@@ -7,29 +7,28 @@ using namespace std;
 void PremierOuNon()
 {
     int nombre;
-    do
-    {
-        /*cin.clear();
-        cin.ignore(1000, '\n');*/
-        cout << "Entrer un nombre entier postif : ";
+    do {
+        cout << "Entrer un nombre entier positif : ";
         cin >> nombre;
-    } while (cin.fail() && nombre <= 0);
-    if (nombre % 2 == 0)
-    {
-        "Ce nombre n'est pas premier puisqu'il est divisible par 2.";
+    } while (nombre <= 0);
+    if (nombre % 2 == 0) {
+        cout << "Ce nombre n'est pas premier puisqu'il est divisible par 2." << endl;
     }
-    int diviseurMaximal = sqrt(nombre);
-    int diviseurActuel = 3;
-    while (diviseurActuel < diviseurMaximal)
+    else
     {
-        if (nombre % diviseurActuel == 0)
+        int diviseurMaximal = sqrt(nombre);
+        int diviseurActuel = 3;
+        while (diviseurActuel < diviseurMaximal)
         {
-            cout << "Ce nombre n'est pas premier puisqu'il est divisible par " << diviseurActuel << ".";
-            return;
+            if (nombre % diviseurActuel == 0)
+            {
+                cout << "Ce nombre n'est pas premier puisqu'il est divisible par " << diviseurActuel << ".";
+                return;
+            }
+            diviseurActuel += 2;
         }
-        diviseurActuel += 2;
+        cout << "Ce nombre est premier.";
     }
-    cout << "Ce nombre est premier.";
 }
 int main()
 {
