@@ -10,22 +10,44 @@ void PremierOuNon()
     do {
         cout << "Entrer un nombre entier positif : ";
         cin >> nombre;
-    } while (nombre <= 0);
-    if (nombre % 2 == 0) {
-        cout << "Ce nombre n'est pas premier puisqu'il est divisible par 2." << endl;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Entrée invalide, le nombre doit etre entier et positif." << endl;
+        }
+        else if (nombre <= 0)
+        {
+            cout << "Entrée invalide, le nombre doit etre entier et positif." << endl;
+        }
+
+    } while (cin.fail() || nombre <= 0);
+    if (nombre == 2)
+    {
+        cout << "Ce nombre est premier.";
+        return;
+    }
+    else if (nombre % 2 == 0)
+    {
+        cout << "Ce nombre n'est pas premier puisqu'il est divisible par 2.";
+        return;
+    }
+    else if (nombre == 1)
+    {
+        cout << "Ce nombre n'est pas un nombre premier, il ne possede qu'un diviseur.";
+        return;
     }
     else
     {
         int diviseurMaximal = sqrt(nombre);
         int diviseurActuel = 3;
-        while (diviseurActuel < diviseurMaximal)
+        for (int diviseurActuel = 3; diviseurActuel <= diviseurMaximal; diviseurActuel += 2)
         {
             if (nombre % diviseurActuel == 0)
             {
-                cout << "Ce nombre n'est pas premier puisqu'il est divisible par " << diviseurActuel << ".";
+                cout << "Ce nombre n'est pas premier puisqu'il est divisible par " << diviseurActuel << "." << endl;
                 return;
             }
-            diviseurActuel += 2;
         }
         cout << "Ce nombre est premier.";
     }
