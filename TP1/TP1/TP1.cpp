@@ -52,9 +52,65 @@ void PremierOuNon()
         cout << "Ce nombre est premier.";
     }
 }
+void CalculEmprunt()
+{
+    float sommeArgent;
+    float montantMensuel;
+    float tauxAnnuel;
+
+    do {
+        cout << "Quelle est la somme d'argent qui vous a ete pretee : " << endl;
+        cin >> sommeArgent;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Entrée invalide, la somme d'argent doit etre un nombre." << endl;
+            continue;
+        }
+        else if (sommeArgent <= 0)
+        {
+            cout << "Entrée invalide, la somme d'argent doit etre entiere et positive." << endl;
+            continue;
+        }
+        cin.ignore();
+        cout << "Quelle est le montant que vous allez rembourser chaque mois : " << endl;
+        cin >> montantMensuel;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Entrée invalide, le montant d'argent doit etre un nombre." << endl;
+            continue;
+        }
+        else if (montantMensuel <= 0)
+        {
+            cout << "Entrée invalide, le montant d'argent doit etre entier et positif." << endl;
+            continue;
+        }
+        cin.ignore();
+        cout << "Quelle est le taux d'interet annuel du preteur : " << endl;
+        cin >> tauxAnnuel;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Entrée invalide, le taux doit etre un nombre." << endl;
+            continue;
+        }
+        else if (tauxAnnuel < 0 || tauxAnnuel >100)
+        {
+            cout << "Entrée invalide, le montant d'argent doit etre entier et positif." << endl;
+            continue;
+        }
+
+    } while (cin.fail() || sommeArgent <= 0 || montantMensuel <= 0 || tauxAnnuel < 0 || tauxAnnuel > 100);
+}
 int main()
 {
-    PremierOuNon();
+    //PremierOuNon();
+    CalculEmprunt();
 }
 
 
