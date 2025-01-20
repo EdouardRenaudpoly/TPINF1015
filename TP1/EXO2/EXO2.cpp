@@ -5,13 +5,13 @@
 #include <math.h>
 using namespace std;
 
-static void ErreurCin(string messageErreur) 
+static void ErreurCin(string messageErreur)
 {
 	cin.clear();
 	cin.ignore(1000, '\n');
 	cout << messageErreur << endl;
 }
-static void QuestionMontant(string question, float montant) 
+static void QuestionMontant(string question, float montant)
 {
 	cin.ignore();
 	cout << question << endl;
@@ -49,8 +49,6 @@ static void CalculEmprunt()
 
 	} while (cin.fail() || sommeArgent <= 0 || montantMensuel <= 0 || tauxAnnuel < 0 || tauxAnnuel > 100);
 }
-
-
 int main() 
 {
 	CalculEmprunt();
