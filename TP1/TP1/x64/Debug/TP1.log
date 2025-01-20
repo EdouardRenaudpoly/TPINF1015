@@ -1,3 +1,10 @@
 ﻿  TP1.cpp
+<<<<<<< HEAD
 C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\TP1\TP1.cpp(42,29): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   TP1.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\x64\Debug\TP1.exe
+=======
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\TP1.cpp(42,29): warning C4244: 'initialisation' : conversion de 'double' en 'int', perte possible de données
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\TP1.cpp(124,45): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\TP1.cpp(125,50): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+  TP1.vcxproj -> C:\Users\grave\TPsINF1015\TPs\TP1\x64\Debug\TP1.exe
+>>>>>>> 24bcd1a9e7d20c579b3db95f0debe47b5b7ede96

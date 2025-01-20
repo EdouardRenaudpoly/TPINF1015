@@ -6,7 +6,7 @@ using namespace std;
 
 void PremierOuNon()
 {
-    int nombre;
+    int nombre=0;
     do {
         cout << "Entrer un nombre entier positif : ";
         cin >> nombre;
@@ -54,10 +54,9 @@ void PremierOuNon()
 }
 void CalculEmprunt()
 {
-    float sommeArgent;
-    float montantMensuel;
-    float tauxAnnuel;
-
+    float sommeArgent=0.0;
+    float montantMensuel=0.0;
+    float tauxAnnuel=0.0;
     do {
         cout << "Quelle est la somme d'argent qui vous a ete pretee : " << endl;
         cin >> sommeArgent;
@@ -66,51 +65,72 @@ void CalculEmprunt()
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Entrée invalide, la somme d'argent doit etre un nombre." << endl;
+            cout << "Entree invalide, la somme d'argent doit etre un nombre." << endl;
             continue;
         }
         else if (sommeArgent <= 0)
         {
-            cout << "Entrée invalide, la somme d'argent doit etre entiere et positive." << endl;
+            cout << "Entree invalide, la somme d'argent doit etre entiere et positive." << endl;
             continue;
         }
         cin.ignore();
-        cout << "Quelle est le montant que vous allez rembourser chaque mois : " << endl;
+        cout << "Quel est le montant que vous allez rembourser chaque mois : " << endl;
         cin >> montantMensuel;
         if (cin.fail())
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Entrée invalide, le montant d'argent doit etre un nombre." << endl;
+            cout << "Entree invalide, le montant d'argent doit etre un nombre." << endl;
             continue;
         }
         else if (montantMensuel <= 0)
         {
-            cout << "Entrée invalide, le montant d'argent doit etre entier et positif." << endl;
+            cout << "Entree invalide, le montant d'argent doit etre entier et positif." << endl;
             continue;
         }
         cin.ignore();
-        cout << "Quelle est le taux d'interet annuel du preteur : " << endl;
+        cout << "Quel est le taux d'interet annuel du preteur : " << endl;
         cin >> tauxAnnuel;
         if (cin.fail())
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Entrée invalide, le taux doit etre un nombre." << endl;
+            cout << "Entree invalide, le taux doit etre un nombre." << endl;
             continue;
         }
         else if (tauxAnnuel < 0 || tauxAnnuel >100)
         {
-            cout << "Entrée invalide, le montant d'argent doit etre entier et positif." << endl;
+            cout << "Entree invalide, le montant d'argent doit etre entier et positif." << endl;
             continue;
         }
 
     } while (cin.fail() || sommeArgent <= 0 || montantMensuel <= 0 || tauxAnnuel < 0 || tauxAnnuel > 100);
 }
+void HauteurDeRebond()
+{    
+    int nbRebonds;
+    float coefficientRebond;
+    int vitesseActuelle;
+    float hauteurActuelle;
+    const float g = 9.81;
+    cout << "Donnez la hauteur initiale de la balle : ";
+    cin >> hauteurActuelle;
+    cout << "Donnez le nombre de rebonds souhaite : ";
+    cin >> nbRebonds;
+    cout << "Donnez est le coefficient de rebond : ";
+    cin >> coefficientRebond;
+    for (int i = 0;i < nbRebonds;i++)
+    {
+        vitesseActuelle = coefficientRebond * sqrt(2 * g * hauteurActuelle);
+        hauteurActuelle = pow(vitesseActuelle, 2)/(2*g);
+    }
+    cout << "La hauteur finale de la balle apres " << nbRebonds << " rebond(s) est " << hauteurActuelle;
+}
 int main()
 {
     //PremierOuNon();
-    CalculEmprunt();
+    //CalculEmprunt();
+    HauteurDeRebond();
 }
 
 
