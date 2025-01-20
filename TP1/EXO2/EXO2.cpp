@@ -17,7 +17,6 @@ static void QuestionMontant(string question, float montant)
 	cout << question << endl;
 	cin >> montant;
 }
-
 static void CalculEmprunt()
 {
 	float sommeArgent = 0.0;
