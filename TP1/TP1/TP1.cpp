@@ -57,7 +57,6 @@ void CalculEmprunt()
     float sommeArgent;
     float montantMensuel;
     float tauxAnnuel;
-
     do {
         cout << "Quelle est la somme d'argent qui vous a ete pretee : " << endl;
         cin >> sommeArgent;
