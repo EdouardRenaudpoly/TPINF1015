@@ -1,0 +1,4 @@
+﻿  EXO3.cpp
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\EXO3\EXO3.cpp(22,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\EXO3\EXO3.cpp(49,45): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  EXO3.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\x64\Debug\EXO3.exe
