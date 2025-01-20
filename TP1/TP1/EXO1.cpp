@@ -56,6 +56,7 @@ static void PremierOuNon()
 int main()
 {
 	PremierOuNon();
+	return 0;
 }
 
 
