@@ -7,7 +7,7 @@
 #include "EXO5.h"
 using namespace std;
 
-static void ErreurCin(string messageErreur)
+static void ErreurCin(const string& messageErreur)
 {
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -17,7 +17,7 @@ static bool estPair(int valeur)
 {
 	return valeur % 2 == 0;
 }
-static void CreerTableau(int(&tableauDebut)[10], const int grosseurTableau) 
+static void CreerTableau(int tableauDebut[], int grosseurTableau)
 {
 	const string message = "Veuillez entrer un nombre positif : ";
 	const string messageErreur = "Erreur : Veuillez entrer un nombre posistif : ";
@@ -33,7 +33,7 @@ static void CreerTableau(int(&tableauDebut)[10], const int grosseurTableau)
 		}
 	}
 }
-static void AfficherTableau(int(&tableau)[10])
+static void AfficherTableau(int tableau[])
 {
 	for (int i = 0; i < 10;++i)
 	{
@@ -45,7 +45,7 @@ static void AfficherTableau(int(&tableau)[10])
 			cout << tableau[i] << ", ";
 	}
 }
-static void PlacerValeurs(int(&tableauDebut)[10], int(&tableauFin)[10], const int grosseurTableau) 
+static void PlacerValeurs(int tableauDebut[], int tableauFin[], int grosseurTableau)
 {
 	int compteur = 0;
 

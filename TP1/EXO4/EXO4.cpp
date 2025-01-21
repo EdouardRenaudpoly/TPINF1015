@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-static void ErreurCin(string messageErreur)
+static void ErreurCin(const string& messageErreur)
 {
 	cin.clear();
 	cin.ignore(1000, '\n');
