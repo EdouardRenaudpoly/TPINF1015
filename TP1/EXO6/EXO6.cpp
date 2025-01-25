@@ -1,12 +1,15 @@
-#include <iostream>
+ï»¿#include <iostream>
 using namespace std;
 
-
+struct MotDictionnaire {
+	std::string mot;
+	std::string nature;
+	std::string definition;
+};
 
 void GestionDictionnaire()
 {
-	//Smap<int, string> dictionnaire;
-	//cout << mot << "\t" << nature / genre << "\t" << définition << endl;
+	const int nMots = 4;
 }
 
 int main()
