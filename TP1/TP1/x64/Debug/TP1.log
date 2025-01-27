@@ -1,9 +1,9 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (TP1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: Le répertoire intermédiaire (x64\Debug\) contient des fichiers partagés provenant d'un autre projet (TP1.vcxproj). Cela peut entraîner un comportement de nettoyage et de regénération incorrect.
   EXO1.cpp
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\TP1\EXO1.cpp(42,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\TP1\EXO1.cpp(44,12): warning C4456: declaration of 'diviseurActuel' hides previous local declaration
-      C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\TP1\EXO1.cpp(43,7):
-      see declaration of 'diviseurActuel'
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(42,23): warning C4244: 'initialisation' : conversion de 'double' en 'int', perte possible de données
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(44,12): warning C4456: la déclaration de 'diviseurActuel' masque la déclaration locale précédente
+      C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(43,7):
+      voir la déclaration de 'diviseurActuel'
   
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\TP1\EXO1.cpp(43,7): warning C4189: 'diviseurActuel': local variable is initialized but not referenced
-  TP1.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\x64\Debug\EXO1.exe
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(43,7): warning C4189: 'diviseurActuel' : variable locale initialisée mais non référencée
+  TP1.vcxproj -> C:\Users\grave\TPsINF1015\TPs\TP1\x64\Debug\EXO1.exe
