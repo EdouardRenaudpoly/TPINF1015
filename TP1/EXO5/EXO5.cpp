@@ -10,7 +10,6 @@
 #include <math.h>
 #include <limits>
 #include <vector>
-#include "EXO5.h"
 using namespace std;
 
 static void erreurCin(const string& messageErreur)
@@ -86,5 +85,4 @@ static void TrierTableau()
 int main()
 {
 	TrierTableau();
-	return 0;
 }

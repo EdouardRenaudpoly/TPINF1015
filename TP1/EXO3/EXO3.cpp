@@ -16,18 +16,18 @@ static void erreurCin(const string& messageErreur)
 	cout << messageErreur << endl;
 }
 
-static void HauteurDeRebond()
+static void hauteurDeRebond()
 {
-	int nRebonds;
-	float coefficientRebond;
-	float vitesseActuelle;
-	float hauteurActuelle;
+	int nRebonds = 0;
+	float coefficientRebond = 0.0;
+	float vitesseActuelle = 0.0;
+	float hauteurActuelle = 0.0;
 	const float g = 9.81;
 	const string messageErreur = "Erreur : La valeur doit etre un nombre strictement positif.";
 	const string messageErreurCoeficient = "Erreur : La valeur doit etre un nombre entre 0 et 1.";
 	cout << "Donnez la hauteur initiale de la balle : ";
 	cin >> hauteurActuelle;
-	while(cin.fail() || hauteurActuelle <= 0) 
+	while (cin.fail() || hauteurActuelle <= 0) 
 	{
 		erreurCin(messageErreur);
 		cin >> hauteurActuelle;
@@ -55,6 +55,5 @@ static void HauteurDeRebond()
 }
 int main()
 {
-	HauteurDeRebond();
-	return 0;
+	hauteurDeRebond();
 }
