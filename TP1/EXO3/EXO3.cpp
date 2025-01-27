@@ -1,11 +1,15 @@
-//Exercice 3
-
-
+/**
+* Programme qui détermine la hauteur atteinte par une balle en tenant compte de la hauteur initiale et du nombre de rebonds.
+* \file   exo3.cpp
+* \author Zackary Labelle et Édouard Renaud
+* \date   27 janvier 2025
+* Créé le 20 janvier 2025
+*/
 #include <iostream>
 #include <limits>
 using namespace std;
 
-static void ErreurCin(const string& messageErreur)
+static void erreurCin(const string& messageErreur)
 {
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -25,21 +29,21 @@ static void HauteurDeRebond()
 	cin >> hauteurActuelle;
 	while(cin.fail() || hauteurActuelle <= 0) 
 	{
-		ErreurCin(messageErreur);
+		erreurCin(messageErreur);
 		cin >> hauteurActuelle;
 	}
 	cout << "Donnez le nombre de rebonds souhaite : ";
 	cin >> nRebonds;
 	while (cin.fail() || nRebonds < 0)
 	{
-		ErreurCin(messageErreur);
+		erreurCin(messageErreur);
 		cin >> nRebonds;
 	}
 	cout << "Donnez est le coefficient de rebond : ";
 	cin >> coefficientRebond;
 	while (cin.fail() || coefficientRebond > 1 || coefficientRebond < 0)
 	{
-		ErreurCin(messageErreurCoeficient);
+		erreurCin(messageErreurCoeficient);
 		cin >> coefficientRebond;
 	}
 	for (int i = 0; i < nRebonds; ++i)
