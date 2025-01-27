@@ -11,7 +11,7 @@
 using namespace std;
 
 // Fonction pour afficher un message d'erreur
-static void ErreurCin(const string& messageErreur) {
+static void erreurCin(const string& messageErreur) {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << messageErreur << endl;
@@ -36,7 +36,7 @@ static float EntreeValidee(const string& question, float borneInf, float borneSu
 }
 
 // Fonction principale pour calculer le remboursement de la dette
-static void CalculEmprunt() {
+static void calculEmprunt() {
     // Variables
     float sommeArgent = EntreeValidee("Quelle est la somme d'argent qui vous a ete pretee : ", 0.01, numeric_limits<float>::infinity());
     float montantMensuel = EntreeValidee("Quel est le montant que vous allez rembourser chaque mois : ", 0.01, numeric_limits<float>::infinity());
