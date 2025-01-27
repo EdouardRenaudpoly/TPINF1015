@@ -4,21 +4,42 @@
 using namespace std;
 
 struct MotDictionnaire {
-	std::string mot;
-	std::string nature;
-	std::string definition;
+	string mot;
+	string nature;
+	string definition;
 };
 
-void GestionDictionnaire()
+static void AfficherMotPlusLong(MotDictionnaire dictionnaire[], int nMots)
+{
+	MotDictionnaire motPlusLong = dictionnaire[0];
+	for (int i = 1;i < nMots;i++)
+	{
+		if (dictionnaire[i].mot.length() > motPlusLong.mot.length())
+		{
+			motPlusLong = dictionnaire[i];
+		}
+	}
+	cout << motPlusLong.mot << " (" << motPlusLong.nature << ") : " << motPlusLong.definition << endl;
+}
+
+static void GestionDictionnaire()
 {
 	const int nMots = 4;
 	MotDictionnaire dictionnaire[nMots];
 	ifstream fichier("dictionnaire.txt");
 	string ligneActuelle;
 	int indiceLigneActuelle = 0;
-	while (getline(fichier, ligneActuelle)) { // Lit le fichier ligne par ligne
-		std::cout << ligneActuelle << std::endl;    // Affiche chaque ligne lue
+	while (getline(fichier, ligneActuelle)) 
+	{
+		istringstream flux(ligneActuelle);
+		MotDictionnaire motActuel;
+		getline(flux, motActuel.mot, '\t');
+		getline(flux, motActuel.nature, '\t');
+		getline(flux, motActuel.definition, '\t');
+		dictionnaire[indiceLigneActuelle] = motActuel;
+		indiceLigneActuelle++;
 	}
+	AfficherMotPlusLong(dictionnaire,nMots);
 	fichier.close();
 }
 
