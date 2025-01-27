@@ -7,7 +7,7 @@
 #include "EXO5.h"
 using namespace std;
 
-static void ErreurCin(const string& messageErreur)
+static void erreurCin(const string& messageErreur)
 {
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -28,7 +28,7 @@ static void CreerTableau(int tableauDebut[], int grosseurTableau)
 		cin >> tableauDebut[i];
 		while (cin.fail() || tableauDebut[i] < 0)
 		{
-			ErreurCin(messageErreur);
+			erreurCin(messageErreur);
 			cin >> tableauDebut[i];
 		}
 	}

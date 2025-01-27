@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-static void ErreurCin(const string& messageErreur)
+static void erreurCin(const string& messageErreur)
 {
 	cin.clear();
 	cin.ignore(1000, '\n');
@@ -26,7 +26,7 @@ static void ApproximationPi()
 		cin >> nIterations;
 		if (cin.fail() || nIterations <= 0)
 		{
-			ErreurCin("Le nombre d'iterations doit etre strictement positif");
+			erreurCin("Le nombre d'iterations doit etre strictement positif");
 		}
 	} while (cin.fail() || nIterations <= 0);
 	for (int i = 0;i < nIterations;i++)
