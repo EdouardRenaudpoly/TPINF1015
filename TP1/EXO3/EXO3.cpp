@@ -1,6 +1,10 @@
-//Exercice 3
-
-
+/**
+* Programme qui détermine la hauteur atteinte par une balle en tenant compte de la hauteur initiale et du nombre de rebonds.
+* \file   exo3.cpp
+* \author Zackary Labelle et Édouard Renaud
+* \date   27 janvier 2025
+* Créé le 20 janvier 2025
+*/
 #include <iostream>
 #include <limits>
 using namespace std;

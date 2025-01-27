@@ -1,3 +1,10 @@
+/**
+* Programme qui détermine le nombre de mois nécessaires pour rembourser une dette ainsi que la somme des intérêts perçus par le prêteur.
+* \file   exo2.cpp
+* \author Zackary Labelle et Édouard Renaud
+* \date   27 janvier 2025
+* Créé le 20 janvier 2025
+*/
 #include <iostream>
 #include <cmath>
 #include <limits>
