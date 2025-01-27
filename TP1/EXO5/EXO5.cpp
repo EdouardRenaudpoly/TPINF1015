@@ -1,4 +1,10 @@
-// Exercice 5 du TP1
+/**
+* Programme qui saisit un tableau de 10 entiers et qui l’affiche de sorte que tous les entiers pairs soient affichés avant les entiers impairs
+* \file   exo5.cpp
+* \author Édouard Renaud et Zackary Labelle
+* \date   27 janvier 2025
+* Créé le 20 janvier 2025
+*/
 
 #include <iostream>
 #include <math.h>

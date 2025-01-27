@@ -1,3 +1,12 @@
+
+/**
+* Programme qui demande le nombre d'itérations souhaité par l'utilisateur et retourne la valeur approximée de pi selon la méthode de Monte-Carlo
+* \file   exo4.cpp
+* \author Édouard Renaud et Zackary Labelle
+* \date   27 janvier 2025
+* Créé le 20 janvier 2025
+*/
+
 #include <random>
 #include <iostream>
 using namespace std;
