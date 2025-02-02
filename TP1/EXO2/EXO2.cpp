@@ -10,17 +10,17 @@
 #include <limits>
 using namespace std;
 
-// Fonction pour afficher un message d'erreur
 static void erreurCin(const string& messageErreur) {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << messageErreur << endl;
 }
 
-// Fonction pour demander et valider une entrée réelle dans un intervalle
 static float EntreeValidee(const string& question, float borneInf, float borneSup) {
-    float valeur;
-    while (true) {
+    float valeur = 0.0;
+    bool estFini = false;
+    while (!estFini) 
+    {
         cout << question;
         cin >> valeur;
 
@@ -30,44 +30,42 @@ static float EntreeValidee(const string& question, float borneInf, float borneSu
         }
         else 
         {
-            return valeur;
+           estFini = true;
         }
     }
+    return valeur;
 }
 
-// Fonction principale pour calculer le remboursement de la dette
-static void calculEmprunt() {
-    // Variables
+static void calculEmprunt() 
+{
+    static const int nombreMois = 12;
+    static const int pourcentage = 100;
     float sommeArgent = EntreeValidee("Quelle est la somme d'argent qui vous a ete pretee : ", 0.01, numeric_limits<float>::infinity());
     float montantMensuel = EntreeValidee("Quel est le montant que vous allez rembourser chaque mois : ", 0.01, numeric_limits<float>::infinity());
     float tauxAnnuel = EntreeValidee("Quel est le taux d'interet annuel du preteur (entre 0 et 100) : ", 0.0, 100.0);
 
-    // Calcul du taux mensuel
-    float tauxMensuel = tauxAnnuel / 12 / 100;
+    float tauxMensuel = tauxAnnuel / nombreMois / pourcentage;
 
-    // Variables de suivi
-    int nombreMois = 0;
+    int nMois = 0;
     float totalInterets = 0.0;
 
-    // Simulation du remboursement mois par mois
     while (sommeArgent > 0) 
     {
-        float interetMensuel = sommeArgent * tauxMensuel;  // Intérêt pour le mois courant
-        totalInterets += interetMensuel;                  // Ajouter à la somme des intérêts
-        sommeArgent += interetMensuel;                   // Ajouter l'intérêt à la dette
-        sommeArgent -= montantMensuel;                   // Rembourser la mensualité
-        nombreMois++;
+        float interetMensuel = sommeArgent * tauxMensuel;
+        totalInterets += interetMensuel;
+        sommeArgent += interetMensuel;
+        sommeArgent -= montantMensuel;
+        ++nMois;
 
-        // Si le remboursement dépasse la dette, ajuster la dernière mensualité
-        if (sommeArgent < 0) 
+        
+        if (sommeArgent < 0) // Si le remboursement dépasse la dette, ajuster la dernière mensualité
         {
-            totalInterets += sommeArgent; // Réduire les intérêts si le dernier paiement couvre plus
+            totalInterets += -sommeArgent;
             sommeArgent = 0;
         }
     }
 
-    // Affichage des résultats
-    cout << "Nombre de mois necessaires pour rembourser la dette : " << nombreMois << endl;
+    cout << "Nombre de mois necessaires pour rembourser la dette : " << nMois << endl;
     cout << "Somme totale des interets perçus par le preteur : " << totalInterets << " $" << endl;
 }
 

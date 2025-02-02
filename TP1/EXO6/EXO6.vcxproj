@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EXO6.cpp" />
+    <ClCompile Include="exo6.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\Downloads\INF1015-TD1-H25-Fichiers\dictionnaire.txt" />

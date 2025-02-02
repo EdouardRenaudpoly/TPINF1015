@@ -1,4 +1,4 @@
-﻿  EXO2.cpp
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\EXO2\EXO2.cpp(36,96): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\EXO2\EXO2.cpp(37,106): warning C4305: 'argument': truncation from 'double' to 'float'
+﻿  exo2.cpp
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\EXO2\exo2.cpp(46,96): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\EXO2\exo2.cpp(47,106): warning C4305: 'argument': truncation from 'double' to 'float'
   EXO2.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Tp\TP1\x64\Debug\EXO2.exe

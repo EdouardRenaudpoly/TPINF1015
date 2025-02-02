@@ -36,7 +36,7 @@ static void gererDictionnaire()
 	const int nMots = 4;
 	MotDictionnaire dictionnaire[nMots];
 	ifstream fichier("dictionnaire.txt");
-	string ligneActuelle="";
+	string ligneActuelle = "";
 	int indiceLigneActuelle = 0;
 	while (getline(fichier, ligneActuelle)) //code modifié à partir de Stack Overflow : https://stackoverflow.com/questions/20756968/reading-multiple-lines-from-a-file-using-getline
 	{

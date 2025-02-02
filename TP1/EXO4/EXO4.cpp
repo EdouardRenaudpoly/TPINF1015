@@ -1,4 +1,3 @@
-
 /**
 * Programme qui demande le nombre d'itérations souhaité par l'utilisateur et retourne la valeur approximée de pi selon la méthode de Monte-Carlo
 * \file   exo4.cpp
@@ -6,7 +5,6 @@
 * \date   27 janvier 2025
 * Créé le 20 janvier 2025
 */
-
 #include <random>
 #include <iostream>
 using namespace std;
@@ -17,18 +15,18 @@ static void erreurCin(const string& messageErreur)
 	cin.ignore(1000, '\n');
 	cout << messageErreur << endl;
 }
-float GenererNombreAleatoire()
+static float genererNombreAleatoire()
 {
 	default_random_engine aleatoire(random_device{}());
 	uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 	return distribution(aleatoire);
 }
-static void ApproximationPi()
+static void approximationPi()
 {
 	const float valeurPi = 3.141593;
 	int nDansCercle = 0;
 	int nTotal = 0;
-	int nIterations;
+	int nIterations = 0;
 	do
 	{
 		cout << "Quel est le nombre d'iterations souhaite : ";
@@ -40,8 +38,8 @@ static void ApproximationPi()
 	} while (cin.fail() || nIterations <= 0);
 	for (int i = 0;i < nIterations;i++)
 	{
-		float x = GenererNombreAleatoire();
-		float y = GenererNombreAleatoire();
+		float x = genererNombreAleatoire();
+		float y = genererNombreAleatoire();
 		if ((pow(x,2)+pow(y,2)) < 1)
 		{
 			nDansCercle++;
@@ -56,5 +54,5 @@ static void ApproximationPi()
 
 int main()
 {
-	ApproximationPi();
+	approximationPi();
 }
