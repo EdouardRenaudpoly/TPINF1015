@@ -48,7 +48,7 @@ string lireString(istream& fichier)
 
 #pragma endregion//}
 
-//TODO: Une fonction pour ajouter un Film à une ListeFilms, le film existant déjà; on veut uniquement ajouter le pointeur vers le film existant.  Cette fonction doit doubler la taille du tableau alloué, avec au minimum un élément, dans le cas où la capacité est insuffisante pour ajouter l'élément.  Il faut alors allouer un nouveau tableau plus grand, copier ce qu'il y avait dans l'ancien, et éliminer l'ancien trop petit.  Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
+///TODO: Une fonction pour ajouter un Film à une ListeFilms, le film existant déjà; on veut uniquement ajouter le pointeur vers le film existant.  Cette fonction doit doubler la taille du tableau alloué, avec au minimum un élément, dans le cas où la capacité est insuffisante pour ajouter l'élément.  Il faut alors allouer un nouveau tableau plus grand, copier ce qu'il y avait dans l'ancien, et éliminer l'ancien trop petit.  Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
 void ajouterFilm(Film* ptrFilm, ListeFilms& listeFilms)
 {
 	if (listeFilms.capacite == listeFilms.nElements)
@@ -63,12 +63,13 @@ void ajouterFilm(Film* ptrFilm, ListeFilms& listeFilms)
 			listeFilms.capacite = 1;
 		}
 		Film** nouveauTableau = new Film* [listeFilms.capacite];
-		for (auto i : range(0, listeFilms.nElements))
+		for (auto&& i : range(0, listeFilms.nElements))
 		{
 			nouveauTableau[i] = listeFilms.elements[i];
 		}
-		for (auto i : range(listeFilms.nElements, listeFilms.capacite))
+		for (auto&& i : range(listeFilms.nElements, listeFilms.capacite))
 		{
+			//Rempli le reste de la liste avec des nullptr
 			nouveauTableau[i] = nullptr;
 		}
 		listeFilms.elements = nouveauTableau;
@@ -94,9 +95,20 @@ void enleverFilm(Film* ptrFilm, ListeFilms& listeFilms)
 	}
 }
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
-Acteur* trouverActeur(string nomActeur, ListeFilms listeFilms)
+Acteur* trouverActeur(string nomActeur, ListeFilms& listeFilms)
 {
-
+	span<Film*> spanFilms(listeFilms.elements,listeFilms.nElements);
+	for (Film* ptrFilm : spanFilms) 
+	{
+		Film filmActuelle = *ptrFilm;
+		span<Acteur*> spanActeurs(filmActuelle.acteurs.elements, filmActuelle.acteurs.nElements);
+		for (Acteur* ptrActeur : spanActeurs) 
+		{
+			Acteur acteurActuelle = *ptrActeur;
+			if (nomActeur == acteurActuelle.nom)
+				return ptrActeur;
+		}
+	}
 	return nullptr;
 }
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
