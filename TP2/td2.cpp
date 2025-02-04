@@ -183,9 +183,10 @@ void detruireFilm(Film* filmADetruire)
 	Film filmActuel = *filmADetruire;
 	for (auto&& i : range(0, filmActuel.acteurs.nElements))
 	{
-		enleverFilm(&filmADetruire, filmActuel.acteurs.elements[i]->joueDans);
+		enleverFilm(filmADetruire, filmActuel.acteurs.elements[i]->joueDans);
 		if (filmActuel.acteurs.elements[i]->joueDans.nElements == 0)
 		{
+			detruireListeFilms(filmActuel.acteurs.elements[i]->joueDans);
 			delete[] filmActuel.acteurs.elements[i];
 		}
 	}
