@@ -72,16 +72,17 @@ void ajouterFilm(Film* ptrFilm, ListeFilms& listeFilms)
 			//Rempli le reste de la liste avec des nullptr
 			nouveauTableau[i] = nullptr;
 		}
+		delete[] listeFilms.elements;  // Libération de l'ancien tableau
 		listeFilms.elements = nouveauTableau;
 	}
 	listeFilms.elements[listeFilms.nElements] = ptrFilm;
 	listeFilms.nElements++;
 }
-//TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
+///TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
 void enleverFilm(Film* ptrFilm, ListeFilms& listeFilms)
 {
 	bool filmEnlevé = false;
-	int index = 0;
+	int index = 0; /// À regarder il faut changer le while pour une boucle for
 	while (!filmEnlevé || index < listeFilms.nElements)
 	{
 		if (listeFilms.elements[index] == ptrFilm)
@@ -94,23 +95,20 @@ void enleverFilm(Film* ptrFilm, ListeFilms& listeFilms)
 		index++;
 	}
 }
-//TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
+///TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 Acteur* trouverActeur(string nomActeur, const ListeFilms& listeFilms)
 {
-	span<Film*> spanFilms(listeFilms.elements,listeFilms.nElements);
-	for (Film* ptrFilm : spanFilms) 
+	for (Film* ptrFilm : span(listeFilms.elements, listeFilms.nElements))
 	{
-		Film filmActuelle = *ptrFilm;
-		span<Acteur*> spanActeurs(filmActuelle.acteurs.elements, filmActuelle.acteurs.nElements);
-		for (Acteur* ptrActeur : spanActeurs) 
+		for (Acteur* ptrActeur : span(ptrFilm->acteurs.elements, ptrFilm->acteurs.nElements))
 		{
-			Acteur acteurActuelle = *ptrActeur;
-			if (nomActeur == acteurActuelle.nom)
+			if (ptrActeur->nom == nomActeur)
 				return ptrActeur;
 		}
 	}
 	return nullptr;
 }
+
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
 Acteur* lireActeur(istream& fichier, const ListeFilms listeFilms)
 {
@@ -156,16 +154,30 @@ ListeFilms creerListe(string nomFichier)
 	
 	int nElements = lireUint16(fichier);
 
-	//TODO: Créer une liste de films vide.
+	///TODO: Créer une liste de films vide.
+	ListeFilms listeFilms = { 0, 0, nullptr };
+
 	for (auto&& i : range(0, nElements)) 
 	{
-		lireFilm(fichier); //TODO: Ajouter le film à la liste.
+		ajouterFilm(lireFilm(fichier), listeFilms); ///TODO: Ajouter le film à la liste.
 	}
 	
-	return {}; //TODO: Retourner la liste de films.
+	return listeFilms; ///TODO: Retourner la liste de films.
 }
 
 //TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
+
+
+///TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
+void detruireListeFilms(ListeFilms& listeFilms) 
+{
+	///Pt pas un span
+	for (Film* ptrFilm : span(listeFilms.elements, listeFilms.nElements)) 
+	{
+		detruireFilm(ptrFilm);
+	}
+	delete[] listeFilms.elements;
+}
 void detruireFilm(Film* filmADetruire)
 {
 	Film filmActuel = *filmADetruire;
@@ -186,16 +198,26 @@ void afficherActeur(const Acteur& acteur)
 	cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
 }
 
-//TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
+///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
+void afficherFilm(const Film& film)
+{
+	cout << film.titre << " (" << film.anneeSortie << ") - " << film.realisateur << " - Recette: " << film.recette << "M$";
+		
+	for (Acteur* ptrActeur : span(film.acteurs.elements, film.acteurs.nElements)) 
+			afficherActeur(*ptrActeur);
+}
+
 
 void afficherListeFilms(const ListeFilms& listeFilms)
 {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
 	static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
 	cout << ligneDeSeparation;
-	//TODO: Changer le for pour utiliser un span.
-	for (int i = 0; i < listeFilms.nElements; i++) {
-		//TODO: Afficher le film.
+	///TODO: Changer le for pour utiliser un span. // Je pense que c good
+	for (Film* ptrFilm : span(listeFilms.elements, listeFilms.nElements))
+	{
+		///TODO: Afficher le film.
+		afficherFilm(*ptrFilm);
 		cout << ligneDeSeparation;
 	}
 }
