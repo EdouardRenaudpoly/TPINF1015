@@ -187,12 +187,12 @@ void detruireFilm(Film* filmADetruire)
 		if (filmActuel.acteurs.elements[i]->joueDans.nElements == 0)
 		{
 			detruireListeFilms(filmActuel.acteurs.elements[i]->joueDans);
+			delete[] &filmActuel.acteurs.elements[i]->joueDans;
 			delete[] filmActuel.acteurs.elements[i];
 		}
 	}
 	delete[] filmADetruire;
 }
-//TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 
 void afficherActeur(const Acteur& acteur)
 {
