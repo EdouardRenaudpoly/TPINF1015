@@ -94,9 +94,9 @@ void enleverFilm(Film* ptrFilm, ListeFilms& listeFilms)
 	}
 }
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
-Acteur* trouverActeur(string nomActeur, ListeFilms listeFilms)
+Acteur* trouverActeur(string nomActeur, ListeFilms& listeFilms)
 {
-
+	
 	return nullptr;
 }
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
@@ -117,7 +117,8 @@ Film* lireFilm(istream& fichier)
 	film.anneeSortie = lireUint16 (fichier);
 	film.recette     = lireUint16 (fichier);
 	film.acteurs.nElements = lireUint8 (fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-	for (int i = 0; i < film.acteurs.nElements; i++) {
+	for (auto&& i : range(0, film.acteurs.nElements)) 
+	{
 		lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
 	}
@@ -132,7 +133,8 @@ ListeFilms creerListe(string nomFichier)
 	int nElements = lireUint16(fichier);
 
 	//TODO: Créer une liste de films vide.
-	for (int i = 0; i < nElements; i++) {
+	for (auto&& i : range(0, nElements)) 
+	{
 		lireFilm(fichier); //TODO: Ajouter le film à la liste.
 	}
 	
