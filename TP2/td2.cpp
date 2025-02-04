@@ -140,7 +140,7 @@ Film* lireFilm(istream& fichier, const ListeFilms& listeFilms)
 	film.acteurs.nElements = lireUint8 (fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
 	for (auto&& i : range(0, film.acteurs.nElements)) 
 	{
-		Acteur* ptrActeur=lireActeur(fichier,listeFilms); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
+		Acteur* ptrActeur = lireActeur(fichier, listeFilms); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
 
 	}
@@ -159,7 +159,7 @@ ListeFilms creerListe(string nomFichier)
 
 	for (auto&& i : range(0, nElements)) 
 	{
-		ajouterFilm(lireFilm(fichier), listeFilms); ///TODO: Ajouter le film à la liste.
+		ajouterFilm(lireFilm(fichier, listeFilms), listeFilms); ///TODO: Ajouter le film à la liste.
 	}
 	
 	return listeFilms; ///TODO: Retourner la liste de films.
