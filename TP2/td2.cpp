@@ -143,8 +143,9 @@ Film* lireFilm(istream& fichier, const ListeFilms& listeFilms)
 		Acteur* ptrActeur = lireActeur(fichier, listeFilms); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
 
+		ajouterFilm(&film, ptrActeur->joueDans);
 	}
-	return {}; //TODO: Retourner le pointeur vers le nouveau film.
+	return &film; //TODO: Retourner le pointeur vers le nouveau film.
 }
 
 ListeFilms creerListe(string nomFichier)
@@ -166,18 +167,6 @@ ListeFilms creerListe(string nomFichier)
 }
 
 //TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
-
-
-///TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
-void detruireListeFilms(ListeFilms& listeFilms) 
-{
-	///Pt pas un span
-	for (Film* ptrFilm : span(listeFilms.elements, listeFilms.nElements)) 
-	{
-		detruireFilm(ptrFilm);
-	}
-	delete[] listeFilms.elements;
-}
 void detruireFilm(Film* filmADetruire)
 {
 	Film filmActuel = *filmADetruire;
@@ -186,12 +175,22 @@ void detruireFilm(Film* filmADetruire)
 		enleverFilm(filmADetruire, filmActuel.acteurs.elements[i]->joueDans);
 		if (filmActuel.acteurs.elements[i]->joueDans.nElements == 0)
 		{
-			detruireListeFilms(filmActuel.acteurs.elements[i]->joueDans);
 			delete[] &filmActuel.acteurs.elements[i]->joueDans;
 			delete[] filmActuel.acteurs.elements[i];
 		}
 	}
 	delete[] filmADetruire;
+}
+
+///TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
+void detruireListeFilms(ListeFilms& listeFilms)
+{
+	///Pt pas un span
+	for (Film* ptrFilm : span(listeFilms.elements, listeFilms.nElements))
+	{
+		detruireFilm(ptrFilm);
+	}
+	delete[] listeFilms.elements;
 }
 
 void afficherActeur(const Acteur& acteur)
@@ -237,7 +236,7 @@ int main()
 {
 	bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
 
-	int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Fuite detectee" de "4 octets" affiché à la fin de l'exécution, qui réfère à cette ligne du programme.
+	//int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Fuite detectee" de "4 octets" affiché à la fin de l'exécution, qui réfère à cette ligne du programme.
 
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
