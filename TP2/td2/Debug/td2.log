@@ -1,8 +1,4 @@
 ﻿  td2.cpp
-C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\td2.cpp(141,14): warning C4189: 'i': local variable is initialized but not referenced
-C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\td2.cpp(143,11): warning C4189: 'ptrActeur': local variable is initialized but not referenced
-C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\td2.cpp(161,14): warning C4189: 'i': local variable is initialized but not referenced
-C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\td2.cpp(148,1): warning C4172: returning address of local variable or temporary : film
-C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\td2.cpp(128,1): warning C4172: returning address of local variable or temporary : acteur
-     Creating library C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\Debug\td2.lib and object C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\Debug\td2.exp
-  td2.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\New folder\TP2\Debug\td2.exe
+C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(169,14): warning C4189: 'i' : variable locale initialisée mais non référencée
+     Création de la bibliothèque C:\Users\grave\TPsINF1015\TPs\TP2\Debug\td2.lib et de l'objet C:\Users\grave\TPsINF1015\TPs\TP2\Debug\td2.exp
+  td2.vcxproj -> C:\Users\grave\TPsINF1015\TPs\TP2\Debug\td2.exe
