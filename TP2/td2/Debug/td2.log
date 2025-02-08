@@ -1,4 +1,153 @@
 ﻿  td2.cpp
-C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(169,14): warning C4189: 'i' : variable locale initialisée mais non référencée
-     Création de la bibliothèque C:\Users\grave\TPsINF1015\TPs\TP2\Debug\td2.lib et de l'objet C:\Users\grave\TPsINF1015\TPs\TP2\Debug\td2.exp
-  td2.vcxproj -> C:\Users\grave\TPsINF1015\TPs\TP2\Debug\td2.exe
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(36,13): error C3646: 'joueDans' : spécificateur de substitution inconnu
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(36,2): error C4430: spécificateur de type manquant - int est pris en compte par défaut. Remarque : C++ ne prend pas en charge int par défaut
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(55,12): warning C4458: la déclaration de 'elements_' masque le membre de classe
+  (compiler le fichier source 'td2.cpp')
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(210,9):
+      voir la déclaration de 'ListeFilms::elements_'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(127,4): error C3861: 'afficherFilm' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(137,4): error C3861: 'detruireFilm' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(157,16): error C3861: 'lireString' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(157,9): error C2593: ’operator =' est ambigu
+  (compiler le fichier source 'td2.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1440,32):
+      est peut-être 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem)'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1432,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem *const )'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1381,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1332,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::initializer_list<_Elem>)'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1211,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::basic_string<char,std::char_traits<char>,std::allocator<char>> &&) noexcept(<expr>)'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(157,9):
+      lors de la tentative de mise en correspondance de la liste des arguments '(std::string, unknown-type)'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(158,27): error C3861: 'lireUint16' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(159,17): error C3861: 'lireUint8' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(169,15): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+  (compiler le fichier source 'td2.cpp')
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(178,16): error C3861: 'lireString' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(178,7): error C2593: ’operator =' est ambigu
+  (compiler le fichier source 'td2.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1440,32):
+      est peut-être 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem)'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1432,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem *const )'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1381,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1332,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::initializer_list<_Elem>)'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1211,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::basic_string<char,std::char_traits<char>,std::allocator<char>> &&) noexcept(<expr>)'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(178,7):
+      lors de la tentative de mise en correspondance de la liste des arguments '(std::string, unknown-type)'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(179,22): error C3861: 'lireString' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(179,7): error C2593: ’operator =' est ambigu
+  (compiler le fichier source 'td2.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1440,32):
+      est peut-être 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem)'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1432,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const _Elem *const )'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1381,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1332,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::initializer_list<_Elem>)'
+          with
+          [
+              _Elem=char
+          ]
+      C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.42.34433\include\xstring(1211,32):
+      ou       'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator =(std::basic_string<char,std::char_traits<char>,std::allocator<char>> &&) noexcept(<expr>)'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(179,7):
+      lors de la tentative de mise en correspondance de la liste des arguments '(std::string, unknown-type)'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(180,22): error C3861: 'lireUint16' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(181,18): error C3861: 'lireUint16' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(182,28): error C3861: 'lireUint8' : identificateur introuvable
+  (compiler le fichier source 'td2.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(192,15): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+  (compiler le fichier source 'td2.cpp')
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(74,35): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(76,39): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(77,40): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(78,46): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
+C:\Users\grave\TPsINF1015\TPs\TP2\td2.cpp(110,11): error C2039: 'joueDans' n'est pas membre de 'Acteur'
+      C:\Users\grave\TPsINF1015\TPs\TP2\structures.hpp(33,8):
+      voir la déclaration de 'Acteur'
+  
