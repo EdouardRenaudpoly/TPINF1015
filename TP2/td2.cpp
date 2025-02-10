@@ -47,6 +47,29 @@ string lireString(istream& fichier)
 }
 
 #pragma endregion//}
+//constructeurs de la classe ListeFilms
+ListeFilms::ListeFilms() //constructeur de base
+{
+	capacite_ = 0;
+	nElements_ = 0;
+	elements_ = nullptr;
+}
+ListeFilms::ListeFilms(string nomFichier)
+{
+	ifstream fichier(nomFichier, ios::binary);
+	fichier.exceptions(ios::failbit);
+
+	int nElements = lireUint16(fichier);
+
+	capacite_ = 0;
+	nElements_ = 0;
+	elements_ = nullptr;
+
+	for ([[maybe_unused]] int i : range(0, nElements))
+	{
+		ajouterFilm(lireFilm(fichier)); ///TODO: Ajouter le film à la liste.
+	}
+}
 ///TODO: Une fonction pour ajouter un Film à une ListeFilms, le film existant déjà; on veut uniquement ajouter le pointeur vers le film existant.  Cette fonction doit doubler la taille du tableau alloué, avec au minimum un élément, dans le cas où la capacité est insuffisante pour ajouter l'élément.  Il faut alors allouer un nouveau tableau plus grand, copier ce qu'il y avait dans l'ancien, et éliminer l'ancien trop petit.  Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
 void ListeFilms::ajouterFilm(Film* ptrFilm)
 {
@@ -122,14 +145,18 @@ Acteur* ListeFilms::trouverActeur(string nomActeur) const
 {
 	for (Film* ptrFilm : span(elements_, nElements_))
 	{
-		for (Acteur* ptrActeur : span(ptrFilm->acteurs.elements, ptrFilm->acteurs.nElements))
+		if (ptrFilm != nullptr)
 		{
-			if (ptrActeur->nom == nomActeur)
-				return ptrActeur;
+			for (Acteur* ptrActeur : span(ptrFilm->acteurs.elements, ptrFilm->acteurs.nElements))
+			{
+				if (ptrActeur->nom == nomActeur)
+					return ptrActeur;
+			}
 		}
 	}
 	return nullptr;
 }
+//TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
 Acteur* lireActeur(istream& fichier, const ListeFilms& listeFilms)
 {
 	Acteur acteur;
@@ -171,24 +198,6 @@ Film* ListeFilms::lireFilm(istream& fichier)
 		ptrActeur->joueDans.ajouterFilm(ptrFilm);
 	}
 	return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
-}
-//TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
-ListeFilms creerListe(string nomFichier)
-{
-	ifstream fichier(nomFichier, ios::binary);
-	fichier.exceptions(ios::failbit);
-
-	int nElements = lireUint16(fichier);
-
-	///TODO: Créer une liste de films vide.
-	ListeFilms listeFilms = ListeFilms();
-
-	for (auto&& i : range(0, nElements))
-	{
-		listeFilms.ajouterFilm(listeFilms.lireFilm(fichier)); ///TODO: Ajouter le film à la liste.
-	}
-
-	return listeFilms; ///TODO: Retourner la liste de films.
 }
 //TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void ListeFilms::detruireFilm(Film* filmADetruire)
@@ -244,7 +253,7 @@ int main()
 	//TODO: Chaque TODO dans cette fonction devrait se faire en 1 ou 2 lignes, en appelant les fonctions écrites.
 
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
-	ListeFilms listeFilms = creerListe("films.bin");
+	ListeFilms listeFilms = ListeFilms("films.bin"); //substitut de créerListe, un nouveau constructeur
 	
 	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.

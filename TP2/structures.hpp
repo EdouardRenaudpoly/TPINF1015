@@ -20,37 +20,8 @@ using namespace iter;
 struct Film; struct Acteur;
 class ListeFilms {
 public:
-	ListeFilms() //constructeur de base
-	{
-		capacite_ = 0;
-		nElements_ = 0;
-		elements_ = nullptr;
-	}
-	ListeFilms(int capacite, int nElements, Film** elements) //constructeur avec paramètres
-		: ListeFilms() 
-	{
-		if (nElements<capacite && nElements>=0 && capacite>=0)
-		{
-			capacite_ = capacite;
-			nElements_ = nElements;
-			if (capacite_ > 0)
-			{
-				elements_ = new Film * [capacite];
-				for (auto&& i : range(0, nElements))
-				{
-					if (elements[i] == nullptr)
-					{
-						nElements--;
-					}
-					elements_[i] = elements[i];
-				}
-			}
-			else
-			{
-				elements_ = nullptr;
-			}
-		}
-	}
+	ListeFilms();
+	ListeFilms(string nomFichier);
 	void ajouterFilm(Film* ptrFilm);
 	void enleverFilm(Film* ptrFilm);
 	void afficherListeFilms() const;
