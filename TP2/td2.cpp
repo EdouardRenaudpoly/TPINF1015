@@ -55,15 +55,12 @@ ListeFilms::ListeFilms() //constructeur de base
 	elements_ = nullptr;
 }
 ListeFilms::ListeFilms(string nomFichier)
+	: ListeFilms()
 {
 	ifstream fichier(nomFichier, ios::binary);
 	fichier.exceptions(ios::failbit);
 
 	int nElements = lireUint16(fichier);
-
-	capacite_ = 0;
-	nElements_ = 0;
-	elements_ = nullptr;
 
 	for ([[maybe_unused]] int i : range(0, nElements))
 	{
@@ -157,13 +154,13 @@ Acteur* ListeFilms::trouverActeur(string nomActeur) const
 	return nullptr;
 }
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
-Acteur* lireActeur(istream& fichier, const ListeFilms& listeFilms)
+Acteur* ListeFilms::lireActeur(istream& fichier)
 {
 	Acteur acteur;
 	acteur.nom = lireString(fichier);
 	acteur.anneeNaissance = lireUint16(fichier);
 	acteur.sexe = lireUint8(fichier);
-	Acteur* ptrActeur = listeFilms.trouverActeur(acteur.nom);
+	Acteur* ptrActeur = trouverActeur(acteur.nom);
 	if (ptrActeur != nullptr)
 	{
 		return ptrActeur;
@@ -192,7 +189,7 @@ Film* ListeFilms::lireFilm(istream& fichier)
 	ptrFilm->acteurs.elements = new Acteur * [film.acteurs.nElements];
 	for (auto&& i : range(0, film.acteurs.nElements))
 	{
-		Acteur* ptrActeur = lireActeur(fichier, *this); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
+		Acteur* ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 		ptrFilm->acteurs.elements[i] = ptrActeur;
 		//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
 		ptrActeur->joueDans.ajouterFilm(ptrFilm);

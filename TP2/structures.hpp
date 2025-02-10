@@ -30,6 +30,7 @@ public:
 	void detruireFilm(Film* filmADetruire);
 	void afficherFilm(const Film& film) const;
 	Film* lireFilm(istream& fichier);
+	Acteur* lireActeur(istream& fichier);
 	int getCapacite()
 	{
 		return capacite_;
