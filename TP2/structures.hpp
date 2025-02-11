@@ -31,18 +31,7 @@ public:
 	void afficherFilm(const Film& film) const;
 	Film* lireFilm(istream& fichier);
 	Acteur* lireActeur(istream& fichier);
-	int getCapacite()
-	{
-		return capacite_;
-	}
-	int getnElements()
-	{
-		return nElements_;
-	}
-	Film** getElements()
-	{
-		return elements_;
-	}
+	span<Film*> creerSpanListeFilms() const;
 private:
 	int capacite_, nElements_;
 	Film** elements_;

@@ -1,9 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: Le répertoire intermédiaire (x64\Debug\) contient des fichiers partagés provenant d'un autre projet (TP1.vcxproj). Cela peut entraîner un comportement de nettoyage et de regénération incorrect.
-  EXO1.cpp
-C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(42,23): warning C4244: 'initialisation' : conversion de 'double' en 'int', perte possible de données
-C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(44,12): warning C4456: la déclaration de 'diviseurActuel' masque la déclaration locale précédente
-      C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(43,7):
+  exo1.cpp
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\exo1.cpp(47,23): warning C4244: 'initialisation' : conversion de 'double' en 'int', perte possible de données
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\exo1.cpp(49,12): warning C4456: la déclaration de 'diviseurActuel' masque la déclaration locale précédente
+      C:\Users\grave\TPsINF1015\TPs\TP1\TP1\exo1.cpp(48,7):
       voir la déclaration de 'diviseurActuel'
   
-C:\Users\grave\TPsINF1015\TPs\TP1\TP1\EXO1.cpp(43,7): warning C4189: 'diviseurActuel' : variable locale initialisée mais non référencée
+C:\Users\grave\TPsINF1015\TPs\TP1\TP1\exo1.cpp(48,7): warning C4189: 'diviseurActuel' : variable locale initialisée mais non référencée
   TP1.vcxproj -> C:\Users\grave\TPsINF1015\TPs\TP1\x64\Debug\EXO1.exe

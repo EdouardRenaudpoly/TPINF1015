@@ -49,8 +49,9 @@ string lireString(istream& fichier)
 #pragma endregion//}
 
 // Fonction pour créer un span pour une ListeFilms
-span<Film*> creerSpanListeFilms(Film** elements, size_t nElements) {
-    return span<Film*>(elements, nElements);
+span<Film*> ListeFilms::creerSpanListeFilms() const
+{
+    return span<Film*>(elements_, nElements_);
 }
 
 // Fonction pour créer un span pour une liste d'acteurs
@@ -113,7 +114,7 @@ void ListeFilms::ajouterFilm(Film* ptrFilm)
 void ListeFilms::enleverFilm(Film* ptrFilm)
 {
     // Parcourt les films avec un span
-    for (Film*& film : creerSpanListeFilms(elements_, nElements_))
+    for (Film*& film : creerSpanListeFilms())
     {
         if (film == ptrFilm)
         {
@@ -131,7 +132,7 @@ void ListeFilms::afficherListeFilms() const
     //TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
     static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
     cout << ligneDeSeparation;
-    for (Film* ptrFilm : creerSpanListeFilms(elements_, nElements_))
+    for (Film* ptrFilm : creerSpanListeFilms())
     {
         afficherFilm(*ptrFilm);
         cout << ligneDeSeparation;
@@ -141,7 +142,7 @@ void ListeFilms::afficherListeFilms() const
 ///TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 void ListeFilms::detruireListeFilms()
 {
-    for (Film* ptrFilm : creerSpanListeFilms(elements_, nElements_))
+    for (Film* ptrFilm : creerSpanListeFilms())
     {
         detruireFilm(ptrFilm);
     }
@@ -151,7 +152,7 @@ void ListeFilms::detruireListeFilms()
 ///TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 Acteur* ListeFilms::trouverActeur(string nomActeur) const
 {
-    for (Film* ptrFilm : creerSpanListeFilms(elements_, nElements_))
+    for (Film* ptrFilm : creerSpanListeFilms())
     {
         if (ptrFilm != nullptr)
         {
@@ -215,9 +216,9 @@ void ListeFilms::detruireFilm(Film* filmADetruire)
     for (auto i : range(filmActuel.acteurs.nElements - 1, -1, -1)) {
         filmActuel.acteurs.elements[i]->joueDans.enleverFilm(filmADetruire);
 
-        if (filmActuel.acteurs.elements[i]->joueDans.getnElements() == 0) {
-            if (filmActuel.acteurs.elements[i]->joueDans.getElements() != nullptr) {
-                delete[] filmActuel.acteurs.elements[i]->joueDans.getElements();
+        if (filmActuel.acteurs.elements[i]->joueDans.nElements_ == 0) {
+            if (filmActuel.acteurs.elements[i]->joueDans.elements_ != nullptr) {
+                delete[] filmActuel.acteurs.elements[i]->joueDans.elements_;
             }
             cout << "Acteur Détruit : " << filmActuel.acteurs.elements[i]->nom << endl;
             delete filmActuel.acteurs.elements[i];
@@ -259,13 +260,13 @@ int main()
     ListeFilms listeFilms = ListeFilms("films.bin"); //substitut de créerListe, un nouveau constructeur
 
     cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-    listeFilms.afficherFilm(*listeFilms.getElements()[0]);
+    listeFilms.afficherFilm(*listeFilms.creerSpanListeFilms()[0]);
     cout << ligneDeSeparation << "Les films sont:" << endl;
     listeFilms.afficherListeFilms();
     listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
     cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
     afficherFilmographieActeur("Benedict Cumberbatch", listeFilms);
-    Film* ptrAlien = listeFilms.getElements()[0];
+    Film* ptrAlien = listeFilms.creerSpanListeFilms()[0];
     listeFilms.enleverFilm(ptrAlien);
     listeFilms.detruireFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
