@@ -122,9 +122,10 @@ void ListeFilms::enleverFilm(Film* ptrFilm)
             film = elements_[nElements_ - 1];
             elements_[nElements_ - 1] = nullptr;
             nElements_--;
-            break; // On sort de la boucle une fois le film enlevé
+            return; // On sort de la fonction une fois le film enlevé
         }
     }
+    cout << "Aucun film ne correspond à celui envoyé en paramètre" << endl;
 }
 
 void ListeFilms::afficherListeFilms() const
@@ -271,5 +272,7 @@ int main()
     listeFilms.detruireFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
     listeFilms.afficherListeFilms();
+    afficherFilmographieActeur("jean-bobino Marsouin", listeFilms);
+    listeFilms.enleverFilm(nullptr);
     listeFilms.detruireListeFilms();
 }
