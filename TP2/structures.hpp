@@ -8,7 +8,7 @@
 #include <limits>
 #include <algorithm>
 #include <span>
-
+#include <memory>
 #include "cppitertools/range.hpp"
 
 #include "bibliotheque_cours.hpp"
@@ -42,8 +42,55 @@ struct Acteur
 	ListeFilms joueDans;
 };// Permet d'utiliser les types alors qu'ils seront défini après.
 struct ListeActeurs {
-	int capacite_, nElements;
-	Acteur** elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	ListeActeurs()
+	{
+		nElements = 0;
+		capacite = 0;
+		elements = make_unique<Acteur * []>(capacite);
+	}
+	ListeActeurs(int nombreElements, int capaciteTableau)
+		:ListeActeurs()
+	{
+		if (nombreElements <= capaciteTableau && nombreElements >= 0)
+		{
+			nElements = nombreElements;
+			capacite = capaciteTableau;
+			elements = make_unique<Acteur * []>(capacite);
+		}
+	}
+	int capacite, nElements;
+	unique_ptr<Acteur* []> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	span<Acteur*> creerSpanListeActeurs() const
+	{
+		return span<Acteur*>(elements.get(), nElements);
+	}
+	void ajouterActeur(Acteur* ptrActeur)
+	{
+		if (capacite == nElements)
+		{
+			if (capacite != 0) //Si jamais le nb d'elements vaut 0 alors si on multiplie par 2 ça change rien
+			{
+				capacite *= 2;
+			}
+			else
+			{
+				capacite = 1;
+			}
+			unique_ptr<Acteur* []> nouveauElements = make_unique<Acteur * []>(capacite);
+			for (auto&& i : range(0, nElements))
+			{
+				nouveauElements[i] = elements[i];
+			}
+			for (auto&& i : range(nElements, capacite))
+			{
+				//Rempli le reste de la liste avec des nullptr
+				nouveauElements[i] = nullptr;
+			}
+			elements = move(nouveauElements);
+		}
+		elements[nElements] = ptrActeur;
+		nElements++;
+	}
 };
 struct Film
 {
