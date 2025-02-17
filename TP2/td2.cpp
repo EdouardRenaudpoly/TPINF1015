@@ -9,6 +9,7 @@
 #include <limits>
 #include <algorithm>
 #include <span>
+#include <memory>
 
 #include "cppitertools/range.hpp"
 
@@ -52,11 +53,6 @@ string lireString(istream& fichier)
 span<Film*> ListeFilms::creerSpanListeFilms() const
 {
     return span<Film*>(elements_, nElements_);
-}
-
-// Fonction pour créer un span pour une liste d'acteurs
-span<Acteur*> creerSpanListeActeurs(Acteur** elements, size_t nElements) {
-    return span<Acteur*>(elements, nElements);
 }
 
 //constructeurs de la classe ListeFilms
@@ -157,7 +153,7 @@ Acteur* ListeFilms::trouverActeur(string nomActeur) const
     {
         if (ptrFilm != nullptr)
         {
-            for (Acteur* ptrActeur : creerSpanListeActeurs(ptrFilm->acteurs.elements, ptrFilm->acteurs.nElements))
+            for (Acteur* ptrActeur : ptrFilm->acteurs.creerSpanListeActeurs())
             {
                 if (ptrActeur->nom == nomActeur)
                     return ptrActeur;
@@ -196,15 +192,14 @@ Film* ListeFilms::lireFilm(istream& fichier)
     film.realisateur = lireString(fichier);
     film.anneeSortie = lireUint16(fichier);
     film.recette = lireUint16(fichier);
-    film.acteurs.nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-    film.acteurs.capacite_ = film.acteurs.nElements;
+    int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
+    film.acteurs = ListeActeurs();
     Film* ptrFilm = new Film();
-    *ptrFilm = film;
-    ptrFilm->acteurs.elements = new Acteur * [film.acteurs.nElements];
-    for (auto&& i : range(0, film.acteurs.nElements))
+    *ptrFilm = move(film);
+    for ([[maybe_unused]] int i : range(0, nElements))
     {
         Acteur* ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
-        ptrFilm->acteurs.elements[i] = ptrActeur;
+        ptrFilm->acteurs.ajouterActeur(ptrActeur);
         ptrActeur->joueDans.ajouterFilm(ptrFilm);
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
@@ -213,7 +208,7 @@ Film* ListeFilms::lireFilm(istream& fichier)
 //TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
 void ListeFilms::detruireFilm(Film* filmADetruire)
 {
-    Film filmActuel = *filmADetruire;
+    Film filmActuel = move(*filmADetruire);
     for (auto i : range(filmActuel.acteurs.nElements - 1, -1, -1)) {
         filmActuel.acteurs.elements[i]->joueDans.enleverFilm(filmADetruire);
 
@@ -225,7 +220,6 @@ void ListeFilms::detruireFilm(Film* filmADetruire)
             delete filmActuel.acteurs.elements[i];
         }
     }
-    delete[] filmActuel.acteurs.elements;
     delete filmADetruire;
 }
 
@@ -239,7 +233,7 @@ void ListeFilms::afficherFilm(const Film& film) const
 {
     cout << film.titre << " (" << film.anneeSortie << ") - " << film.realisateur << " - Recette: " << film.recette << "M$";
     cout << "\n";
-    for (Acteur* ptrActeur : creerSpanListeActeurs(film.acteurs.elements, film.acteurs.nElements))
+    for (Acteur* ptrActeur : film.acteurs.creerSpanListeActeurs())
         afficherActeur(*ptrActeur);
 }
 
