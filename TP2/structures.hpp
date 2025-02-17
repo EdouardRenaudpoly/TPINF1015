@@ -20,7 +20,7 @@ using namespace iter;
 struct Film; struct Acteur;
 class ListeFilms {
 public:
-	ListeFilms();
+	ListeFilms() : capacite_(0), nElements_(0), elements_(make_unique<shared_ptr<Film>[]>(0)) {}
 	ListeFilms(string nomFichier);
 	void ajouterFilm(Film* ptrFilm);
 	void enleverFilm(Film* ptrFilm);
@@ -33,58 +33,33 @@ public:
 	Acteur* lireActeur(istream& fichier);
 	span<Film*> creerSpanListeFilms() const;
 private:
-	int capacite_, nElements_;
-	Film** elements_;
+	int capacite_ = 0;
+	int nElements_ = 0;
+	unique_ptr<shared_ptr<Film>[]> elements_;
 };
 struct Acteur
 {
-	std::string nom; int anneeNaissance; char sexe;
-	ListeFilms joueDans;
+	string nom = "";
+	int anneeNaissance = 0;
+	char sexe = 'U';
 };// Permet d'utiliser les types alors qu'ils seront défini après.
-struct ListeActeurs {
-	ListeActeurs()
-	{
-		nElements = 0;
-		capacite = 0;
-		elements = make_unique<Acteur * []>(capacite);
-	}
+struct ListeActeurs 
+{
+	ListeActeurs() : capacite(0), nElements(0), elements(make_unique<shared_ptr<Acteur>[]>(0)) {}
+
 	int capacite, nElements;
-	unique_ptr<Acteur* []> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-	span<Acteur*> creerSpanListeActeurs() const
-	{
-		return span<Acteur*>(elements.get(), nElements);
-	}
-	void ajouterActeur(Acteur* ptrActeur)
-	{
-		if (capacite == nElements)
-		{
-			if (capacite != 0) //Si jamais le nb d'elements vaut 0 alors si on multiplie par 2 ça change rien
-			{
-				capacite *= 2;
-			}
-			else
-			{
-				capacite = 1;
-			}
-			unique_ptr<Acteur* []> nouveauElements = make_unique<Acteur * []>(capacite);
-			for (auto&& i : range(0, nElements))
-			{
-				nouveauElements[i] = elements[i];
-			}
-			for (auto&& i : range(nElements, capacite))
-			{
-				//Rempli le reste de la liste avec des nullptr
-				nouveauElements[i] = nullptr;
-			}
-			elements = move(nouveauElements);
-		}
-		elements[nElements] = ptrActeur;
-		nElements++;
+	unique_ptr<shared_ptr<Acteur>[]> elements;
+
+	span<shared_ptr<Acteur>> creerSpanListeActeurs() const {
+		return span<shared_ptr<Acteur>>(elements.get(), nElements);
 	}
 };
+
 struct Film
 {
-	std::string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-	int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
+	string titre = "";
+	string realisateur = "";
+	int anneeSortie = 0;
+	int recette = 0;
 	ListeActeurs acteurs;
 };
