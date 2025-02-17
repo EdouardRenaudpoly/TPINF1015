@@ -22,16 +22,16 @@ class ListeFilms {
 public:
 	ListeFilms() : capacite_(0), nElements_(0), elements_(make_unique<shared_ptr<Film>[]>(0)) {}
 	ListeFilms(string nomFichier);
-	void ajouterFilm(Film* ptrFilm);
-	void enleverFilm(Film* ptrFilm);
+	void ajouterFilm(shared_ptr<Film> ptrFilm);
+	void enleverFilm(shared_ptr<Film> ptrFilm);
 	void afficherListeFilms() const;
 	void detruireListeFilms();
-	Acteur* trouverActeur(string nomActeur) const;
-	void detruireFilm(Film* filmADetruire);
+	shared_ptr<Acteur> trouverActeur(string nomActeur) const;
+	void detruireFilm(shared_ptr<Film> filmADetruire);
 	void afficherFilm(const Film& film) const;
-	Film* lireFilm(istream& fichier);
-	Acteur* lireActeur(istream& fichier);
-	span<Film*> creerSpanListeFilms() const;
+	shared_ptr<Film> lireFilm(istream& fichier);
+	shared_ptr<Acteur> lireActeur(istream& fichier);
+	span<shared_ptr<Film>> creerSpanListeFilms() const;
 private:
 	int capacite_ = 0;
 	int nElements_ = 0;
@@ -50,13 +50,13 @@ struct ListeActeurs
 	{
 		nElements = nElementsActeurs;
 		capacite = nElementsActeurs;
-		elements = make_unique<Acteur * []>(capacite);
+		elements = make_unique<shared_ptr<Acteur>[]>(capacite);
 	}
 	int capacite, nElements;
-	unique_ptr<Acteur* []> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-	span<Acteur*> creerSpanListeActeurs() const
+	unique_ptr<shared_ptr<Acteur>[]> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	span<shared_ptr<Acteur>> creerSpanListeActeurs() const
 	{
-		return span<Acteur*>(elements.get(), nElements);
+		return span<shared_ptr<Acteur>>(elements.get(), nElements);
 	}
 };
 struct Film
