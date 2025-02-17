@@ -48,16 +48,6 @@ struct ListeActeurs {
 		capacite = 0;
 		elements = make_unique<Acteur * []>(capacite);
 	}
-	ListeActeurs(int nombreElements, int capaciteTableau)
-		:ListeActeurs()
-	{
-		if (nombreElements <= capaciteTableau && nombreElements >= 0)
-		{
-			nElements = nombreElements;
-			capacite = capaciteTableau;
-			elements = make_unique<Acteur * []>(capacite);
-		}
-	}
 	int capacite, nElements;
 	unique_ptr<Acteur* []> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 	span<Acteur*> creerSpanListeActeurs() const

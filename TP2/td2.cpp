@@ -193,8 +193,7 @@ Film* ListeFilms::lireFilm(istream& fichier)
     film.anneeSortie = lireUint16(fichier);
     film.recette = lireUint16(fichier);
     int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-    int capacite = nElements;
-    film.acteurs = ListeActeurs(nElements,capacite);
+    film.acteurs = ListeActeurs();
     Film* ptrFilm = new Film();
     *ptrFilm = move(film);
     for ([[maybe_unused]] int i : range(0, nElements))
