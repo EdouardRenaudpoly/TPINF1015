@@ -43,18 +43,34 @@ struct Acteur
 	int anneeNaissance = 0;
 	char sexe = 'U';
 };// Permet d'utiliser les types alors qu'ils seront défini après.
-struct ListeActeurs 
+
+//struct ListeActeurs 
+//{
+//	ListeActeurs() : capacite(0), nElements(0), elements(make_unique<shared_ptr<Acteur>[]>(0)) {}
+//
+//	int capacite, nElements;
+//	unique_ptr<shared_ptr<Acteur>[]> elements;
+//
+//	span<shared_ptr<Acteur>> creerSpanListeActeurs() const {
+//		return span<shared_ptr<Acteur>>(elements.get(), nElements);
+//	}
+//};
+
+struct ListeActeurs
 {
-	ListeActeurs() : capacite(0), nElements(0), elements(make_unique<shared_ptr<Acteur>[]>(0)) {}
-
+	ListeActeurs(int nElementsActeurs = 0)
+	{
+		nElements = nElementsActeurs;
+		capacite = nElementsActeurs;
+		elements = make_unique<Acteur * []>(capacite);
+	}
 	int capacite, nElements;
-	unique_ptr<shared_ptr<Acteur>[]> elements;
-
-	span<shared_ptr<Acteur>> creerSpanListeActeurs() const {
-		return span<shared_ptr<Acteur>>(elements.get(), nElements);
+	unique_ptr<Acteur* []> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	span<Acteur*> creerSpanListeActeurs() const
+	{
+		return span<Acteur*>(elements.get(), nElements);
 	}
 };
-
 struct Film
 {
 	string titre = "";
