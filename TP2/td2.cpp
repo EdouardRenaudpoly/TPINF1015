@@ -99,7 +99,7 @@ void ListeFilms::ajouterFilm(Film* ptrFilm)
             //Rempli le reste de la liste avec des nullptr
             nouveauTableau[i] = nullptr;
         }
-        delete[] elements_;  // Libération de l'ancien tableau
+        delete[] elements_.get();  // Libération de l'ancien tableau
         elements_ = nouveauTableau;
     }
     elements_[nElements_] = ptrFilm;
@@ -211,13 +211,13 @@ void ListeFilms::detruireFilm(Film* filmADetruire)
     for (auto i : range(filmActuel.acteurs.nElements - 1, -1, -1)) {
         filmActuel.acteurs.elements[i]->joueDans.enleverFilm(filmADetruire);
 
-        if (filmActuel.acteurs.elements[i]->joueDans.nElements_ == 0) {
+        /*if (filmActuel.acteurs.elements[i]->joueDans.nElements_ == 0) {
             if (filmActuel.acteurs.elements[i]->joueDans.elements_ != nullptr) {
                 delete[] filmActuel.acteurs.elements[i]->joueDans.elements_;
             }
             cout << "Acteur Détruit : " << filmActuel.acteurs.elements[i]->nom << endl;
             delete filmActuel.acteurs.elements[i];
-        }
+        }*/
     }
     delete filmADetruire;
 }

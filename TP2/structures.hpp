@@ -44,18 +44,6 @@ struct Acteur
 	char sexe = 'U';
 };// Permet d'utiliser les types alors qu'ils seront défini après.
 
-//struct ListeActeurs 
-//{
-//	ListeActeurs() : capacite(0), nElements(0), elements(make_unique<shared_ptr<Acteur>[]>(0)) {}
-//
-//	int capacite, nElements;
-//	unique_ptr<shared_ptr<Acteur>[]> elements;
-//
-//	span<shared_ptr<Acteur>> creerSpanListeActeurs() const {
-//		return span<shared_ptr<Acteur>>(elements.get(), nElements);
-//	}
-//};
-
 struct ListeActeurs
 {
 	ListeActeurs(int nElementsActeurs = 0)
