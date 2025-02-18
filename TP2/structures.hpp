@@ -26,7 +26,6 @@ public:
 	void enleverFilm(shared_ptr<Film> ptrFilm);
 	void afficherListeFilms() const;
 	shared_ptr<Acteur> trouverActeur(string nomActeur) const;
-	void afficherFilm(const Film& film) const;
 	shared_ptr<Film> lireFilm(istream& fichier);
 	shared_ptr<Acteur> lireActeur(istream& fichier);
 	span<shared_ptr<Film>> creerSpanListeFilms() const;
@@ -65,3 +64,4 @@ struct Film
 	int recette = 0;
 	ListeActeurs acteurs;
 };
+ostream& operator<<(ostream& os,const Film& film);

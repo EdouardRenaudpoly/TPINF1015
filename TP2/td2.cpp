@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <span>
 #include <memory> //TP3
+#include <sstream>
 
 #include "cppitertools/range.hpp"
 
@@ -131,7 +132,7 @@ void ListeFilms::afficherListeFilms() const
     cout << ligneDeSeparation;
     for (shared_ptr<Film> ptrFilm : creerSpanListeFilms())
     {
-        afficherFilm(*ptrFilm);
+        cout << *ptrFilm;
         cout << ligneDeSeparation;
     }
 }
@@ -195,14 +196,19 @@ void afficherActeur(const Acteur& acteur)
 {
     cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
 }
+ostream& afficherActeur(ostream& os, const Acteur& acteur) {
+    os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+    return os;
+}
 
 ///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
-void ListeFilms::afficherFilm(const Film& film) const
+ostream& operator<<(ostream& os, const Film& film)
 {
-    cout << film.titre << " (" << film.anneeSortie << ") - " << film.realisateur << " - Recette: " << film.recette << "M$";
-    cout << "\n";
+    os << film.titre << " (" << film.anneeSortie << ") - " << film.realisateur << " - Recette: " << film.recette << "M$";
+    os << "\n";
     for (shared_ptr<Acteur> ptrActeur : film.acteurs.creerSpanListeActeurs())
-        afficherActeur(*ptrActeur);
+        afficherActeur(os,*ptrActeur);
+    return os;
 }
 
 //void afficherFilmographieActeur(const string& nomActeur, const ListeFilms& listeFilms)
@@ -213,7 +219,6 @@ void ListeFilms::afficherFilm(const Film& film) const
 //    else
 //        acteur->joueDans.afficherListeFilms();
 //}
-
 int main()
 {
     bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
@@ -223,7 +228,7 @@ int main()
     ListeFilms listeFilms = ListeFilms("films.bin"); //substitut de créerListe, un nouveau constructeur
 
     cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-    listeFilms.afficherFilm(*listeFilms.creerSpanListeFilms()[0]);
+    cout<<*listeFilms.creerSpanListeFilms()[0];
     cout << ligneDeSeparation << "Les films sont:" << endl;
     listeFilms.afficherListeFilms();
     listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
