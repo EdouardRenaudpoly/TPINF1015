@@ -191,7 +191,33 @@ shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
 }
-
+shared_ptr<Film> ListeFilms::operator[](int index)
+{
+    return elements_[index];
+}
+//Film& Film::operator= (Film&& autre) noexcept {
+//    titre=autre.titre;
+//    realisateur = autre.realisateur; 
+//    anneeSortie = autre.anneeSortie;
+//    recette = autre.recette;
+//    acteurs = move(autre.acteurs);
+//    return *this;
+//}
+//Film::Film(Film&& autre) noexcept {
+//    *this = move(autre);
+//}
+Film::Film(const Film& autre)
+{
+    titre = autre.titre;
+    realisateur = autre.realisateur;
+    anneeSortie = autre.anneeSortie;
+    recette = autre.recette;
+    acteurs = ListeActeurs(autre.acteurs.nElements);
+    for (auto&& i : range(0,autre.acteurs.nElements))
+    {
+        acteurs.elements[i] = autre.acteurs.elements[i];
+    }
+}
 void afficherActeur(const Acteur& acteur)
 {
     cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
@@ -228,13 +254,22 @@ int main()
     ListeFilms listeFilms = ListeFilms("films.bin"); //substitut de créerListe, un nouveau constructeur
 
     cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-    cout<<*listeFilms.creerSpanListeFilms()[0];
+    cout<<*listeFilms[0];
     cout << ligneDeSeparation << "Les films sont:" << endl;
     listeFilms.afficherListeFilms();
     listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
-    cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
+    //cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
     //afficherFilmographieActeur("Benedict Cumberbatch", listeFilms);
-    shared_ptr<Film> ptrAlien = listeFilms.creerSpanListeFilms()[0];
+
+    Film skylien = *listeFilms[0];
+    skylien.titre = "Skylien";
+    skylien.acteurs.elements[0] = listeFilms[1]->acteurs.elements[0];
+    skylien.acteurs.elements[0]->nom = "Daniel Wroughton Craig";
+    cout << ligneDeSeparation << "Modifications TP3" << "\n";
+    cout << skylien;
+    cout << *listeFilms[0];
+    cout << *listeFilms[1];
+    shared_ptr<Film> ptrAlien = listeFilms[0];
     listeFilms.enleverFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
     listeFilms.afficherListeFilms();

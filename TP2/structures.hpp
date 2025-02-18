@@ -29,6 +29,7 @@ public:
 	shared_ptr<Film> lireFilm(istream& fichier);
 	shared_ptr<Acteur> lireActeur(istream& fichier);
 	span<shared_ptr<Film>> creerSpanListeFilms() const;
+	shared_ptr<Film> operator[](int index);
 private:
 	int capacite_ = 0;
 	int nElements_ = 0;
@@ -63,5 +64,12 @@ struct Film
 	int anneeSortie = 0;
 	int recette = 0;
 	ListeActeurs acteurs;
+	/*Film& operator= (Film&& autre) noexcept;*/
+	Film()
+	{
+
+	}
+	/*Film(Film&& autre) noexcept;*/
+	Film(const Film& autre);
 };
 ostream& operator<<(ostream& os,const Film& film);
