@@ -237,6 +237,15 @@ ostream& operator<<(ostream& os, const Film& film)
     return os;
 }
 
+shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const {
+    for (const auto& film : creerSpanListeFilms()) {
+        if (critere(film)) {
+            return film;
+        }
+    }
+    return nullptr;
+}
+
 //void afficherFilmographieActeur(const string& nomActeur, const ListeFilms& listeFilms)
 //{
 //    const Acteur* acteur = listeFilms.trouverActeur(nomActeur);
@@ -269,6 +278,22 @@ int main()
     cout << skylien;
     cout << *listeFilms[0];
     cout << *listeFilms[1];
+
+    cout << "\nRecherche du film avec une recette de 955M$ :" << endl;
+    shared_ptr<Film> filmCherche = listeFilms.chercherFilm([](const shared_ptr<Film>& film) 
+    {
+        return film->recette == 955;
+    });
+
+    if (filmCherche) 
+    {
+        cout << "Film trouvé : " << *filmCherche << endl;
+    }
+    else 
+    {
+        cout << "Aucun film trouvé avec cette recette." << endl;
+    }
+
     shared_ptr<Film> ptrAlien = listeFilms[0];
     listeFilms.enleverFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
