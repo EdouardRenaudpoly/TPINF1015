@@ -89,18 +89,18 @@ void ListeFilms::ajouterFilm(shared_ptr<Film> ptrFilm)
         {
             capacite_ = 1;
         }
-        unique_ptr<shared_ptr<Film>> nouveauTableau = shared_ptr<Film>[capacite_];
+        unique_ptr<shared_ptr<Film>[]> nouveauTableau = make_unique<shared_ptr<Film>[]>(capacite_);
         for (auto&& i : range(0, nElements_))
         {
             nouveauTableau[i] = elements_[i];
+            elements_[i] = nullptr;
         }
         for (auto&& i : range(nElements_, capacite_))
         {
             //Rempli le reste de la liste avec des nullptr
             nouveauTableau[i] = nullptr;
         }
-        delete[] elements_.get();  // Libération de l'ancien tableau
-        elements_ = nouveauTableau;
+        elements_ = move(nouveauTableau);
     }
     elements_[nElements_] = ptrFilm;
     nElements_++;
@@ -136,16 +136,6 @@ void ListeFilms::afficherListeFilms() const
     }
 }
 
-///TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
-void ListeFilms::detruireListeFilms()
-{
-    for (shared_ptr<Film> ptrFilm : creerSpanListeFilms())
-    {
-        detruireFilm(ptrFilm);
-    }
-    delete[] elements_.get();
-}
-
 ///TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const
 {
@@ -177,9 +167,7 @@ shared_ptr<Acteur> ListeFilms::lireActeur(istream& fichier)
     }
     else
     {
-        ptrActeur = new Acteur();
-        *ptrActeur = acteur;
-        ptrActeur->joueDans = ListeFilms();
+        ptrActeur = make_shared<Acteur>(acteur);
         cout << "Acteur créé : " << acteur.nom << endl;
         return ptrActeur;
     }
@@ -194,32 +182,13 @@ shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
     film.recette = lireUint16(fichier);
     int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
     film.acteurs = ListeActeurs(nElements);
-    shared_ptr<Film> ptrFilm = new Film(move(film));
+    shared_ptr<Film> ptrFilm = make_shared<Film>(move(film));
     for ([[maybe_unused]] int i : range(0, nElements))
     {
         shared_ptr<Acteur> ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
         ptrFilm->acteurs.elements[i]=ptrActeur;
-        ptrActeur->joueDans.ajouterFilm(ptrFilm);
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
-}
-
-//TODO: Une fonction pour détruire un film (relâcher toute la mémoire associée à ce film, et les acteurs qui ne jouent plus dans aucun films de la collection).  Noter qu'il faut enleve le film détruit des films dans lesquels jouent les acteurs.  Pour fins de débogage, affichez les noms des acteurs lors de leur destruction.
-void ListeFilms::detruireFilm(shared_ptr<Film> filmADetruire)
-{
-    Film filmActuel = move(*filmADetruire);
-    for (auto i : range(filmActuel.acteurs.nElements - 1, -1, -1)) {
-        filmActuel.acteurs.elements[i]->joueDans.enleverFilm(filmADetruire);
-
-        /*if (filmActuel.acteurs.elements[i]->joueDans.nElements_ == 0) {
-            if (filmActuel.acteurs.elements[i]->joueDans.elements_ != nullptr) {
-                delete[] filmActuel.acteurs.elements[i]->joueDans.elements_;
-            }
-            cout << "Acteur Détruit : " << filmActuel.acteurs.elements[i]->nom << endl;
-            delete filmActuel.acteurs.elements[i];
-        }*/
-    }
-    delete filmADetruire;
 }
 
 void afficherActeur(const Acteur& acteur)
@@ -262,10 +231,8 @@ int main()
     //afficherFilmographieActeur("Benedict Cumberbatch", listeFilms);
     shared_ptr<Film> ptrAlien = listeFilms.creerSpanListeFilms()[0];
     listeFilms.enleverFilm(ptrAlien);
-    listeFilms.detruireFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
     listeFilms.afficherListeFilms();
     //afficherFilmographieActeur("jean-bobino Marsouin", listeFilms);
     listeFilms.enleverFilm(nullptr);
-    listeFilms.detruireListeFilms();
 }

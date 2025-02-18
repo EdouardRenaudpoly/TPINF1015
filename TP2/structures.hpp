@@ -20,14 +20,12 @@ using namespace iter;
 struct Film; struct Acteur;
 class ListeFilms {
 public:
-	ListeFilms() : capacite_(0), nElements_(0), elements_(make_unique<shared_ptr<Film>[]>(0)) {}
+	ListeFilms();
 	ListeFilms(string nomFichier);
 	void ajouterFilm(shared_ptr<Film> ptrFilm);
 	void enleverFilm(shared_ptr<Film> ptrFilm);
 	void afficherListeFilms() const;
-	void detruireListeFilms();
 	shared_ptr<Acteur> trouverActeur(string nomActeur) const;
-	void detruireFilm(shared_ptr<Film> filmADetruire);
 	void afficherFilm(const Film& film) const;
 	shared_ptr<Film> lireFilm(istream& fichier);
 	shared_ptr<Acteur> lireActeur(istream& fichier);
