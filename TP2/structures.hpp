@@ -29,6 +29,7 @@ public:
 	shared_ptr<Film> lireFilm(istream& fichier);
 	shared_ptr<Acteur> lireActeur(istream& fichier);
 	span<shared_ptr<Film>> creerSpanListeFilms() const;
+	shared_ptr<Film> chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const;
 	shared_ptr<Film> operator[](int index);
 private:
 	int capacite_ = 0;
