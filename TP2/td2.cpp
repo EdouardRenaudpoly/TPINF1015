@@ -191,7 +191,7 @@ shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
 }
-shared_ptr<Film> ListeFilms::operator[](int index)
+shared_ptr<Film>& ListeFilms::operator[](int index)
 {
     return elements_[index];
 }
@@ -212,16 +212,9 @@ Film::Film(const Film& autre)
     realisateur = autre.realisateur;
     anneeSortie = autre.anneeSortie;
     recette = autre.recette;
-    acteurs = ListeActeurs(autre.acteurs.nElements);
-    for (auto&& i : range(0,autre.acteurs.nElements))
-    {
-        acteurs.elements[i] = autre.acteurs.elements[i];
-    }
+    acteurs = autre.acteurs;
 }
-void afficherActeur(const Acteur& acteur)
-{
-    cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
-}
+
 ostream& afficherActeur(ostream& os, const Acteur& acteur) {
     os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
     return os;
@@ -246,14 +239,6 @@ shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)
     return nullptr;
 }
 
-//void afficherFilmographieActeur(const string& nomActeur, const ListeFilms& listeFilms)
-//{
-//    const Acteur* acteur = listeFilms.trouverActeur(nomActeur);
-//    if (acteur == nullptr)
-//        cout << "Aucun acteur de ce nom" << endl;
-//    else
-//        acteur->joueDans.afficherListeFilms();
-//}
 int main()
 {
     bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
@@ -267,13 +252,11 @@ int main()
     cout << ligneDeSeparation << "Les films sont:" << endl;
     listeFilms.afficherListeFilms();
     listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
-    //cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
-    //afficherFilmographieActeur("Benedict Cumberbatch", listeFilms);
 
     Film skylien = *listeFilms[0];
     skylien.titre = "Skylien";
-    skylien.acteurs.elements[0] = listeFilms[1]->acteurs.elements[0];
-    skylien.acteurs.elements[0]->nom = "Daniel Wroughton Craig";
+    skylien.acteurs[0] = listeFilms[1]->acteurs[0];
+    skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
     cout << ligneDeSeparation << "Modifications TP3" << "\n";
     cout << skylien;
     cout << *listeFilms[0];
@@ -289,15 +272,26 @@ int main()
     {
         cout << "Film trouvé : " << *filmCherche << endl;
     }
-    else 
-    {
-        cout << "Aucun film trouvé avec cette recette." << endl;
-    }
 
     shared_ptr<Film> ptrAlien = listeFilms[0];
     listeFilms.enleverFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
     listeFilms.afficherListeFilms();
-    //afficherFilmographieActeur("jean-bobino Marsouin", listeFilms);
     listeFilms.enleverFilm(nullptr);
+    //Validation classe générique Liste
+    Liste<string> listeTextes(2);
+    listeTextes[0] = make_shared<string>("Salut");
+    listeTextes[1] = make_shared<string>("Bonjour");
+    Liste<string> listeTextes2 = listeTextes;
+    listeTextes[0] = make_shared<string>("Allo");
+    *listeTextes[1] = "Salut2";
+    cout << "listeTextes[0] : " << *listeTextes[0] << endl;
+    cout << "listeTextes[1] : " << *listeTextes[1] << endl;
+    cout << "listeTextes2[0] : " << *listeTextes2[0] << endl;
+    cout << "listeTextes2[1] : " << *listeTextes2[1] << endl;
+    //Pour la couverture de code
+    shared_ptr<Film> filmInexistant = listeFilms.chercherFilm([](const shared_ptr<Film>& film)
+        {
+            return film->recette == 34095867;
+        });
 }

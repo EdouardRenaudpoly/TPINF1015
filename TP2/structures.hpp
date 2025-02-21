@@ -30,7 +30,7 @@ public:
 	shared_ptr<Acteur> lireActeur(istream& fichier);
 	span<shared_ptr<Film>> creerSpanListeFilms() const;
 	shared_ptr<Film> chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const;
-	shared_ptr<Film> operator[](int index);
+	shared_ptr<Film>& operator[](int index);
 private:
 	int capacite_ = 0;
 	int nElements_ = 0;
@@ -43,21 +43,43 @@ struct Acteur
 	char sexe = 'U';
 };// Permet d'utiliser les types alors qu'ils seront défini après.
 
-struct ListeActeurs
+template<typename T>
+class Liste
 {
-	ListeActeurs(int nElementsActeurs = 0)
+public:
+	Liste(int nElementsActeurs = 0)
 	{
 		nElements = nElementsActeurs;
 		capacite = nElementsActeurs;
-		elements = make_unique<shared_ptr<Acteur>[]>(capacite);
+		elements = make_unique<shared_ptr<T>[]>(capacite);
 	}
 	int capacite, nElements;
-	unique_ptr<shared_ptr<Acteur>[]> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-	span<shared_ptr<Acteur>> creerSpanListeActeurs() const
+	unique_ptr<shared_ptr<T>[]> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	span<shared_ptr<T>> creerSpanListeActeurs() const
 	{
-		return span<shared_ptr<Acteur>>(elements.get(), nElements);
+		return span<shared_ptr<T>>(elements.get(), nElements);
+	}
+	Liste(const Liste& autre)
+	{
+		*this = autre;
+	}
+	Liste& operator= (const Liste& autre) noexcept
+	{
+		nElements = autre.nElements;
+		capacite = autre.capacite;
+		elements = make_unique<shared_ptr<T>[]>(capacite);
+		for (auto&& i : range(0, autre.nElements))
+		{
+			elements[i] = autre.elements[i];
+		}
+		return *this;
+	}
+	shared_ptr<T>& operator[](int index)
+	{
+		return elements[index];
 	}
 };
+using ListeActeurs = Liste<Acteur>;
 struct Film
 {
 	string titre = "";
