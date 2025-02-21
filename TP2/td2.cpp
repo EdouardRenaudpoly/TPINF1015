@@ -1,4 +1,14 @@
-﻿#pragma region "Includes"//{
+﻿/**
+* Programme de gestion d'instances de Film et de ses attributs (acteurs, nom, recette, etc.) à l'aide de la classe ListeFilms et création de la classe générique Liste notamment utilisée pour contenir les acteurs d'un film.
+* Les fonctionnalités ajoutées sont : Gestion de la mémoire automatique avec les pointeurs intelligents, création de surchage des opérateurs d'indexation dans listeFilms et Liste, surcharge de l'opérateur = pour l'affectation d'une Liste, surcharge de l'opérateur << pour afficher nu film et ses acteurs, création de constructeur de copie pour Film et Liste,
+* Fonction lambda pour trouver un film selon une condition, Liste en tant que fonction générique pour contenir n'importe quel type template T
+* \file   td2.cpp
+* \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+* \date   21 février 2025
+* Créé le 17 février 2025
+*/
+
+#pragma region "Includes"//{
 #define _CRT_SECURE_NO_WARNINGS // On permet d'utiliser les fonctions de copies de chaînes qui sont considérées non sécuritaires.
 
 #include "structures.hpp"      // Structures de données pour la collection de films en mémoire.
