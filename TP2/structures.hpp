@@ -24,11 +24,11 @@ public:
 	ListeFilms(string nomFichier);
 	void ajouterFilm(shared_ptr<Film> ptrFilm);
 	void enleverFilm(shared_ptr<Film> ptrFilm);
-	void afficherListeFilms() const;
+	void afficher() const;
 	shared_ptr<Acteur> trouverActeur(string nomActeur) const;
 	shared_ptr<Film> lireFilm(istream& fichier);
 	shared_ptr<Acteur> lireActeur(istream& fichier);
-	span<shared_ptr<Film>> creerSpanListeFilms() const;
+	span<shared_ptr<Film>> creerSpan() const;
 	shared_ptr<Film> chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const;
 	shared_ptr<Film>& operator[](int index);
 private:
@@ -49,15 +49,13 @@ class Liste
 public:
 	Liste(int nElementsActeurs = 0)
 	{
-		nElements = nElementsActeurs;
-		capacite = nElementsActeurs;
-		elements = make_unique<shared_ptr<T>[]>(capacite);
+		nElements_ = nElementsActeurs;
+		capacite_ = nElementsActeurs;
+		elements_ = make_unique<shared_ptr<T>[]>(capacite_);
 	}
-	int capacite, nElements;
-	unique_ptr<shared_ptr<T>[]> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-	span<shared_ptr<T>> creerSpanListeActeurs() const
+	span<shared_ptr<T>> creerSpan() const
 	{
-		return span<shared_ptr<T>>(elements.get(), nElements);
+		return span<shared_ptr<T>>(elements_.get(), nElements_);
 	}
 	Liste(const Liste& autre)
 	{
@@ -65,19 +63,22 @@ public:
 	}
 	Liste& operator= (const Liste& autre) noexcept
 	{
-		nElements = autre.nElements;
-		capacite = autre.capacite;
-		elements = make_unique<shared_ptr<T>[]>(capacite);
-		for (auto&& i : range(0, autre.nElements))
+		nElements_ = autre.nElements_;
+		capacite_ = autre.capacite_;
+		elements_ = make_unique<shared_ptr<T>[]>(capacite_);
+		for (auto&& i : range(0, autre.nElements_))
 		{
-			elements[i] = autre.elements[i];
+			elements_[i] = autre.elements_[i];
 		}
 		return *this;
 	}
 	shared_ptr<T>& operator[](int index)
 	{
-		return elements[index];
+		return elements_[index];
 	}
+private:
+	int capacite_, nElements_;
+	unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 };
 using ListeActeurs = Liste<Acteur>;
 struct Film
@@ -87,12 +88,7 @@ struct Film
 	int anneeSortie = 0;
 	int recette = 0;
 	ListeActeurs acteurs;
-	/*Film& operator= (Film&& autre) noexcept;*/
-	Film()
-	{
-
-	}
-	/*Film(Film&& autre) noexcept;*/
+	Film() {}
 	Film(const Film& autre);
 };
 ostream& operator<<(ostream& os,const Film& film);

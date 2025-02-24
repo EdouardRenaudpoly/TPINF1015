@@ -4,7 +4,7 @@
 * Fonction lambda pour trouver un film selon une condition, Liste en tant que fonction générique pour contenir n'importe quel type template T
 * \file   td2.cpp
 * \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
-* \date   21 février 2025
+* \date   24 février 2025
 * Créé le 17 février 2025
 */
 
@@ -61,7 +61,7 @@ string lireString(istream& fichier)
 #pragma endregion//}
 
 // Fonction pour créer un span pour une ListeFilms
-span<shared_ptr<Film>> ListeFilms::creerSpanListeFilms() const
+span<shared_ptr<Film>> ListeFilms::creerSpan() const
 {
     return span<shared_ptr<Film>>(elements_.get(), nElements_);
 }
@@ -121,7 +121,7 @@ void ListeFilms::ajouterFilm(shared_ptr<Film> ptrFilm)
 void ListeFilms::enleverFilm(shared_ptr<Film> ptrFilm)
 {
     // Parcourt les films avec un span
-    for (shared_ptr<Film>& film : creerSpanListeFilms())
+    for (shared_ptr<Film>& film : creerSpan())
     {
         if (film == ptrFilm)
         {
@@ -135,12 +135,12 @@ void ListeFilms::enleverFilm(shared_ptr<Film> ptrFilm)
     cout << "Aucun film ne correspond à celui envoyé en paramètre" << endl;
 }
 
-void ListeFilms::afficherListeFilms() const
+void ListeFilms::afficher() const
 {
     //TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
     static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
     cout << ligneDeSeparation;
-    for (shared_ptr<Film> ptrFilm : creerSpanListeFilms())
+    for (shared_ptr<Film> ptrFilm : creerSpan())
     {
         cout << *ptrFilm;
         cout << ligneDeSeparation;
@@ -150,11 +150,11 @@ void ListeFilms::afficherListeFilms() const
 ///TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const
 {
-    for (shared_ptr<Film> ptrFilm : creerSpanListeFilms())
+    for (shared_ptr<Film> ptrFilm : creerSpan())
     {
         if (ptrFilm != nullptr)
         {
-            for (shared_ptr<Acteur> ptrActeur : ptrFilm->acteurs.creerSpanListeActeurs())
+            for (shared_ptr<Acteur> ptrActeur : ptrFilm->acteurs.creerSpan())
             {
                 if (ptrActeur->nom == nomActeur)
                     return ptrActeur;
@@ -197,7 +197,7 @@ shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
     for ([[maybe_unused]] int i : range(0, nElements))
     {
         shared_ptr<Acteur> ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
-        ptrFilm->acteurs.elements[i]=ptrActeur;
+        ptrFilm->acteurs.creerSpan()[i]=ptrActeur;
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
 }
@@ -205,17 +205,6 @@ shared_ptr<Film>& ListeFilms::operator[](int index)
 {
     return elements_[index];
 }
-//Film& Film::operator= (Film&& autre) noexcept {
-//    titre=autre.titre;
-//    realisateur = autre.realisateur; 
-//    anneeSortie = autre.anneeSortie;
-//    recette = autre.recette;
-//    acteurs = move(autre.acteurs);
-//    return *this;
-//}
-//Film::Film(Film&& autre) noexcept {
-//    *this = move(autre);
-//}
 Film::Film(const Film& autre)
 {
     titre = autre.titre;
@@ -235,13 +224,13 @@ ostream& operator<<(ostream& os, const Film& film)
 {
     os << film.titre << " (" << film.anneeSortie << ") - " << film.realisateur << " - Recette: " << film.recette << "M$";
     os << "\n";
-    for (shared_ptr<Acteur> ptrActeur : film.acteurs.creerSpanListeActeurs())
+    for (shared_ptr<Acteur> ptrActeur : film.acteurs.creerSpan())
         afficherActeur(os,*ptrActeur);
     return os;
 }
 
 shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const {
-    for (const auto& film : creerSpanListeFilms()) {
+    for (const auto& film : creerSpan()) {
         if (critere(film)) {
             return film;
         }
@@ -260,7 +249,7 @@ int main()
     cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
     cout<<*listeFilms[0];
     cout << ligneDeSeparation << "Les films sont:" << endl;
-    listeFilms.afficherListeFilms();
+    listeFilms.afficher();
     listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
 
     Film skylien = *listeFilms[0];
@@ -286,7 +275,7 @@ int main()
     shared_ptr<Film> ptrAlien = listeFilms[0];
     listeFilms.enleverFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
-    listeFilms.afficherListeFilms();
+    listeFilms.afficher();
     listeFilms.enleverFilm(nullptr);
     //Validation classe générique Liste
     Liste<string> listeTextes(2);
@@ -301,7 +290,7 @@ int main()
     cout << "listeTextes2[1] : " << *listeTextes2[1] << endl;
     //Pour la couverture de code
     shared_ptr<Film> filmInexistant = listeFilms.chercherFilm([](const shared_ptr<Film>& film)
-        {
+    {
             return film->recette == 34095867;
-        });
+    });
 }
