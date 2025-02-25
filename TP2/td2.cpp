@@ -186,7 +186,7 @@ shared_ptr<Acteur> ListeFilms::lireActeur(istream& fichier)
 
 shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
 {
-    Film film = {};
+    Film film;
     film.titre = lireString(fichier);
     film.realisateur = lireString(fichier);
     film.anneeSortie = lireUint16(fichier);
@@ -252,6 +252,7 @@ int main()
     listeFilms.afficher();
     listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
 
+    //vérigication des surcharges [] et << et =
     Film skylien = *listeFilms[0];
     skylien.titre = "Skylien";
     skylien.acteurs[0] = listeFilms[1]->acteurs[0];
@@ -260,6 +261,9 @@ int main()
     cout << skylien;
     cout << *listeFilms[0];
     cout << *listeFilms[1];
+    ostringstream tamponStringStream;
+    tamponStringStream << *listeFilms[0];
+    string filmEnString = tamponStringStream.str();
 
     cout << "\nRecherche du film avec une recette de 955M$ :" << endl;
     shared_ptr<Film> filmCherche = listeFilms.chercherFilm([](const shared_ptr<Film>& film) 
@@ -272,6 +276,7 @@ int main()
         cout << "Film trouvé : " << *filmCherche << endl;
     }
 
+    //enlever premier film
     shared_ptr<Film> ptrAlien = listeFilms[0];
     listeFilms.enleverFilm(ptrAlien);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
