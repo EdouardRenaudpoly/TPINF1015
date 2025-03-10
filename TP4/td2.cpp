@@ -148,13 +148,13 @@ void ListeFilms::afficher() const
 }
 
 ///TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
-shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const
+shared_ptr<Acteur> trouverActeur(string nomActeur) const
 {
     for (shared_ptr<Film> ptrFilm : creerSpan())
     {
         if (ptrFilm != nullptr)
         {
-            for (shared_ptr<Acteur> ptrActeur : ptrFilm->acteurs.creerSpan())
+            for (shared_ptr<Acteur> ptrActeur : ptrFilm->acteurs_.creerSpan())
             {
                 if (ptrActeur->nom == nomActeur)
                     return ptrActeur;
@@ -184,7 +184,7 @@ shared_ptr<Acteur> ListeFilms::lireActeur(istream& fichier)
     }
 }
 
-shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
+shared_ptr<Film> lireFilm(istream& fichier)
 {
     Film film;
     film.titre = lireString(fichier);
@@ -207,7 +207,7 @@ shared_ptr<Film>& ListeFilms::operator[](int index)
 }
 Film::Film(const Film& autre)
 {
-    titre = autre.titre;
+    titre_ = autre.titre_;
     realisateur = autre.realisateur;
     anneeSortie = autre.anneeSortie;
     recette = autre.recette;
@@ -218,6 +218,8 @@ ostream& afficherActeur(ostream& os, const Acteur& acteur) {
     os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
     return os;
 }
+
+
 
 ///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
 ostream& operator<<(ostream& os, const Film& film)

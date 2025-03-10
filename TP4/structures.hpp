@@ -26,7 +26,8 @@ public:
 		titre_ = titre;
 		annee_ = annee;
 	}
-
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
+	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
 private:
 	string titre_;
 	int annee_;
@@ -102,14 +103,14 @@ class Film : public Item
 {
 public:
 	Film(){}
-	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs)
+	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs) : Item(titre, annee)
 	{
-		titre_ = titre;
-		annee_ = annee;
 		realisateur_ = realisateur;
 		recette_ = recette;
 		acteurs_ = move(acteurs);
 	}
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
+	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
 	Film(const Film& autre);
 private:
 	string realisateur_ = "";
@@ -120,12 +121,10 @@ private:
 class Livre : public Item
 {
 public:
-	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages)
+	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages) : Item(titre, annee)
 	{
-		titre_ = titre;
-		annee_ = annee;
 		auteur_ = auteur;
-		nPages_ = nPages;
+		millionsCopiesVendues_ = millionsCopiesVendues;
 		nPages_=nPages;
 	}
 private:
