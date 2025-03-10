@@ -81,14 +81,38 @@ private:
 	unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 };
 using ListeActeurs = Liste<Acteur>;
-struct Film
+class Film : public Item
 {
-	string titre = "";
-	string realisateur = "";
-	int anneeSortie = 0;
-	int recette = 0;
-	ListeActeurs acteurs;
-	Film() {}
+public:
+	Film(){}
+	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs)
+	{
+		titre_ = titre;
+		annee_ = annee;
+		realisateur_ = realisateur;
+		recette_ = recette;
+		acteurs_ = move(acteurs);
+	}
 	Film(const Film& autre);
+private:
+	string realisateur_ = "";
+	int recette_ = 0;
+	ListeActeurs acteurs_;
+};
+class Livre : public Item
+{
+public:
+	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages)
+	{
+		titre_ = titre;
+		annee_ = annee;
+		auteur_ = auteur;
+		nPages_ = nPages;
+		nPages_=nPages;
+	}
+private:
+	string auteur_;
+	int millionsCopiesVendues_;
+	int nPages_;
 };
 ostream& operator<<(ostream& os,const Film& film);
