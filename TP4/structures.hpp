@@ -97,6 +97,7 @@ private:
 	unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 };
 using ListeActeurs = Liste<Acteur>;
+
 class Film : public Item
 {
 public:
@@ -115,6 +116,7 @@ private:
 	int recette_ = 0;
 	ListeActeurs acteurs_;
 };
+
 class Livre : public Item
 {
 public:
