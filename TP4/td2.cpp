@@ -154,7 +154,7 @@ shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const
     {
         if (ptrFilm != nullptr)
         {
-            for (shared_ptr<Acteur> ptrActeur : ptrFilm->acteurs.creerSpan())
+            for (shared_ptr<Acteur> ptrActeur : ptrFilm->acteurs_.creerSpan())
             {
                 if (ptrActeur->nom == nomActeur)
                     return ptrActeur;
@@ -186,18 +186,11 @@ shared_ptr<Acteur> ListeFilms::lireActeur(istream& fichier)
 
 shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
 {
-    Film film;
-    film.titre = lireString(fichier);
-    film.realisateur = lireString(fichier);
-    film.anneeSortie = lireUint16(fichier);
-    film.recette = lireUint16(fichier);
-    int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-    film.acteurs = ListeActeurs(nElements);
+    Film film(fichier);
     shared_ptr<Film> ptrFilm = make_shared<Film>(move(film));
-    for ([[maybe_unused]] int i : range(0, nElements))
+    for (auto&& ptrActeur : film.acteurs_.creerSpan())
     {
-        shared_ptr<Acteur> ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
-        ptrFilm->acteurs.creerSpan()[i]=ptrActeur;
+        ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
 }
@@ -207,11 +200,10 @@ shared_ptr<Film>& ListeFilms::operator[](int index)
 }
 Film::Film(const Film& autre)
 {
-    titre = autre.titre;
-    realisateur = autre.realisateur;
-    anneeSortie = autre.anneeSortie;
-    recette = autre.recette;
-    acteurs = autre.acteurs;
+    Item(autre);
+    realisateur_ = autre.realisateur_;
+    recette_ = autre.recette_;
+    acteurs_ = autre.acteurs_;
 }
 
 ostream& afficherActeur(ostream& os, const Acteur& acteur) {
@@ -222,9 +214,11 @@ ostream& afficherActeur(ostream& os, const Acteur& acteur) {
 ///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
 ostream& operator<<(ostream& os, const Film& film)
 {
-    os << film.titre << " (" << film.anneeSortie << ") - " << film.realisateur << " - Recette: " << film.recette << "M$";
+    Item unItem = film;
+    cout << unItem;
+    os << film.realisateur_ << " - Recette: " << film.recette_ << "M$";
     os << "\n";
-    for (shared_ptr<Acteur> ptrActeur : film.acteurs.creerSpan())
+    for (shared_ptr<Acteur> ptrActeur : film.acteurs_.creerSpan())
         afficherActeur(os,*ptrActeur);
     return os;
 }
@@ -255,8 +249,8 @@ int main()
     //vérigication des surcharges [] et << et =
     Film skylien = *listeFilms[0];
     skylien.titre = "Skylien";
-    skylien.acteurs[0] = listeFilms[1]->acteurs[0];
-    skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
+    skylien.acteurs_[0] = listeFilms[1]->acteurs_[0];
+    skylien.acteurs_[0]->nom = "Daniel Wroughton Craig";
     cout << ligneDeSeparation << "Modifications TP3" << "\n";
     cout << skylien;
     cout << *listeFilms[0];
@@ -268,7 +262,7 @@ int main()
     cout << "\nRecherche du film avec une recette de 955M$ :" << endl;
     shared_ptr<Film> filmCherche = listeFilms.chercherFilm([](const shared_ptr<Film>& film) 
     {
-        return film->recette == 955;
+        return film->recette_ == 955;
     });
 
     if (filmCherche) 

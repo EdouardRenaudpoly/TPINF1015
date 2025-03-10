@@ -26,7 +26,15 @@ public:
 		titre_ = titre;
 		annee_ = annee;
 	}
-
+	Item(const Item& autre) 
+	{
+		titre_ = autre.titre_;
+		annee_ = autre.annee_;
+	}
+	friend ostream& operator<<(ostream& os, const Item& item) 
+	{
+		return os << item.titre_ << " (" << item.annee_ << ") - ";
+	}
 private:
 	string titre_;
 	int annee_;
@@ -101,16 +109,26 @@ using ListeActeurs = Liste<Acteur>;
 class Film : public Item
 {
 public:
-	Film(){}
-	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs)
+	Film(istream& fichier)
 	{
-		titre_ = titre;
-		annee_ = annee;
+		string titre = lireString(fichier);
+		realisateur_ = lireString(fichier);
+		int anneeSortie = lireUint16(fichier);
+		recette_ = lireUint16(fichier);
+		int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
+		acteurs_ = ListeActeurs(nElements);
+		Item(titre, anneeSortie);
+	}
+	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs) : Item(titre, annee)
+	{
 		realisateur_ = realisateur;
 		recette_ = recette;
 		acteurs_ = move(acteurs);
 	}
 	Film(const Film& autre);
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
+	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
+	friend ostream& operator<<(ostream& os, const Film& film);
 private:
 	string realisateur_ = "";
 	int recette_ = 0;
@@ -120,17 +138,14 @@ private:
 class Livre : public Item
 {
 public:
-	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages)
+	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages) : Item(titre, annee)
 	{
-		titre_ = titre;
-		annee_ = annee;
 		auteur_ = auteur;
+		millionsCopiesVendues_ = millionsCopiesVendues;
 		nPages_ = nPages;
-		nPages_=nPages;
 	}
 private:
 	string auteur_;
 	int millionsCopiesVendues_;
 	int nPages_;
 };
-ostream& operator<<(ostream& os,const Film& film);
