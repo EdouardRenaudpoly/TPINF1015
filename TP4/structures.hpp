@@ -17,7 +17,24 @@
 
 using namespace std;
 using namespace iter;
-struct Film; struct Acteur;
+
+class Item
+{
+public:
+	Item(string titre = "", int annee = 0)
+	{
+		titre_ = titre;
+		annee_ = annee;
+	}
+
+private:
+	string titre_;
+	int annee_;
+
+};
+
+struct Film; struct Acteur; struct Livre;
+
 class ListeFilms {
 public:
 	ListeFilms();
@@ -42,7 +59,6 @@ struct Acteur
 	int anneeNaissance = 0;
 	char sexe = 'U';
 };// Permet d'utiliser les types alors qu'ils seront défini après.
-
 template<typename T>
 class Liste
 {
@@ -81,14 +97,6 @@ private:
 	unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 };
 using ListeActeurs = Liste<Acteur>;
-struct Film
-{
-	string titre = "";
-	string realisateur = "";
-	int anneeSortie = 0;
-	int recette = 0;
-	ListeActeurs acteurs;
-	Film() {}
-	Film(const Film& autre);
-};
+
+
 ostream& operator<<(ostream& os,const Film& film);
