@@ -36,7 +36,7 @@ using namespace iter;
 typedef uint8_t UInt8;
 typedef uint16_t UInt16;
 
-#pragma region "Fonctions de base pour lire le fichier binaire"//{
+#pragma region "Fonctions de base pour lire le fichier binaire"//
 
 UInt8 lireUint8(istream& fichier)
 {
@@ -120,6 +120,7 @@ void ListeFilms::ajouterFilm(shared_ptr<Film> ptrFilm)
 ///TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
 void ListeFilms::enleverFilm(shared_ptr<Film> ptrFilm)
 {
+
     // Parcourt les films avec un span
     for (shared_ptr<Film>& film : creerSpan())
     {

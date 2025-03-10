@@ -1,0 +1,4 @@
+﻿  testExam.cpp
+C:\Users\grave\TPsINF1015\TPs\testExam\testExam\testExam.cpp(47,36): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\grave\TPsINF1015\TPs\testExam\testExam\testExam.cpp(47,25): warning C4305: 'argument' : troncation de 'double' à 'float'
+  testExam.vcxproj -> C:\Users\grave\TPsINF1015\TPs\testExam\x64\Debug\testExam.exe
