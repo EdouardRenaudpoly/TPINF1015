@@ -149,3 +149,4 @@ private:
 	int millionsCopiesVendues_;
 	int nPages_;
 };
+

@@ -232,6 +232,19 @@ shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)
     return nullptr;
 }
 
+
+
+void construireBibliotheque(ListeFilms& listeFilms, istream& fichierLivre)
+{
+    vector<Item> bibliotheque = {};
+    for (auto&& film : listeFilms.creerSpan()) 
+    {
+        bibliotheque.push_back(*film);
+    }
+    
+
+}
+
 int main()
 {
     bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
