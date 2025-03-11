@@ -125,6 +125,8 @@ public:
 		recette_ = recette;
 		acteurs_ = move(acteurs);
 	}
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
+	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
 	Film(const Film& autre);
 	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
 	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
