@@ -21,6 +21,7 @@
 #include <span>
 #include <memory> //TP3
 #include <sstream>
+#include <iomanip>
 
 #include "cppitertools/range.hpp"
 
@@ -135,20 +136,20 @@ void ListeFilms::enleverFilm(shared_ptr<Film> ptrFilm)
     cout << "Aucun film ne correspond à celui envoyé en paramètre" << endl;
 }
 
-void ListeFilms::afficher() const
+void afficherListeItems(const vector<unique_ptr<Item>>& bibliotheque)
 {
     //TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
     static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
     cout << ligneDeSeparation;
-    for (shared_ptr<Film> ptrFilm : creerSpan())
+    for (int i : range(bibliotheque.size()))
     {
-        cout << *ptrFilm;
+        cout << *bibliotheque[i];
         cout << ligneDeSeparation;
     }
 }
 
 ///TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
-shared_ptr<Acteur> trouverActeur(string nomActeur) const
+shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const
 {
     for (shared_ptr<Film> ptrFilm : creerSpan())
     {
@@ -184,11 +185,15 @@ shared_ptr<Acteur> ListeFilms::lireActeur(istream& fichier)
     }
 }
 
-shared_ptr<Film> lireFilm(istream& fichier)
+shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
 {
-    Film film(fichier);
-    shared_ptr<Film> ptrFilm = make_shared<Film>(move(film));
-    for (auto&& ptrActeur : film.acteurs_.creerSpan())
+    string titre = lireString(fichier);
+    string realisateur = lireString(fichier);
+    int anneeSortie = lireUint16(fichier);
+    int recette = lireUint16(fichier);
+    int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
+    shared_ptr<Film> ptrFilm = make_shared<Film>(Film(titre,anneeSortie,realisateur,recette,ListeActeurs(nElements)));
+    for (auto&& ptrActeur : ptrFilm->acteurs_.creerSpan())
     {
         ptrActeur = lireActeur(fichier); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
     }
@@ -198,9 +203,8 @@ shared_ptr<Film>& ListeFilms::operator[](int index)
 {
     return elements_[index];
 }
-Film::Film(const Film& autre)
+Film::Film(const Film& autre) : Item(autre)
 {
-    Item(autre);
     realisateur_ = autre.realisateur_;
     recette_ = autre.recette_;
     acteurs_ = autre.acteurs_;
@@ -216,15 +220,17 @@ ostream& afficherActeur(ostream& os, const Acteur& acteur) {
 ///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
 ostream& operator<<(ostream& os, const Film& film)
 {
-    Item unItem = film;
-    cout << unItem;
-    os << film.realisateur_ << " - Recette: " << film.recette_ << "M$";
-    os << "\n";
-    for (shared_ptr<Acteur> ptrActeur : film.acteurs_.creerSpan())
-        afficherActeur(os,*ptrActeur);
+    film.afficher(os);
     return os;
 }
-
+void Film::afficher(ostream& os) const
+{
+    Item::afficher(os);
+    os << realisateur_ << " - Recette: " << recette_ << "M$";
+    os << "\n";
+    for (shared_ptr<Acteur> ptrActeur : acteurs_.creerSpan())
+        afficherActeur(os, *ptrActeur);
+}
 shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const {
     for (const auto& film : creerSpan()) {
         if (critere(film)) {
@@ -236,17 +242,44 @@ shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)
 
 
 
-void construireBibliotheque(ListeFilms& listeFilms, istream& fichierLivre)
+vector<unique_ptr<Item>> construireBibliotheque(ListeFilms& listeFilms)
 {
-    vector<Item> bibliotheque = {};
+    vector<unique_ptr<Item>> bibliotheque = {};
     for (auto&& film : listeFilms.creerSpan()) 
     {
-        bibliotheque.push_back(*film);
+        bibliotheque.push_back(make_unique<Film>(*film));
     }
-    
-
+    ifstream fichier("livres.txt");
+    string ligneActuelle = "";
+    string auteur;
+    int millionsCopiesVendues;
+    int nPages;
+    string titre;
+    int annee;
+    istringstream flux(ligneActuelle);
+    while (fichier >> quoted(titre) >> annee >> quoted(auteur) >> millionsCopiesVendues >> nPages) 
+    {
+        Livre livreActuel = Livre(titre, annee, auteur, millionsCopiesVendues, nPages);
+        bibliotheque.push_back(make_unique<Livre>(livreActuel));
+    }
+    return bibliotheque;
 }
-
+unique_ptr<Item> trouverItem(const vector<unique_ptr<Item>>& bibliotheque, const string& titre)
+{
+    for (unique_ptr<Item> ptrItem : bibliotheque)
+    {
+        if (ptrItem->validerTitre(titre))
+        {
+            return ptrItem;
+        }
+    }
+    return nullptr;
+}
+//FilmLivre initialiserFilmLivre(vector<unique_ptr<Item>> bibliotheque)
+//{
+//    Film filmHobbit = trouverItem(bibliotheque, "");
+//    Livre livreHobbit = trouverItem(bibliotheque, "The Hobbit");
+//}
 int main()
 {
     bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
@@ -255,56 +288,41 @@ int main()
 
     ListeFilms listeFilms = ListeFilms("films.bin"); //substitut de créerListe, un nouveau constructeur
 
-    cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-    cout<<*listeFilms[0];
-    cout << ligneDeSeparation << "Les films sont:" << endl;
-    listeFilms.afficher();
-    listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
+    vector<unique_ptr<Item>> bibliotheque = construireBibliotheque(listeFilms);
 
-    //vérigication des surcharges [] et << et =
-    Film skylien = *listeFilms[0];
-    skylien.titre = "Skylien";
-    skylien.acteurs_[0] = listeFilms[1]->acteurs_[0];
-    skylien.acteurs_[0]->nom = "Daniel Wroughton Craig";
-    cout << ligneDeSeparation << "Modifications TP3" << "\n";
-    cout << skylien;
-    cout << *listeFilms[0];
-    cout << *listeFilms[1];
-    ostringstream tamponStringStream;
-    tamponStringStream << *listeFilms[0];
-    string filmEnString = tamponStringStream.str();
+    afficherListeItems(bibliotheque);
 
-    cout << "\nRecherche du film avec une recette de 955M$ :" << endl;
-    shared_ptr<Film> filmCherche = listeFilms.chercherFilm([](const shared_ptr<Film>& film) 
-    {
-        return film->recette_ == 955;
-    });
+    //cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
+    //cout<<*listeFilms[0];
+    //cout << ligneDeSeparation << "Les films sont:" << endl;
+    ////listeFilms.afficher();
+    //listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
 
-    if (filmCherche) 
-    {
-        cout << "Film trouvé : " << *filmCherche << endl;
-    }
+    ////vérigication des surcharges [] et << et =
+    //Film skylien = *listeFilms[0];
+    //cout << ligneDeSeparation << "Modifications TP3" << "\n";
+    //cout << skylien;
+    //cout << *listeFilms[0];
+    //cout << *listeFilms[1];
+    //ostringstream tamponStringStream;
+    //tamponStringStream << *listeFilms[0];
+    //string filmEnString = tamponStringStream.str();
 
-    //enlever premier film
-    shared_ptr<Film> ptrAlien = listeFilms[0];
-    listeFilms.enleverFilm(ptrAlien);
-    cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
-    listeFilms.afficher();
-    listeFilms.enleverFilm(nullptr);
-    //Validation classe générique Liste
-    Liste<string> listeTextes(2);
-    listeTextes[0] = make_shared<string>("Salut");
-    listeTextes[1] = make_shared<string>("Bonjour");
-    Liste<string> listeTextes2 = listeTextes;
-    listeTextes[0] = make_shared<string>("Allo");
-    *listeTextes[1] = "Salut2";
-    cout << "listeTextes[0] : " << *listeTextes[0] << endl;
-    cout << "listeTextes[1] : " << *listeTextes[1] << endl;
-    cout << "listeTextes2[0] : " << *listeTextes2[0] << endl;
-    cout << "listeTextes2[1] : " << *listeTextes2[1] << endl;
+    ////enlever premier film
+    //shared_ptr<Film> ptrAlien = listeFilms[0];
+    //listeFilms.enleverFilm(ptrAlien);
+    //cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
+    //listeFilms.enleverFilm(nullptr);
+    ////Validation classe générique Liste
+    //Liste<string> listeTextes(2);
+    //listeTextes[0] = make_shared<string>("Salut");
+    //listeTextes[1] = make_shared<string>("Bonjour");
+    //Liste<string> listeTextes2 = listeTextes;
+    //listeTextes[0] = make_shared<string>("Allo");
+    //*listeTextes[1] = "Salut2";
+    //cout << "listeTextes[0] : " << *listeTextes[0] << endl;
+    //cout << "listeTextes[1] : " << *listeTextes[1] << endl;
+    //cout << "listeTextes2[0] : " << *listeTextes2[0] << endl;
+    //cout << "listeTextes2[1] : " << *listeTextes2[1] << endl;
     //Pour la couverture de code
-    shared_ptr<Film> filmInexistant = listeFilms.chercherFilm([](const shared_ptr<Film>& film)
-    {
-            return film->recette == 34095867;
-    });
 }

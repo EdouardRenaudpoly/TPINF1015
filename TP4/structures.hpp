@@ -17,8 +17,16 @@
 
 using namespace std;
 using namespace iter;
-
-class Item
+class Affichable {
+public:
+	virtual void afficher(ostream& os) const = 0;
+	virtual ~Affichable() = default;  
+};
+ostream& operator<<(ostream& os, const Affichable& obj) {
+	obj.afficher(os);
+	return os;
+}
+class Item : Affichable
 {
 public:
 	Item(string titre = "", int annee = 0)
@@ -33,7 +41,16 @@ public:
 	}
 	friend ostream& operator<<(ostream& os, const Item& item) 
 	{
-		return os << item.titre_ << " (" << item.annee_ << ") - ";
+		item.afficher(os);
+		return os;
+	}
+	void afficher(ostream& os) const override
+	{
+		os << titre_ << " (" << annee_ << ") - ";
+	}
+	bool validerTitre(const string& titre)
+	{
+		return titre == titre_;
 	}
 private:
 	string titre_;
@@ -41,7 +58,7 @@ private:
 
 };
 
-struct Film; struct Acteur; struct Livre;
+class Film; struct Acteur; class Livre;
 
 class ListeFilms {
 public:
@@ -49,7 +66,6 @@ public:
 	ListeFilms(string nomFichier);
 	void ajouterFilm(shared_ptr<Film> ptrFilm);
 	void enleverFilm(shared_ptr<Film> ptrFilm);
-	void afficher() const;
 	shared_ptr<Acteur> trouverActeur(string nomActeur) const;
 	shared_ptr<Film> lireFilm(istream& fichier);
 	shared_ptr<Acteur> lireActeur(istream& fichier);
@@ -102,42 +118,31 @@ public:
 	}
 private:
 	int capacite_, nElements_;
-	unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	unique_ptr<shared_ptr<T>[]> elements_;
 };
 using ListeActeurs = Liste<Acteur>;
 
-class Film : public Item
+class Film : virtual public Item
 {
 public:
-	Film(istream& fichier)
-	{
-		string titre = lireString(fichier);
-		realisateur_ = lireString(fichier);
-		int anneeSortie = lireUint16(fichier);
-		recette_ = lireUint16(fichier);
-		int nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
-		acteurs_ = ListeActeurs(nElements);
-		Item(titre, anneeSortie);
-	}
 	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs) : Item(titre, annee)
 	{
 		realisateur_ = realisateur;
 		recette_ = recette;
 		acteurs_ = move(acteurs);
 	}
-	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
-	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
 	Film(const Film& autre);
 	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
 	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
 	friend ostream& operator<<(ostream& os, const Film& film);
+	void afficher(ostream& os) const;
 private:
 	string realisateur_ = "";
 	int recette_ = 0;
 	ListeActeurs acteurs_;
 };
 
-class Livre : public Item
+class Livre : virtual public Item
 {
 public:
 	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages) : Item(titre, annee)
@@ -146,9 +151,34 @@ public:
 		millionsCopiesVendues_ = millionsCopiesVendues;
 		nPages_ = nPages;
 	}
+	void afficher(ostream& os) const
+	{
+		Item::afficher(os);
+		os << auteur_ << " - Millions de copies vendues: " << millionsCopiesVendues_ << " - Nombre de pages: " << nPages_;
+		os << "\n";
+	}
 private:
 	string auteur_;
 	int millionsCopiesVendues_;
 	int nPages_;
 };
-
+ostream& operator<<(ostream& os, const Livre& livre)
+{
+	livre.afficher(os);
+	return os;
+}
+class FilmLivre : public Film, public Livre
+{
+public:
+	FilmLivre(const Film& film, const Livre& livre) : Item(film), Film(film), Livre(livre) {}
+	void afficher(ostream& os) const
+	{
+		Livre::afficher(os);
+		Film::afficher(os);
+	}
+};
+ostream& operator<<(ostream& os, const FilmLivre& filmLivre)
+{
+	filmLivre.afficher(os);
+	return os;
+}
