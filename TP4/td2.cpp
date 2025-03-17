@@ -280,11 +280,13 @@ shared_ptr<Item> trouverItem(const vector<shared_ptr<Item>>& bibliotheque, const
     }
     return nullptr;
 }
-//FilmLivre initialiserFilmLivre(vector<unique_ptr<Item>> bibliotheque)
-//{
-//    Film filmHobbit = trouverItem(bibliotheque, "");
-//    Livre livreHobbit = trouverItem(bibliotheque, "The Hobbit");
-//}
+FilmLivre initialiserFilmLivre(vector<shared_ptr<Item>> bibliotheque)
+{
+    shared_ptr<Item> filmHobbit = trouverItem(bibliotheque, "");
+    shared_ptr<Item> livreHobbit = trouverItem(bibliotheque, "The Hobbit");
+    cout << filmHobbit;
+    cout << livreHobbit;
+}
 int main()
 {
     bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
@@ -297,6 +299,8 @@ int main()
 
     afficherListeItems(bibliotheque);
 
+    FilmLivre hobbit = initialiserFilmLivre(bibliotheque);
+   
     //cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
     //cout<<*listeFilms[0];
     //cout << ligneDeSeparation << "Les films sont:" << endl;

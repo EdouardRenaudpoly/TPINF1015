@@ -83,7 +83,10 @@ template<typename T>
 class Liste
 {
 public:
-	Liste(int nElementsActeurs = 0):nElements_(nElementsActeurs), capacite_(nElementsActeurs), elements_(make_unique<shared_ptr<T>>(elements_.get(), nElements_)) {}
+	Liste(int nElementsActeurs = 0) :nElements_(nElementsActeurs), capacite_(nElementsActeurs)
+	{
+		elements_ = make_unique<shared_ptr<T>>(elements_.get(), nElements_);
+	}
 	span<shared_ptr<T>> creerSpan() const
 	{
 		return span<shared_ptr<T>>(elements_.get(), nElements_);
