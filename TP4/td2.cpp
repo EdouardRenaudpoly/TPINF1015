@@ -216,7 +216,11 @@ ostream& afficherActeur(ostream& os, const Acteur& acteur) {
 }
 
 
-
+void Livre::afficher(ostream& os) const {
+    Item::afficher(os);
+    os << auteur_ << " - Millions de copies vendues: " << millionsCopiesVendues_ << " - Nombre de pages: " << nPages_;
+    os << "\n";
+}
 ///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
 ostream& operator<<(ostream& os, const Film& film)
 {

@@ -29,11 +29,7 @@ ostream& operator<<(ostream& os, const Affichable& obj) {
 class Item : Affichable
 {
 public:
-	Item(string titre = "", int annee = 0)
-	{
-		titre_ = titre;
-		annee_ = annee;
-	}
+	Item(string titre = "", int annee = 0) : titre_(titre), annee_(annee) {}
 	Item(const Item& autre) 
 	{
 		titre_ = autre.titre_;
@@ -87,12 +83,7 @@ template<typename T>
 class Liste
 {
 public:
-	Liste(int nElementsActeurs = 0)
-	{
-		nElements_ = nElementsActeurs;
-		capacite_ = nElementsActeurs;
-		elements_ = make_unique<shared_ptr<T>[]>(capacite_);
-	}
+	Liste(int nElementsActeurs = 0):nElements_(nElementsActeurs), capacite_(nElementsActeurs), elements_(make_unique<shared_ptr<T>>(elements_.get(), nElements_)) {}
 	span<shared_ptr<T>> creerSpan() const
 	{
 		return span<shared_ptr<T>>(elements_.get(), nElements_);
@@ -125,12 +116,7 @@ using ListeActeurs = Liste<Acteur>;
 class Film : virtual public Item
 {
 public:
-	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs) : Item(titre, annee)
-	{
-		realisateur_ = realisateur;
-		recette_ = recette;
-		acteurs_ = move(acteurs);
-	}
+	Film(string titre, int annee, string realisateur, int recette, ListeActeurs acteurs) : Item(titre, annee), realisateur_(realisateur), recette_(recette), acteurs_(acteurs) {}
 	Film(const Film& autre);
 	friend shared_ptr<Acteur> ListeFilms::trouverActeur(string nomActeur) const;
 	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
@@ -145,18 +131,8 @@ private:
 class Livre : virtual public Item
 {
 public:
-	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages) : Item(titre, annee)
-	{
-		auteur_ = auteur;
-		millionsCopiesVendues_ = millionsCopiesVendues;
-		nPages_ = nPages;
-	}
-	void afficher(ostream& os) const
-	{
-		Item::afficher(os);
-		os << auteur_ << " - Millions de copies vendues: " << millionsCopiesVendues_ << " - Nombre de pages: " << nPages_;
-		os << "\n";
-	}
+	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages) : Item(titre, annee), auteur_(auteur), millionsCopiesVendues_(millionsCopiesVendues), nPages_(nPages) {}
+	void afficher(ostream& os) const;
 private:
 	string auteur_;
 	int millionsCopiesVendues_;
