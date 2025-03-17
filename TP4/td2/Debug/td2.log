@@ -1,3 +1,6 @@
-﻿  td2.cpp
-C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(276,1): error C2220: l'avertissement suivant est traité comme une erreur
-C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(276,1): warning C4715: 'trouverItem' : les chemins de contrôle ne retournent pas tous une valeur
+﻿  bibliotheque_cours.cpp
+  verification_allocation.cpp
+  td2.cpp
+  Generating Code...
+     Creating library C:\Users\zacka\Documents\Université\Session2\INF1015\TP4\TP4\Debug\td2.lib and object C:\Users\zacka\Documents\Université\Session2\INF1015\TP4\TP4\Debug\td2.exp
+  td2.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\TP4\TP4\Debug\td2.exe
