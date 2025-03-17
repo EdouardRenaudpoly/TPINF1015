@@ -1,11 +1,12 @@
 ﻿/**
-* Programme de gestion d'instances de Film et de ses attributs (acteurs, nom, recette, etc.) à l'aide de la classe ListeFilms et création de la classe générique Liste notamment utilisée pour contenir les acteurs d'un film.
-* Les fonctionnalités ajoutées sont : Gestion de la mémoire automatique avec les pointeurs intelligents, création de surchage des opérateurs d'indexation dans listeFilms et Liste, surcharge de l'opérateur = pour l'affectation d'une Liste, surcharge de l'opérateur << pour afficher nu film et ses acteurs, création de constructeur de copie pour Film et Liste,
-* Fonction lambda pour trouver un film selon une condition, Liste en tant que fonction générique pour contenir n'importe quel type template T
-* \file   td2.cpp
+* Ce programme a pour but de créer une bibliothèque contenant des livres et des films qui sont tous les deux des enfants de la classe bibliothèque. Nous avons donc créé les classes Film et Livre avec une encapsulation appropriée.
+* La bibliothèque est construite en ajoutant les films de la ListeFilms et en lisant le contenu des livres depuis le fichier livres.txt. La classe Item ainsi que ses enfants implémentent l'interface affichable ce qui fait en sorte
+* que nous pouvons afficher correctement des items. Nous avons également modifié la classe afficherListeFilms pour qu'elle puisse afficher une liste d'items. Finalement, le code implémente la classe LivreFilm qui hérite de Livre
+* et de Film et nous l'avons ajouté à la bibliothèque en vérifiant que le tout s'affiche correctement.
+* \file   td4.cpp
 * \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
-* \date   24 février 2025
-* Créé le 17 février 2025
+* \date   18 mars 2025
+* Créé le 9 mars 2025
 */
 
 #pragma region "Includes"//{
@@ -136,7 +137,7 @@ void ListeFilms::enleverFilm(shared_ptr<Film> ptrFilm)
     cout << "Aucun film ne correspond à celui envoyé en paramètre" << endl;
 }
 
-void afficherListeItems(const vector<unique_ptr<Item>>& bibliotheque)
+void afficherListeItems(const vector<shared_ptr<Item>>& bibliotheque)
 {
     //TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
     static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
@@ -246,9 +247,9 @@ shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)
 
 
 
-vector<unique_ptr<Item>> construireBibliotheque(ListeFilms& listeFilms)
+vector<shared_ptr<Item>> construireBibliotheque(ListeFilms& listeFilms)
 {
-    vector<unique_ptr<Item>> bibliotheque = {};
+    vector<shared_ptr<Item>> bibliotheque = {};
     for (auto&& film : listeFilms.creerSpan()) 
     {
         bibliotheque.push_back(make_unique<Film>(*film));
@@ -264,13 +265,13 @@ vector<unique_ptr<Item>> construireBibliotheque(ListeFilms& listeFilms)
     while (fichier >> quoted(titre) >> annee >> quoted(auteur) >> millionsCopiesVendues >> nPages) 
     {
         Livre livreActuel = Livre(titre, annee, auteur, millionsCopiesVendues, nPages);
-        bibliotheque.push_back(make_unique<Livre>(livreActuel));
+        bibliotheque.push_back(make_shared<Livre>(livreActuel));
     }
     return bibliotheque;
 }
-unique_ptr<Item> trouverItem(const vector<unique_ptr<Item>>& bibliotheque, const string& titre)
+shared_ptr<Item> trouverItem(const vector<shared_ptr<Item>>& bibliotheque, const string& titre)
 {
-    for (unique_ptr<Item> ptrItem : bibliotheque)
+    for (auto& ptrItem : bibliotheque)
     {
         if (ptrItem->validerTitre(titre))
         {
@@ -292,7 +293,7 @@ int main()
 
     ListeFilms listeFilms = ListeFilms("films.bin"); //substitut de créerListe, un nouveau constructeur
 
-    vector<unique_ptr<Item>> bibliotheque = construireBibliotheque(listeFilms);
+    vector<shared_ptr<Item>> bibliotheque = construireBibliotheque(listeFilms);
 
     afficherListeItems(bibliotheque);
 
