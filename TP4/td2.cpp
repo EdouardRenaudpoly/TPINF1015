@@ -61,7 +61,24 @@ string lireString(istream& fichier)
 }
 
 #pragma endregion//}
-
+Item::Item(const Item& autre)
+{
+    titre_ = autre.titre_;
+    annee_ = autre.annee_;
+}
+ostream& operator<<(ostream& os, const Item& item)
+{
+    item.afficher(os);
+    return os;
+}
+void Item::afficher(ostream& os) const
+{
+    os << titre_ << " (" << annee_ << ") - ";
+}
+bool Item::validerTitre(const string& titre)
+{
+    return titre == titre_;
+}
 // Fonction pour créer un span pour une ListeFilms
 span<shared_ptr<Film>> ListeFilms::creerSpan() const
 {
@@ -119,32 +136,14 @@ void ListeFilms::ajouterFilm(shared_ptr<Film> ptrFilm)
     nElements_++;
 }
 
-///TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
-void ListeFilms::enleverFilm(shared_ptr<Film> ptrFilm)
-{
-    // Parcourt les films avec un span
-    for (shared_ptr<Film>& film : creerSpan())
-    {
-        if (film == ptrFilm)
-        {
-            // Remplace le film à enlever par le dernier film de la liste
-            film = elements_[nElements_ - 1] ;
-            elements_[nElements_ - 1] = nullptr;
-            nElements_--;
-            return; // On sort de la fonction une fois le film enlevé
-        }
-    }
-    cout << "Aucun film ne correspond à celui envoyé en paramètre" << endl;
-}
-
 void afficherListeItems(const vector<shared_ptr<Item>>& bibliotheque)
 {
     //TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
     static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
     cout << ligneDeSeparation;
-    for (int i : range(bibliotheque.size()))
+    for (auto&& ptrItem : bibliotheque)
     {
-        cout << *bibliotheque[i];
+        cout << *ptrItem;
         cout << ligneDeSeparation;
     }
 }
@@ -200,10 +199,41 @@ shared_ptr<Film> ListeFilms::lireFilm(istream& fichier)
     }
     return ptrFilm; //TODO: Retourner le pointeur vers le nouveau film.
 }
-shared_ptr<Film>& ListeFilms::operator[](int index)
+template<typename T>
+Liste<T>::Liste(int nElementsActeurs)
+{
+    nElements_ = nElementsActeurs;
+    capacite_ = nElementsActeurs;
+    elements_ = make_unique<shared_ptr<T>[]>(capacite_);
+}
+template<typename T>
+span<shared_ptr<T>> Liste<T>::creerSpan() const
+{
+    return span<shared_ptr<T>>(elements_.get(), nElements_);
+}
+template<typename T>
+Liste<T>::Liste(const Liste& autre)
+{
+    *this = autre;
+}
+template<typename T>
+Liste& Liste<T>::operator= (const Liste& autre) noexcept
+{
+    nElements_ = autre.nElements_;
+    capacite_ = autre.capacite_;
+    elements_ = make_unique<shared_ptr<T>[]>(capacite_);
+    for (auto&& i : range(0, autre.nElements_))
+    {
+        elements_[i] = autre.elements_[i];
+    }
+    return *this;
+}
+template<typename T>
+shared_ptr<T>& Liste<T>::operator[](int index)
 {
     return elements_[index];
 }
+
 Film::Film(const Film& autre) : Item(autre)
 {
     realisateur_ = autre.realisateur_;
@@ -211,41 +241,33 @@ Film::Film(const Film& autre) : Item(autre)
     acteurs_ = autre.acteurs_;
 }
 
-ostream& afficherActeur(ostream& os, const Acteur& acteur) {
+ostream& afficherActeur(ostream& os, const Acteur& acteur) 
+{
     os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
     return os;
 }
-
-
-void Livre::afficher(ostream& os) const {
-    Item::afficher(os);
+void Livre::afficherSansItem(ostream& os) const 
+{
     os << auteur_ << " - Millions de copies vendues: " << millionsCopiesVendues_ << " - Nombre de pages: " << nPages_;
     os << "\n";
 }
-///TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
-ostream& operator<<(ostream& os, const Film& film)
-{
-    film.afficher(os);
-    return os;
-}
-void Film::afficher(ostream& os) const
+void Livre::afficher(ostream& os) const 
 {
     Item::afficher(os);
+    afficherSansItem(os);
+}
+void Film::afficherSansItem(ostream& os) const
+{
     os << realisateur_ << " - Recette: " << recette_ << "M$";
     os << "\n";
     for (shared_ptr<Acteur> ptrActeur : acteurs_.creerSpan())
         afficherActeur(os, *ptrActeur);
 }
-shared_ptr<Film> ListeFilms::chercherFilm(function<bool(const shared_ptr<Film>&)> critere) const {
-    for (const auto& film : creerSpan()) {
-        if (critere(film)) {
-            return film;
-        }
-    }
-    return nullptr;
+void Film::afficher(ostream& os) const
+{
+    Item::afficher(os);
+    afficherSansItem(os);
 }
-
-
 
 vector<shared_ptr<Item>> construireBibliotheque(ListeFilms& listeFilms)
 {
@@ -282,10 +304,16 @@ shared_ptr<Item> trouverItem(const vector<shared_ptr<Item>>& bibliotheque, const
 }
 FilmLivre initialiserFilmLivre(vector<shared_ptr<Item>> bibliotheque)
 {
-    shared_ptr<Item> filmHobbit = trouverItem(bibliotheque, "");
-    shared_ptr<Item> livreHobbit = trouverItem(bibliotheque, "The Hobbit");
-    cout << filmHobbit;
-    cout << livreHobbit;
+    shared_ptr<Film> filmHobbit = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Le Hobbit : La Bataille des Cinq Armées"));
+    shared_ptr<Livre> livreHobbit = dynamic_pointer_cast<Livre>(trouverItem(bibliotheque, "The Hobbit"));
+    FilmLivre filmLivreHobbit = FilmLivre(*filmHobbit, *livreHobbit);
+    return filmLivreHobbit;
+}
+void FilmLivre::afficher(ostream& os) const
+{
+    Item::afficher(os);
+    Film::afficherSansItem(os);
+    Livre::afficherSansItem(os);
 }
 int main()
 {
@@ -297,41 +325,10 @@ int main()
 
     vector<shared_ptr<Item>> bibliotheque = construireBibliotheque(listeFilms);
 
-    afficherListeItems(bibliotheque);
-
     FilmLivre hobbit = initialiserFilmLivre(bibliotheque);
-   
-    //cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-    //cout<<*listeFilms[0];
-    //cout << ligneDeSeparation << "Les films sont:" << endl;
-    ////listeFilms.afficher();
-    //listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
+    bibliotheque.push_back(make_shared<FilmLivre>(hobbit));
 
-    ////vérigication des surcharges [] et << et =
-    //Film skylien = *listeFilms[0];
-    //cout << ligneDeSeparation << "Modifications TP3" << "\n";
-    //cout << skylien;
-    //cout << *listeFilms[0];
-    //cout << *listeFilms[1];
-    //ostringstream tamponStringStream;
-    //tamponStringStream << *listeFilms[0];
-    //string filmEnString = tamponStringStream.str();
-
-    ////enlever premier film
-    //shared_ptr<Film> ptrAlien = listeFilms[0];
-    //listeFilms.enleverFilm(ptrAlien);
-    //cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
-    //listeFilms.enleverFilm(nullptr);
-    ////Validation classe générique Liste
-    //Liste<string> listeTextes(2);
-    //listeTextes[0] = make_shared<string>("Salut");
-    //listeTextes[1] = make_shared<string>("Bonjour");
-    //Liste<string> listeTextes2 = listeTextes;
-    //listeTextes[0] = make_shared<string>("Allo");
-    //*listeTextes[1] = "Salut2";
-    //cout << "listeTextes[0] : " << *listeTextes[0] << endl;
-    //cout << "listeTextes[1] : " << *listeTextes[1] << endl;
-    //cout << "listeTextes2[0] : " << *listeTextes2[0] << endl;
-    //cout << "listeTextes2[1] : " << *listeTextes2[1] << endl;
+    afficherListeItems(bibliotheque);
     //Pour la couverture de code
+    shared_ptr<Film> filmNonExistant = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Skibidi Toilet : Attack of the Cameraman"));
 }
