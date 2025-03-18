@@ -217,7 +217,7 @@ Liste<T>::Liste(const Liste& autre)
     *this = autre;
 }
 template<typename T>
-Liste& Liste<T>::operator= (const Liste& autre) noexcept
+Liste<T>& Liste<T>::operator= (const Liste<T>& autre) noexcept
 {
     nElements_ = autre.nElements_;
     capacite_ = autre.capacite_;
@@ -274,7 +274,7 @@ vector<shared_ptr<Item>> construireBibliotheque(ListeFilms& listeFilms)
     vector<shared_ptr<Item>> bibliotheque = {};
     for (auto&& film : listeFilms.creerSpan()) 
     {
-        bibliotheque.push_back(make_unique<Film>(*film));
+        bibliotheque.push_back(make_shared<Film>(*film));
     }
     ifstream fichier("livres.txt");
     string ligneActuelle = "";

@@ -1,17 +1,3 @@
 ﻿  td2.cpp
-C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(220,18): error C2955: 'Liste' : l'utilisation de classe modèle requiert une liste d'arguments modèle
-      C:\Users\grave\TPsINF1015\TPs\TP4\structures.hpp(62,7):
-      voir la déclaration de 'Liste'
-  
-C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(220,18): error C2244: 'Liste<T>::operator =' : impossible de faire correspondre la définition de fonction avec une déclaration existante
-      C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(220,18):
-      voir la déclaration de 'Liste<T>::operator ='
-      C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(220,18):
-      définition
-      C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(220,18):
-      'Liste &Liste<T>::operator =(const Liste<T> &) noexcept'
-      C:\Users\grave\TPsINF1015\TPs\TP4\td2.cpp(220,18):
-      déclarations existantes
-      C:\Users\grave\TPsINF1015\TPs\TP4\structures.hpp(68,9):
-      'Liste<T> &Liste<T>::operator =(const Liste<T> &) noexcept'
-  
+     Création de la bibliothèque C:\Users\grave\TPsINF1015\TPs\TP4\Debug\td2.lib et de l'objet C:\Users\grave\TPsINF1015\TPs\TP4\Debug\td2.exp
+  td2.vcxproj -> C:\Users\grave\TPsINF1015\TPs\TP4\Debug\td2.exe
