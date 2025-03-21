@@ -30,7 +30,6 @@ public:
 	friend ostream& operator<<(ostream& os, const Item& item);
 	void afficher(ostream& os) const override;
 	bool validerTitre(const string& titre);
-private:
 	string titre_;
 	int annee_;
 
@@ -82,7 +81,7 @@ public:
 	friend shared_ptr<Film> ListeFilms::lireFilm(istream& fichier);
 	void afficher(ostream& os) const;
 	void afficherSansItem(ostream& os) const;
-private:
+	void afficherPourFilmLivre(ostream& os) const;
 	string realisateur_ = "";
 	int recette_ = 0;
 	ListeActeurs acteurs_;
@@ -94,7 +93,6 @@ public:
 	Livre(string titre, int annee, string auteur, int millionsCopiesVendues, int nPages) : Item(titre, annee), auteur_(auteur), millionsCopiesVendues_(millionsCopiesVendues), nPages_(nPages) {}
 	void afficher(ostream& os) const;
 	void afficherSansItem(ostream& os) const;
-private:
 	string auteur_;
 	int millionsCopiesVendues_;
 	int nPages_;

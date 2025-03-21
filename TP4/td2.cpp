@@ -29,6 +29,7 @@
 #include "bibliotheque_cours.hpp"
 #include "verification_allocation.hpp" // Nos fonctions pour le rapport de fuites de mémoire.
 #include "debogage_memoire.hpp"        // Ajout des numéros de ligne des "new" dans le rapport de fuites.  Doit être après les include du système, qui peuvent utiliser des "placement new" (non supporté par notre ajout de numéros de lignes).
+#include <forward_list>
 
 using namespace std;
 using namespace iter;
@@ -73,7 +74,7 @@ ostream& operator<<(ostream& os, const Item& item)
 }
 void Item::afficher(ostream& os) const
 {
-    os << titre_ << " (" << annee_ << ") - ";
+    os << titre_;
 }
 bool Item::validerTitre(const string& titre)
 {
@@ -135,8 +136,8 @@ void ListeFilms::ajouterFilm(shared_ptr<Film> ptrFilm)
     elements_[nElements_] = ptrFilm;
     nElements_++;
 }
-
-void afficherListeItems(const vector<shared_ptr<Item>>& bibliotheque)
+template<std::ranges::input_range T>
+void afficherListeItems(const T& bibliotheque)
 {
     //TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
     static const string ligneDeSeparation = "\n-----------------------------------------------------------\n";
@@ -248,8 +249,12 @@ ostream& afficherActeur(ostream& os, const Acteur& acteur)
 }
 void Livre::afficherSansItem(ostream& os) const 
 {
-    os << auteur_ << " - Millions de copies vendues: " << millionsCopiesVendues_ << " - Nombre de pages: " << nPages_;
+    os << ", de "<<auteur_;
     os << "\n";
+}
+void Film::afficherPourFilmLivre(ostream& os) const
+{
+    os << ", de " << realisateur_;
 }
 void Livre::afficher(ostream& os) const 
 {
@@ -258,10 +263,8 @@ void Livre::afficher(ostream& os) const
 }
 void Film::afficherSansItem(ostream& os) const
 {
-    os << realisateur_ << " - Recette: " << recette_ << "M$";
+    os << ", par " << realisateur_;
     os << "\n";
-    for (shared_ptr<Acteur> ptrActeur : acteurs_.creerSpan())
-        afficherActeur(os, *ptrActeur);
 }
 void Film::afficher(ostream& os) const
 {
@@ -312,8 +315,28 @@ FilmLivre initialiserFilmLivre(vector<shared_ptr<Item>> bibliotheque)
 void FilmLivre::afficher(ostream& os) const
 {
     Item::afficher(os);
-    Film::afficherSansItem(os);
+    Film::afficherPourFilmLivre(os);
     Livre::afficherSansItem(os);
+}
+template<std::ranges::input_range T>
+forward_list<shared_ptr<Item>> copierPointeurs(const T& bibliotheque)
+{
+    forward_list<shared_ptr<Item>> listeCopiee;
+    forward_list<shared_ptr<Item>>::iterator it = listeCopiee.before_begin();
+    for (auto&& ptrItem : bibliotheque) 
+    {
+        it = listeCopiee.insert_after(it, ptrItem);
+    }
+    return listeCopiee;
+}
+forward_list<shared_ptr<Item>> copierOrdreInverse(const forward_list<shared_ptr<Item>>& bibliotheque)
+{
+    forward_list<shared_ptr<Item>> listeInversee;
+    for (auto&& ptrItem : bibliotheque)
+    {
+        listeInversee.push_front(ptrItem);
+    }
+    return listeInversee;
 }
 int main()
 {
@@ -329,6 +352,16 @@ int main()
     bibliotheque.push_back(make_shared<FilmLivre>(hobbit));
 
     afficherListeItems(bibliotheque);
+    cout << ligneDeSeparation << endl;
+    forward_list<shared_ptr<Item>> biblioForwardList = copierPointeurs(bibliotheque); //1.1
+    afficherListeItems(biblioForwardList);
+    cout << ligneDeSeparation << endl;
+    forward_list<shared_ptr<Item>> biblioInversee = copierOrdreInverse(biblioForwardList); // 1.2
+    afficherListeItems(biblioInversee);
+    cout << ligneDeSeparation << endl;
+    forward_list<shared_ptr<Item>> biblioCopiee = copierPointeurs(biblioForwardList); //1.3
+    afficherListeItems(biblioCopiee);
+    cout << ligneDeSeparation << endl;
     //Pour la couverture de code
     shared_ptr<Film> filmNonExistant = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Skibidi Toilet : Attack of the Cameraman"));
 }
