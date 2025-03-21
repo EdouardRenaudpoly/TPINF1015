@@ -57,6 +57,7 @@ struct Acteur
 	int anneeNaissance = 0;
 	char sexe = 'U';
 };// Permet d'utiliser les types alors qu'ils seront défini après.
+ostream& operator<<(ostream& os, const Acteur& acteur);
 template<typename T>
 class Liste
 {
@@ -66,6 +67,16 @@ public:
 	Liste(const Liste& autre);
 	Liste& operator= (const Liste& autre) noexcept;
 	shared_ptr<T>& operator[](int index);
+
+	shared_ptr<T>* begin() 
+	{
+		return &elements_[0];
+	}
+
+	shared_ptr<T>* end() 
+	{
+		return &elements_[nElements_];
+	}
 private:
 	int capacite_, nElements_;
 	unique_ptr<shared_ptr<T>[]> elements_;

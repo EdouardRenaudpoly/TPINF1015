@@ -242,7 +242,7 @@ Film::Film(const Film& autre) : Item(autre)
     acteurs_ = autre.acteurs_;
 }
 
-ostream& afficherActeur(ostream& os, const Acteur& acteur) 
+ostream& operator<<(ostream& os, const Acteur& acteur) 
 {
     os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
     return os;
@@ -338,6 +338,17 @@ forward_list<shared_ptr<Item>> copierOrdreInverse(const forward_list<shared_ptr<
     }
     return listeInversee;
 }
+vector<shared_ptr<Item>> copierOrdreInverseVecteur(const forward_list<shared_ptr<Item>>& bibliotheque)
+{
+    vector<shared_ptr<Item>> vecteurInverse(distance(bibliotheque.begin(),bibliotheque.end()));  //ligne reprise depuis le site : https://how.dev/answers/what-is-the-distance-function-in-cpp
+    vector<shared_ptr<Item>>::reverse_iterator it = vecteurInverse.rbegin();
+    for (auto&& ptrItem : bibliotheque)
+    {
+        *it = ptrItem;
+        it++;
+    }
+    return vecteurInverse;
+}
 int main()
 {
     bibliotheque_cours::activerCouleursAnsi();  // Permet sous Windows les "ANSI escape code" pour changer de couleurs https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac les supportent normalement par défaut.
@@ -362,6 +373,14 @@ int main()
     forward_list<shared_ptr<Item>> biblioCopiee = copierPointeurs(biblioForwardList); //1.3
     afficherListeItems(biblioCopiee);
     cout << ligneDeSeparation << endl;
+    vector<shared_ptr<Item>> vecteurCopie = copierOrdreInverseVecteur(biblioForwardList); //1.4
+    afficherListeItems(vecteurCopie);
+    cout << ligneDeSeparation << endl;
+    Film film = *dynamic_pointer_cast<Film>(bibliotheque[0]);
+    for (auto&& acteur : film.acteurs_) //1.5
+    {
+        cout << *acteur;
+    }
     //Pour la couverture de code
     shared_ptr<Film> filmNonExistant = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Skibidi Toilet : Attack of the Cameraman"));
 }
