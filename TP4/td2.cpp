@@ -1,12 +1,11 @@
 ﻿/**
-* Ce programme a pour but de créer une bibliothèque contenant des livres et des films qui sont tous les deux des enfants de la classe bibliothèque. Nous avons donc créé les classes Film et Livre avec une encapsulation appropriée.
-* La bibliothèque est construite en ajoutant les films de la ListeFilms et en lisant le contenu des livres depuis le fichier livres.txt. La classe Item ainsi que ses enfants implémentent l'interface affichable ce qui fait en sorte
-* que nous pouvons afficher correctement des items. Nous avons également modifié la classe afficherListeFilms pour qu'elle puisse afficher une liste d'items. Finalement, le code implémente la classe LivreFilm qui hérite de Livre
-* et de Film et nous l'avons ajouté à la bibliothèque en vérifiant que le tout s'affiche correctement.
-* \file   td4.cpp
+* Ce programme a pour but de continuer la bibliotheque et de nous familiariser avec les conteneurs. La première partie consiste à implémenter des copies dans l'ordre original ou inversé des éléments de la bibliothèque avec
+* des vecteurs ou des forward_list. On implémente également begin et end dans la classe générique Liste pour pouvoir itérer dedans. Par la suite, il faut implémenter des conteneurs pour permettre de trier les items et pour
+* pouvoir trouver un Item facilement. Finalement, nous avons implémenté des algorithmes dont un qui copie tous les items de la bibliothèque qui sont des films et un qui fait la somme des recettes de la bibliothèque copiée juste avant
+* \file   td5.cpp
 * \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
-* \date   18 mars 2025
-* Créé le 9 mars 2025
+* \date   23 mars 2025
+* Créé le 21 mars 2025
 */
 
 #pragma region "Includes"//{

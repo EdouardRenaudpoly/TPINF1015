@@ -1,3 +1,10 @@
+/**
+* Ces classes sont les mêmes que pour le td précédent, nous avons modifié la classe Liste pour pouvoir itérer dedans à l'aide d'un for classique, les méthodes de classe begin et end on été ajoutées.
+* \file   structures.hpp
+* \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+* \date   23 mars 2025
+* Créé le 21 mars 2025
+*/
 #pragma once
 // Structures mémoires pour une collection de films.
 
