@@ -29,6 +29,8 @@
 #include "verification_allocation.hpp" // Nos fonctions pour le rapport de fuites de mémoire.
 #include "debogage_memoire.hpp"        // Ajout des numéros de ligne des "new" dans le rapport de fuites.  Doit être après les include du système, qui peuvent utiliser des "placement new" (non supporté par notre ajout de numéros de lignes).
 #include <forward_list>
+#include <set>
+#include <unordered_set>
 
 using namespace std;
 using namespace iter;
@@ -380,6 +382,16 @@ int main()
     {
         cout << *acteur;
     }
+    cout << ligneDeSeparation << endl;
+    auto fonctionTri = [](const shared_ptr<Item>& a,const shared_ptr<Item>& b) {return a->titre_ < b->titre_;};
+    set <shared_ptr<Item>, decltype(fonctionTri)> bibliothequeTriee(fonctionTri);
+    for (auto&& ptrItem : bibliotheque)
+    {
+        bibliothequeTriee.insert(ptrItem);
+    }
+    afficherListeItems(bibliothequeTriee); //2.1
+    cout << ligneDeSeparation << endl;
+    unordered_set<shared_ptr<Item>> bibliothequeTrouve;
     //Pour la couverture de code
     shared_ptr<Film> filmNonExistant = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Skibidi Toilet : Attack of the Cameraman"));
 }
