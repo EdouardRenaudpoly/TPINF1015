@@ -31,6 +31,7 @@
 #include <forward_list>
 #include <set>
 #include <unordered_set>
+#include <numeric>
 
 using namespace std;
 using namespace iter;
@@ -414,8 +415,12 @@ int main()
         cout << "Film non trouvé" << endl;
     }
     cout << ligneDeSeparation << endl;
-
-
+    vector<shared_ptr<Item>> filmsCopies;
+    copy_if(bibliotheque.begin(), bibliotheque.end(), back_inserter(filmsCopies), [](shared_ptr<Item> item) { return dynamic_pointer_cast<Film>(item) != nullptr; }); //3.1
+    afficherListeItems(filmsCopies);
+    cout << ligneDeSeparation << endl;
+    int recettesTotales = reduce(filmsCopies.begin(), filmsCopies.end(), 0, [](int somme, const shared_ptr<Item>& ptrItem) {return somme + dynamic_pointer_cast<Film>(ptrItem)->recette_;}); //3.2
+    cout << recettesTotales << " M$" << endl;
     //Pour la couverture de code
     shared_ptr<Film> filmNonExistant = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Skibidi Toilet : Attack of the Cameraman"));
 }
