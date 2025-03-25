@@ -361,7 +361,8 @@ int main()
     vector<shared_ptr<Item>> bibliotheque = construireBibliotheque(listeFilms);
 
     FilmLivre hobbit = initialiserFilmLivre(bibliotheque);
-    bibliotheque.push_back(make_shared<FilmLivre>(hobbit));
+    shared_ptr<FilmLivre> ptrHobbit = make_shared<FilmLivre>(hobbit);
+    bibliotheque.push_back(ptrHobbit);
 
     afficherListeItems(bibliotheque);
     cout << ligneDeSeparation << endl;
@@ -392,6 +393,29 @@ int main()
     afficherListeItems(bibliothequeTriee); //2.1
     cout << ligneDeSeparation << endl;
     unordered_set<shared_ptr<Item>> bibliothequeTrouve;
+    for (auto&& ptrItem : bibliotheque)
+    {
+        bibliothequeTrouve.insert(ptrItem);
+    }
+    
+    string nomRecherche="The Hobbit";
+    auto it = find_if(bibliothequeTrouve.begin(), bibliothequeTrouve.end(),
+        [&nomRecherche](const shared_ptr<Item>& item) {
+            return item->titre_ == nomRecherche;
+        });
+    //2.2
+    if (it != bibliothequeTrouve.end())
+    {
+        cout << "Film Trouvé !" << endl;
+        cout << **it;
+    }
+    else
+    {
+        cout << "Film non trouvé" << endl;
+    }
+    cout << ligneDeSeparation << endl;
+
+
     //Pour la couverture de code
     shared_ptr<Film> filmNonExistant = dynamic_pointer_cast<Film>(trouverItem(bibliotheque, "Skibidi Toilet : Attack of the Cameraman"));
 }
