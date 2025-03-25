@@ -410,10 +410,6 @@ int main()
         cout << "Film Trouvé !" << endl;
         cout << **it;
     }
-    else
-    {
-        cout << "Film non trouvé" << endl;
-    }
     cout << ligneDeSeparation << endl;
     vector<shared_ptr<Item>> filmsCopies;
     copy_if(bibliotheque.begin(), bibliotheque.end(), back_inserter(filmsCopies), [](shared_ptr<Item> item) { return dynamic_pointer_cast<Film>(item) != nullptr; }); //3.1
