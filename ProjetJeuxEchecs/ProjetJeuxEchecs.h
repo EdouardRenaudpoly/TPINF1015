@@ -16,6 +16,7 @@ namespace Modele
 	class Tour;
 	class Echiquier;
 	class TropDeRoisException;
+	class MouvementTemporaire;
 };
 QT_END_NAMESPACE
 
@@ -46,32 +47,35 @@ public:
 class Roi : public Piece
 {
 public:
-	Roi(int x, int y);
+	Roi(int x, int y, bool estBlanc);
 	bool estMouvementValide(int x, int y) const;
 private:
 	static int nRois;
 	int x_;
 	int y_;
+	bool estBlanc_;
 };
 
 class Cavalier : public Piece
 {
 public:
-	Cavalier(int x, int y) : x_(x), y_(y){}
+	Cavalier(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
 	bool estMouvementValide(int x, int y) const;
 private:
 	int x_;
 	int y_;
+	bool estBlanc_;
 };
 
 class Tour : public Piece
 {
 public:
-	Tour(int x, int y) : x_(x), y_(y){}
+	Tour(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
 	bool estMouvementValide(int x, int y) const;
 private:
 	int x_;
 	int y_;
+	bool estBlanc_;
 };
 
 class Echiquier : public QObject {
@@ -83,4 +87,15 @@ public slots:
 	void deplacerPiece(Piece* ptrPiece, int x, int y);
 signals:
 	void pieceDeplacee(int x, int y);
+};
+
+class MouvementTemporaire
+{
+public:
+	MouvementTemporaire(Piece& piece, int nouveauX, int nouveauY);
+	~MouvementTemporaire();
+private:
+	Piece& piece_;
+	int ancienX_;
+	int ancienY_;
 };

@@ -19,11 +19,10 @@ TEST(Test, exempleDeTest)
 {
 	try
 	{
-		Roi roi1;
-		Roi roi2;
-		Roi roi3; //cause une exception
-
-		FAIL() << "L'exception a pas marché";
+		Roi roi1(0,0,true);
+		Roi roi2(0,0,false);
+		Roi roi3(0,0,false); //cause une exception
+		FAIL() << "L'exception n'a pas été lancée !";
 	}
 	catch (TropDeRoisException)
 	{

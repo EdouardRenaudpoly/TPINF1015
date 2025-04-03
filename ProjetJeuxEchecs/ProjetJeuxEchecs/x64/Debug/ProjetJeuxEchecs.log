@@ -1,17 +1,4 @@
 ﻿   Qt/MSBuild: 3.3.1.1
-  Reading Qt configuration (C:/Qt/6.8.3/msvc2022_64/bin/qmake)
    Qt: 6.8.3
-  TestJeuxEchecs.cpp
-  bibliotheque_cours.cpp
-  verification_allocation.cpp
-  gtest-all.cc
   ProjetJeuxEchecs.cpp
-  main.cpp
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x29 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x72 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xe3 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x152 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  qrc_ProjetJeuxEchecs.cpp
-  moc_ProjetJeuxEchecs.cpp
-     Création de la bibliothèque C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.lib et de l'objet C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exp
   ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe

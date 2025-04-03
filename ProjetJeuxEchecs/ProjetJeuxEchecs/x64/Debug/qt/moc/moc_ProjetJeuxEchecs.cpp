@@ -180,7 +180,7 @@ static constexpr auto qt_meta_stringdata_ZN9EchiquierE = QtMocHelpers::stringDat
     "",
     "x",
     "y",
-    "positionnerPiece",
+    "deplacerPiece",
     "Piece*",
     "ptrPiece"
 );
@@ -229,7 +229,7 @@ Q_CONSTINIT const QMetaObject Echiquier::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'positionnerPiece'
+        // method 'deplacerPiece'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<Piece *, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
@@ -244,7 +244,7 @@ void Echiquier::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->pieceDeplacee((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 1: _t->positionnerPiece((*reinterpret_cast< std::add_pointer_t<Piece*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
+        case 1: _t->deplacerPiece((*reinterpret_cast< std::add_pointer_t<Piece*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
         default: ;
         }
     }
