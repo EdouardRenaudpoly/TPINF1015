@@ -30,7 +30,7 @@
 #include "debogage_memoire.hpp"        // Ajout des numéros de ligne des "new" dans le rapport de fuites.  Doit être après les include du système, qui peuvent utiliser des "placement new" (non supporté par notre ajout de numéros de lignes).
 #include <forward_list>
 #include <set>
-#include <unordered_set>
+#include <unordered_map>
 #include <numeric>
 
 using namespace std;
@@ -323,6 +323,7 @@ void FilmLivre::afficher(ostream& os) const
 template<std::ranges::input_range T>
 forward_list<shared_ptr<Item>> copierPointeurs(const T& bibliotheque)
 {
+    //Complexité : O(n), car on fait n fois l'opération insert_after qui est en O(1) où n correspond au nombre d'éléments dans le conteneur à copier
     forward_list<shared_ptr<Item>> listeCopiee;
     forward_list<shared_ptr<Item>>::iterator it = listeCopiee.before_begin();
     for (auto&& ptrItem : bibliotheque) 
@@ -333,6 +334,7 @@ forward_list<shared_ptr<Item>> copierPointeurs(const T& bibliotheque)
 }
 forward_list<shared_ptr<Item>> copierOrdreInverse(const forward_list<shared_ptr<Item>>& bibliotheque)
 {
+    //Complexité : O(n), car on fait n fois l'opération push_front qui est en O(1) où n correspond au nombre d'éléments dans le conteneur à copier
     forward_list<shared_ptr<Item>> listeInversee;
     for (auto&& ptrItem : bibliotheque)
     {
@@ -342,6 +344,8 @@ forward_list<shared_ptr<Item>> copierOrdreInverse(const forward_list<shared_ptr<
 }
 vector<shared_ptr<Item>> copierOrdreInverseVecteur(const forward_list<shared_ptr<Item>>& bibliotheque)
 {
+    //Complexité : O(n), car on commence par réserver la mémoire pour le vecteur ce qui évite de toujours avoir à réallouer une mémoire pour que le vecteur soit contigu.
+    // Ensuite on itère simplement dans cette espace mémoire et on ajoute des éléments ce qui est O(1).
     vector<shared_ptr<Item>> vecteurInverse(distance(bibliotheque.begin(),bibliotheque.end()));  //ligne reprise depuis le site : https://how.dev/answers/what-is-the-distance-function-in-cpp
     vector<shared_ptr<Item>>::reverse_iterator it = vecteurInverse.rbegin();
     for (auto&& ptrItem : bibliotheque)
@@ -385,31 +389,32 @@ int main()
         cout << *acteur;
     }
     cout << ligneDeSeparation << endl;
-    auto fonctionTri = [](const shared_ptr<Item>& a,const shared_ptr<Item>& b) {return a->titre_ < b->titre_;};
-    set <shared_ptr<Item>, decltype(fonctionTri)> bibliothequeTriee(fonctionTri);
+    cout << "2.1" << endl;
+    auto comparerTitre = [](const shared_ptr<Item>& item1, const shared_ptr<Item>& item2) 
+    {
+        if (item1->titre_ != item2->titre_)
+        {
+            return item1->titre_ < item2->titre_;
+        }
+        else
+        {
+            return item1 > item2; //Compare les adresses si jamais on a 2 items avec le meme nom
+        }
+    };
+    set <shared_ptr<Item>, decltype(comparerTitre)> bibliothequeTriee(comparerTitre); //set va faire le tri en fonction de la fonction comparerTitre
     for (auto&& ptrItem : bibliotheque)
     {
         bibliothequeTriee.insert(ptrItem);
     }
     afficherListeItems(bibliothequeTriee); //2.1
     cout << ligneDeSeparation << endl;
-    unordered_set<shared_ptr<Item>> bibliothequeTrouve;
+    unordered_map<string,shared_ptr<Item>> bibliothequeTrouve; //le unordered_map permet de trouver des items selon un paramètre en O(1) en moyenne à cause de l'étape de hachage
     for (auto&& ptrItem : bibliotheque)
     {
-        bibliothequeTrouve.insert(ptrItem);
+        bibliothequeTrouve[ptrItem->titre_] = ptrItem;
     }
-    
     string nomRecherche="The Hobbit";
-    auto it = find_if(bibliothequeTrouve.begin(), bibliothequeTrouve.end(),
-        [&nomRecherche](const shared_ptr<Item>& item) {
-            return item->titre_ == nomRecherche;
-        });
-    //2.2
-    if (it != bibliothequeTrouve.end())
-    {
-        cout << "Film Trouvé !" << endl;
-        cout << **it;
-    }
+    cout << *bibliothequeTrouve[nomRecherche];
     cout << ligneDeSeparation << endl;
     vector<shared_ptr<Item>> filmsCopies;
     copy_if(bibliotheque.begin(), bibliotheque.end(), back_inserter(filmsCopies), [](shared_ptr<Item> item) { return dynamic_pointer_cast<Film>(item) != nullptr; }); //3.1
