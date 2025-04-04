@@ -1,12 +1,19 @@
 ﻿#pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QPixmap>
+#include <QPainter>
 #include "ui_ProjetJeuxEchecs.h"
 #include <iostream>
 #include <map>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class ProjetJeuxEchecsClass; };
+namespace Ui 
+{ 
+	class ProjetJeuxEchecsClass; 
+	class EchiquierWidget;
+	class PieceWidget;
+};
 QT_END_NAMESPACE
 
 QT_BEGIN_NAMESPACE
@@ -27,16 +34,37 @@ class ProjetJeuxEchecs : public QMainWindow
     Q_OBJECT
 
 public:
-    ProjetJeuxEchecs(QWidget *parent = nullptr);
+    explicit ProjetJeuxEchecs(QWidget *parent = nullptr);
     ~ProjetJeuxEchecs();
 
 private:
     Ui::ProjetJeuxEchecsClass *ui;
 };
 
+class EchiquierWidget : QWidget
+{
+	Q_OBJECT
+public:
+	explicit EchiquierWidget(QWidget* parent = nullptr);
+protected:
+	void paintEvent(QPaintEvent* event) override;
+private:
+	QPixmap echiquierPixMap_;
+};
+
+class PieceWidget : QLabel
+{
+	Q_OBJECT
+public:
+	PieceWidget(Piece* pieceModele, QWidget* parent = nullptr);
+private:
+	Piece* pieceModele_;
+};
+
 class TropDeRoisException : public std::exception {};
 
-class Piece : public QObject {
+class Piece : public QObject 
+{
 	Q_OBJECT
 public:
 	Piece(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
@@ -44,10 +72,12 @@ public:
 
 	int getX() const { return x_; }
 	int getY() const { return y_; }
+
 	void changerPosition(int newX, int newY) {
 		x_ = newX;
 		y_ = newY;
 	}
+
 	virtual bool estMouvementValide(int x, int y) const = 0; // Méthode virtuelle pure
 protected:
 	int x_;
