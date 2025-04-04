@@ -17,7 +17,7 @@ ProjetJeuxEchecs::~ProjetJeuxEchecs()
     delete ui;
 }
 
-Roi::Roi(int x, int y,bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc)
+Roi::Roi(int x, int y,bool estBlanc) : Piece(x,y,estBlanc)
 {
     if (nRois >= MAX_ROIS)
     {
@@ -48,6 +48,18 @@ void Echiquier::deplacerPiece(Piece* ptrPiece, int x, int y)
     }
     else
     {
-        QMessageBox::critical(nullptr, "Erreur", "Trop de rois sont actuellement sur l'échiquier");
+        QMessageBox::critical(nullptr, "Erreur", "Ce mouvement n'est pas valide");
     }
+}
+MouvementTemporaire::MouvementTemporaire(Echiquier& echiquier,Piece* ptrPiece, int nouveauX, int nouveauY)
+{
+    echiquier_ = echiquier;
+    ptrPiece_ = ptrPiece;
+
+    ancienX_ = ptrPiece_->getX();
+    ancienY_ = ptrPiece_->getY();
+}
+MouvementTemporaire::~MouvementTemporaire()
+{
+    ptrPiece_->
 }

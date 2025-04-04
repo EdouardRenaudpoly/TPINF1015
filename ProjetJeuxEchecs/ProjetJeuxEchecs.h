@@ -2,6 +2,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_ProjetJeuxEchecs.h"
+#include <iostream>
+#include <map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ProjetJeuxEchecsClass; };
@@ -36,12 +38,18 @@ class TropDeRoisException : public std::exception {};
 
 class Piece : public QObject {
 	Q_OBJECT
-
 public:
-	Piece() = default;
+	Piece(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
 	virtual ~Piece() = default;
 
-	virtual bool estMouvementValide(int x, int y) const = 0;
+	int getX() const { return x_; }
+	int getY() const { return y_; }
+
+	virtual bool estMouvementValide(int x, int y) const = 0; // Méthode virtuelle pure
+protected:
+	int x_;
+	int y_;
+	bool estBlanc_;
 };
 
 class Roi : public Piece
@@ -51,31 +59,20 @@ public:
 	bool estMouvementValide(int x, int y) const;
 private:
 	static int nRois;
-	int x_;
-	int y_;
-	bool estBlanc_;
 };
 
 class Cavalier : public Piece
 {
 public:
-	Cavalier(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
+	Cavalier(int x, int y, bool estBlanc) : Piece(x,y,estBlanc){}
 	bool estMouvementValide(int x, int y) const;
-private:
-	int x_;
-	int y_;
-	bool estBlanc_;
 };
 
 class Tour : public Piece
 {
 public:
-	Tour(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
+	Tour(int x, int y, bool estBlanc) : Piece(x,y,estBlanc){}
 	bool estMouvementValide(int x, int y) const;
-private:
-	int x_;
-	int y_;
-	bool estBlanc_;
 };
 
 class Echiquier : public QObject {
@@ -87,15 +84,18 @@ public slots:
 	void deplacerPiece(Piece* ptrPiece, int x, int y);
 signals:
 	void pieceDeplacee(int x, int y);
+private:
+	std::map<std::pair<int,int>,Piece*> positionPieces_;
 };
 
 class MouvementTemporaire
 {
 public:
-	MouvementTemporaire(Piece& piece, int nouveauX, int nouveauY);
+	MouvementTemporaire(Echiquier& echiquier, Piece* ptrPiece, int nouveauX, int nouveauY);
 	~MouvementTemporaire();
 private:
-	Piece& piece_;
+	Echiquier& echiquier_;
+	Piece* ptrPiece_;
 	int ancienX_;
 	int ancienY_;
 };
