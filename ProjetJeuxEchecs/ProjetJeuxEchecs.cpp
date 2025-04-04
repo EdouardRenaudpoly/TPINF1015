@@ -2,6 +2,7 @@
 #include <math.h>
 #include <QMessageBox>
 #include <QString>
+#include <iostream>
 static constexpr int MAX_ROIS = 2;
 
 
@@ -25,6 +26,10 @@ Roi::Roi(int x, int y,bool estBlanc) : Piece(x,y,estBlanc)
     }
     nRois++;
 }
+Roi::~Roi()
+{
+    nRois--;
+}
 int Roi::nRois = 0;
 
 bool Roi::estMouvementValide(int x, int y) const
@@ -44,16 +49,23 @@ void Echiquier::deplacerPiece(Piece* ptrPiece, int x, int y)
     if (ptrPiece->estMouvementValide(x, y))
     {
         //regarder si y'a une piece dans le chemin
-
+        deplacerSansVerification(ptrPiece, x, y);
     }
     else
     {
         QMessageBox::critical(nullptr, "Erreur", "Ce mouvement n'est pas valide");
     }
 }
-MouvementTemporaire::MouvementTemporaire(Echiquier& echiquier,Piece* ptrPiece, int nouveauX, int nouveauY)
+void Echiquier::deplacerSansVerification(Piece* ptrPiece, int x, int y)
 {
-    echiquier_ = echiquier;
+    using namespace std;
+    positionPieces_[pair(ptrPiece->getX(), ptrPiece->getY())] = nullptr;
+    ptrPiece->changerPosition(x, y);
+    positionPieces_[pair(x, y)] = ptrPiece;
+}
+MouvementTemporaire::MouvementTemporaire(Echiquier* ptrEchiquier,Piece* ptrPiece, int nouveauX, int nouveauY)
+{
+    ptrEchiquier_ = ptrEchiquier;
     ptrPiece_ = ptrPiece;
 
     ancienX_ = ptrPiece_->getX();
@@ -61,5 +73,5 @@ MouvementTemporaire::MouvementTemporaire(Echiquier& echiquier,Piece* ptrPiece, i
 }
 MouvementTemporaire::~MouvementTemporaire()
 {
-    ptrPiece_->
+    ptrEchiquier_->deplacerSansVerification(ptrPiece_, ancienX_, ancienY_);
 }

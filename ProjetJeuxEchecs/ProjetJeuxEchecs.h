@@ -44,7 +44,10 @@ public:
 
 	int getX() const { return x_; }
 	int getY() const { return y_; }
-
+	void changerPosition(int newX, int newY) {
+		x_ = newX;
+		y_ = newY;
+	}
 	virtual bool estMouvementValide(int x, int y) const = 0; // Méthode virtuelle pure
 protected:
 	int x_;
@@ -56,6 +59,7 @@ class Roi : public Piece
 {
 public:
 	Roi(int x, int y, bool estBlanc);
+	~Roi();
 	bool estMouvementValide(int x, int y) const;
 private:
 	static int nRois;
@@ -82,6 +86,7 @@ public:
 
 public slots:
 	void deplacerPiece(Piece* ptrPiece, int x, int y);
+	void deplacerSansVerification(Piece* ptrPiece, int x, int y);
 signals:
 	void pieceDeplacee(int x, int y);
 private:
@@ -91,10 +96,10 @@ private:
 class MouvementTemporaire
 {
 public:
-	MouvementTemporaire(Echiquier& echiquier, Piece* ptrPiece, int nouveauX, int nouveauY);
+	MouvementTemporaire(Echiquier* ptrEchiquier, Piece* ptrPiece, int nouveauX, int nouveauY);
 	~MouvementTemporaire();
 private:
-	Echiquier& echiquier_;
+	Echiquier* ptrEchiquier_;
 	Piece* ptrPiece_;
 	int ancienX_;
 	int ancienY_;
