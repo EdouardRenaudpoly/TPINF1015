@@ -3,6 +3,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QPixmap>
 #include <QPainter>
+#include <QLabel>
+#include <QGridLayout>
 #include "ui_ProjetJeuxEchecs.h"
 #include <iostream>
 #include <map>
@@ -29,49 +31,16 @@ namespace Modele
 };
 QT_END_NAMESPACE
 
-class ProjetJeuxEchecs : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    explicit ProjetJeuxEchecs(QWidget *parent = nullptr);
-    ~ProjetJeuxEchecs();
-
-private:
-    Ui::ProjetJeuxEchecsClass *ui;
-};
-
-class EchiquierWidget : QWidget
+class Piece : public QObject
 {
 	Q_OBJECT
 public:
-	explicit EchiquierWidget(QWidget* parent = nullptr);
-protected:
-	void paintEvent(QPaintEvent* event) override;
-private:
-	QPixmap echiquierPixMap_;
-};
-
-class PieceWidget : QLabel
-{
-	Q_OBJECT
-public:
-	PieceWidget(Piece* pieceModele, QWidget* parent = nullptr);
-private:
-	Piece* pieceModele_;
-};
-
-class TropDeRoisException : public std::exception {};
-
-class Piece : public QObject 
-{
-	Q_OBJECT
-public:
-	Piece(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc){}
+	Piece(int x, int y, bool estBlanc) : x_(x), y_(y), estBlanc_(estBlanc) {}
 	virtual ~Piece() = default;
 
 	int getX() const { return x_; }
 	int getY() const { return y_; }
+	bool estBlanc() const { return estBlanc_; }
 
 	void changerPosition(int newX, int newY) {
 		x_ = newX;
@@ -84,6 +53,43 @@ protected:
 	int y_;
 	bool estBlanc_;
 };
+
+class PieceWidget : public QLabel
+{
+	Q_OBJECT
+public:
+	PieceWidget(Piece* pieceModele, QWidget* parent = nullptr);
+private:
+	Piece* pieceModele_;
+};
+
+class EchiquierWidget : public QWidget
+{
+	Q_OBJECT
+public:
+	explicit EchiquierWidget(QWidget* parent = nullptr);
+	void ajouterPiece(Piece* piece);
+protected:
+	void paintEvent(QPaintEvent* event) override;
+private:
+	QPixmap echiquierPixMap_;
+	std::vector<PieceWidget*> pieceWidgets_;
+};
+
+class ProjetJeuxEchecs : public QMainWindow
+{
+	Q_OBJECT
+
+public:
+	explicit ProjetJeuxEchecs(QWidget* parent = nullptr);
+	~ProjetJeuxEchecs();
+
+private:
+	Ui::ProjetJeuxEchecsClass* ui;
+	EchiquierWidget* echiquierWidget;
+};
+
+class TropDeRoisException : public std::exception {};
 
 class Roi : public Piece
 {
@@ -134,3 +140,4 @@ private:
 	int ancienX_;
 	int ancienY_;
 };
+

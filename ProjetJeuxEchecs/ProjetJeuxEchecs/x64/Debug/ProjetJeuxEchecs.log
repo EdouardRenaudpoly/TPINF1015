@@ -1,5 +1,6 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.8.3
+  moc ProjetJeuxEchecs.h
   ProjetJeuxEchecs.cpp
   TestJeuxEchecs.cpp
   main.cpp
@@ -10,7 +11,8 @@ C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning 
 C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2a4 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2ac et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
 C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32b et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(66,101): warning C4100: 'nouveauY' : paramètre formel non référencé
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(66,87): warning C4100: 'nouveauX' : paramètre formel non référencé
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(52,47): warning C4100: 'event' : paramètre formel non référencé
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(152,101): warning C4100: 'nouveauY' : paramètre formel non référencé
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(152,87): warning C4100: 'nouveauX' : paramètre formel non référencé
   moc_ProjetJeuxEchecs.cpp
   ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe

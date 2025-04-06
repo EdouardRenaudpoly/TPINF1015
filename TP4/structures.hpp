@@ -29,6 +29,7 @@ public:
 	virtual void afficher(ostream& os) const = 0;
 	virtual ~Affichable() = default;  
 };
+
 class Item : Affichable
 {
 public:

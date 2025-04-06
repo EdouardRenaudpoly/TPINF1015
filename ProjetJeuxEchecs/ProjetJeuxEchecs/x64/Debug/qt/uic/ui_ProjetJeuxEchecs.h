@@ -22,25 +22,26 @@ QT_BEGIN_NAMESPACE
 class Ui_ProjetJeuxEchecsClass
 {
 public:
+    QWidget *centralWidget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
-    QWidget *centralWidget;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *ProjetJeuxEchecsClass)
     {
         if (ProjetJeuxEchecsClass->objectName().isEmpty())
             ProjetJeuxEchecsClass->setObjectName("ProjetJeuxEchecsClass");
-        ProjetJeuxEchecsClass->resize(600, 400);
-        menuBar = new QMenuBar(ProjetJeuxEchecsClass);
-        menuBar->setObjectName("menuBar");
-        ProjetJeuxEchecsClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(ProjetJeuxEchecsClass);
-        mainToolBar->setObjectName("mainToolBar");
-        ProjetJeuxEchecsClass->addToolBar(mainToolBar);
+        ProjetJeuxEchecsClass->resize(94, 76);
         centralWidget = new QWidget(ProjetJeuxEchecsClass);
         centralWidget->setObjectName("centralWidget");
         ProjetJeuxEchecsClass->setCentralWidget(centralWidget);
+        menuBar = new QMenuBar(ProjetJeuxEchecsClass);
+        menuBar->setObjectName("menuBar");
+        menuBar->setGeometry(QRect(0, 0, 94, 21));
+        ProjetJeuxEchecsClass->setMenuBar(menuBar);
+        mainToolBar = new QToolBar(ProjetJeuxEchecsClass);
+        mainToolBar->setObjectName("mainToolBar");
+        ProjetJeuxEchecsClass->addToolBar(Qt::ToolBarArea::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(ProjetJeuxEchecsClass);
         statusBar->setObjectName("statusBar");
         ProjetJeuxEchecsClass->setStatusBar(statusBar);

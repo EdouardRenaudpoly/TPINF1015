@@ -1,4 +1,13 @@
 <RCC>
-    <qresource prefix="ProjetJeuxEchecs">
-    </qresource>
+  <qresource prefix="/images">
+    <file>images/echiquier.png</file>
+    <file>images/roi_blanc.png</file>
+    <file>images/roi_noir.png</file>
+    <file>images/tour_blanche.png</file>
+    <file>images/tour_noire.png</file>
+    <file>images/cavalier_blanc.png</file>
+    <file>images/cavalier_noir.png</file>
+  </qresource>
 </RCC>
+
+

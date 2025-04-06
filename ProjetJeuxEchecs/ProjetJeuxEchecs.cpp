@@ -6,10 +6,19 @@
 #include <QPainter>
 #include <QLabel>
 #include <QWidget>
+#include <QVBoxLayout>
 #include <iostream>
 static constexpr int MAX_ROIS = 2;
 static constexpr int TAILLE_COTE_ECHIQUIER = 400;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
+
+void EchiquierWidget::ajouterPiece(Piece* piece)
+{
+    auto* pieceWidget = new PieceWidget(piece, this);
+    pieceWidget->move(piece->getX() * TAILLE_CASE, piece->getY() * TAILLE_CASE);
+    pieceWidget->show();
+    pieceWidgets_.push_back(pieceWidget);
+}
 
 //Fonctions des classes du namespace UI
 ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
@@ -17,6 +26,13 @@ ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
     , ui(new Ui::ProjetJeuxEchecsClass())
 {
     ui->setupUi(this);
+
+    echiquierWidget = new EchiquierWidget(this);
+    QVBoxLayout* mainLayout = new QVBoxLayout(ui->centralWidget);
+    ui->centralWidget->setLayout(mainLayout);
+    mainLayout->addWidget(echiquierWidget);
+    Piece* roi = new Roi(0, 0, true);
+    echiquierWidget->ajouterPiece(roi);
 }
 
 ProjetJeuxEchecs::~ProjetJeuxEchecs()
@@ -24,10 +40,15 @@ ProjetJeuxEchecs::~ProjetJeuxEchecs()
     delete ui;
 }
 
-EchiquierWidget::EchiquierWidget(QWidget* parent) : QWidget(parent), echiquierPixMap_(":/images/echiquier.png")
+EchiquierWidget::EchiquierWidget(QWidget* parent)
+    : QWidget(parent), echiquierPixMap_(":/images/echiquier.png")
 {
     setFixedSize(TAILLE_COTE_ECHIQUIER, TAILLE_COTE_ECHIQUIER);
+    if (echiquierPixMap_.isNull())
+        qDebug() << "Erreur : l'image d'échiquier n'a pas été chargée";
 }
+
+
 void EchiquierWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
@@ -36,19 +57,41 @@ void EchiquierWidget::paintEvent(QPaintEvent* event)
     }
 }
 
+
 QString getImagePathForPiece(Piece* piece)
 {
     if (dynamic_cast<Roi*>(piece))
     {
-        return ":/images/roi.png";
+        if (piece->estBlanc())
+        {
+            return ":/images/roi_blanc.png";
+        }
+        else
+        {
+            return ":/images/roi_noir.png";
+        }
     }
     else if (dynamic_cast<Tour*>(piece))
     {
-        return ":/images/tour.png";
+        if (piece->estBlanc())
+        {
+            return ":/images/tour_blanche.png";
+        }
+        else
+        {
+            return ":/images/tour_noire.png";
+        }
     }
     else
     {
-        return ":/images/cavalier.png";
+        if (piece->estBlanc())
+        {
+            return ":/images/cavalier_blanc.png";
+        }
+        else
+        {
+            return ":/images/cavalier_noir.png";
+        }
     }
 }
 
@@ -56,7 +99,9 @@ PieceWidget::PieceWidget(Piece* pieceModele, QWidget* parent) : QLabel(parent), 
 {
     setPixmap(QPixmap(getImagePathForPiece(pieceModele_)).scaled(TAILLE_CASE, TAILLE_CASE));
     setFixedSize(TAILLE_CASE, TAILLE_CASE);
+    setAttribute(Qt::WA_TransparentForMouseEvents); // optionnel si tu veux laisser passer les clics
 }
+
 
 //Fonctions des classes du namespace Modele
 Roi::Roi(int x, int y,bool estBlanc) : Piece(x,y,estBlanc)
