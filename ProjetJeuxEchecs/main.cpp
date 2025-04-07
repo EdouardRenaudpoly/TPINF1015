@@ -42,6 +42,7 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 	//NOTE: C'est normal que la couverture de code dans l'Explorateur de tests de Visual Studio ne couvre pas la fin de cette fonction ni la fin du main apr�s l'appel � cette fonction puisqu'il ex�cute uniquement les tests Google Test dans l'appel ci-dessus.
 }
 
+
 int main(int argc, char *argv[])
 {
     bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
