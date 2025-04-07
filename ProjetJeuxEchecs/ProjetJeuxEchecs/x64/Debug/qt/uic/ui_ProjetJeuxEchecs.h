@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -23,6 +24,7 @@ class Ui_ProjetJeuxEchecsClass
 {
 public:
     QWidget *centralWidget;
+    QLabel *label;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -31,13 +33,17 @@ public:
     {
         if (ProjetJeuxEchecsClass->objectName().isEmpty())
             ProjetJeuxEchecsClass->setObjectName("ProjetJeuxEchecsClass");
-        ProjetJeuxEchecsClass->resize(94, 76);
+        ProjetJeuxEchecsClass->resize(1074, 857);
         centralWidget = new QWidget(ProjetJeuxEchecsClass);
         centralWidget->setObjectName("centralWidget");
+        label = new QLabel(centralWidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(130, 40, 671, 671));
+        label->setPixmap(QPixmap(QString::fromUtf8(":/images/images/echiquier.png")));
         ProjetJeuxEchecsClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ProjetJeuxEchecsClass);
         menuBar->setObjectName("menuBar");
-        menuBar->setGeometry(QRect(0, 0, 94, 21));
+        menuBar->setGeometry(QRect(0, 0, 1074, 33));
         ProjetJeuxEchecsClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ProjetJeuxEchecsClass);
         mainToolBar->setObjectName("mainToolBar");
@@ -54,6 +60,7 @@ public:
     void retranslateUi(QMainWindow *ProjetJeuxEchecsClass)
     {
         ProjetJeuxEchecsClass->setWindowTitle(QCoreApplication::translate("ProjetJeuxEchecsClass", "ProjetJeuxEchecs", nullptr));
+        label->setText(QString());
     } // retranslateUi
 
 };
