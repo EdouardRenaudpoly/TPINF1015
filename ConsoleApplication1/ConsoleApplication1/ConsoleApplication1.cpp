@@ -2,11 +2,66 @@
 //
 
 #include <iostream>
+#include <vector>
+#include <set>
+
 using namespace std;
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        if (nums.empty()) return {};
+
+        sort(nums.begin(), nums.end());  // Trie les éléments
+
+        vector<int> dp(nums.size(), 1);  // dp[i] représente la taille du plus grand sous-ensemble divisible qui se termine par nums[i]
+        vector<int> previous(nums.size(), -1);  // Pour reconstruire le sous-ensemble
+
+        int maxSize = 1, maxIndex = 0;  // Taille et index du plus grand sous-ensemble
+
+        for (int i = 1; i < nums.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] % nums[j] == 0 && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                    previous[i] = j;
+                }
+            }
+            if (dp[i] > maxSize) {
+                maxSize = dp[i];
+                maxIndex = i;
+            }
+        }
+
+        // Reconstruction du sous-ensemble à partir de previous
+        vector<int> result;
+        while (maxIndex != -1) {
+            result.push_back(nums[maxIndex]);
+            maxIndex = previous[maxIndex];
+        }
+
+        reverse(result.begin(), result.end());
+        return result;
+    }
+
+    int main() {
+        vector<int> nums = { 1, 2, 4, 8 };
+        vector<int> result = largestDivisibleSubset(nums);
+
+        for (int num : result) {
+            cout << num << " ";
+        }
+        return 0;
+    }
+}; 
 
 int main()
 {
-    cout << "Hello World!\n";
+    Solution s;
+    vector<int> v = { 1,2,3 };
+    vector<int> reponse = s.largestDivisibleSubset(v);
+    for (int i : reponse)
+    {
+        cout << i << " ";
+    }
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage

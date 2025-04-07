@@ -63,19 +63,6 @@ private:
 	Piece* pieceModele_;
 };
 
-class EchiquierWidget : public QWidget
-{
-	Q_OBJECT
-public:
-	explicit EchiquierWidget(QWidget* parent = nullptr);
-	void ajouterPiece(Piece* piece);
-protected:
-	void paintEvent(QPaintEvent* event) override;
-private:
-	QPixmap echiquierPixMap_;
-	std::vector<PieceWidget*> pieceWidgets_;
-};
-
 class ProjetJeuxEchecs : public QMainWindow
 {
 	Q_OBJECT
@@ -86,7 +73,6 @@ public:
 
 private:
 	Ui::ProjetJeuxEchecsClass* ui;
-	EchiquierWidget* echiquierWidget;
 };
 
 class TropDeRoisException : public std::exception {};

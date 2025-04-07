@@ -12,14 +12,6 @@ static constexpr int MAX_ROIS = 2;
 static constexpr int TAILLE_COTE_ECHIQUIER = 400;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
 
-void EchiquierWidget::ajouterPiece(Piece* piece)
-{
-    auto* pieceWidget = new PieceWidget(piece, this);
-    pieceWidget->move(piece->getX() * TAILLE_CASE, piece->getY() * TAILLE_CASE);
-    pieceWidget->show();
-    pieceWidgets_.push_back(pieceWidget);
-}
-
 //Fonctions des classes du namespace UI
 ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
     : QMainWindow(parent)
@@ -27,36 +19,14 @@ ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
 {
     ui->setupUi(this);
 
-    echiquierWidget = new EchiquierWidget(this);
     QVBoxLayout* mainLayout = new QVBoxLayout(ui->centralWidget);
     ui->centralWidget->setLayout(mainLayout);
-    mainLayout->addWidget(echiquierWidget);
-    Piece* roi = new Roi(0, 0, true);
-    echiquierWidget->ajouterPiece(roi);
 }
 
 ProjetJeuxEchecs::~ProjetJeuxEchecs()
 {
     delete ui;
 }
-
-EchiquierWidget::EchiquierWidget(QWidget* parent)
-    : QWidget(parent), echiquierPixMap_(":/images/echiquier.png")
-{
-    setFixedSize(TAILLE_COTE_ECHIQUIER, TAILLE_COTE_ECHIQUIER);
-    if (echiquierPixMap_.isNull())
-        qDebug() << "Erreur : l'image d'échiquier n'a pas été chargée";
-}
-
-
-void EchiquierWidget::paintEvent(QPaintEvent* event)
-{
-    QPainter painter(this);
-    if (!echiquierPixMap_.isNull()) {
-        painter.drawPixmap(0, 0, width(), height(), echiquierPixMap_);
-    }
-}
-
 
 QString getImagePathForPiece(Piece* piece)
 {
