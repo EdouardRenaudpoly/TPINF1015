@@ -6,21 +6,38 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>94</width>
-    <height>76</height>
+    <width>1074</width>
+    <height>857</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>ProjetJeuxEchecs</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>40</y>
+      <width>671</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="ProjetJeuxEchecs.qrc">:/images/images/echiquier.png</pixmap>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>94</width>
-     <height>21</height>
+     <width>1074</width>
+     <height>33</height>
     </rect>
    </property>
   </widget>

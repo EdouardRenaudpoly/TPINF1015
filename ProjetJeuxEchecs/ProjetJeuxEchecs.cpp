@@ -34,33 +34,33 @@ QString getImagePathForPiece(Piece* piece)
     {
         if (piece->estBlanc())
         {
-            return ":/images/roi_blanc.png";
+            return ":/images/images/roi_blanc.png";
         }
         else
         {
-            return ":/images/roi_noir.png";
+            return ":/images/images/roi_noir.png";
         }
     }
     else if (dynamic_cast<Tour*>(piece))
     {
         if (piece->estBlanc())
         {
-            return ":/images/tour_blanche.png";
+            return ":/images/images/tour_blanche.png";
         }
         else
         {
-            return ":/images/tour_noire.png";
+            return ":/images/images/tour_noire.png";
         }
     }
     else
     {
         if (piece->estBlanc())
         {
-            return ":/images/cavalier_blanc.png";
+            return ":/images/images/cavalier_blanc.png";
         }
         else
         {
-            return ":/images/cavalier_noir.png";
+            return ":/images/images/cavalier_noir.png";
         }
     }
 }
