@@ -9,7 +9,7 @@
 #include <QVBoxLayout>
 #include <iostream>
 static constexpr int MAX_ROIS = 2;
-static constexpr int TAILLE_COTE_ECHIQUIER = 400;
+static constexpr int TAILLE_COTE_ECHIQUIER = 800;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
 
 void EchiquierWidget::ajouterPiece(Piece* piece)
@@ -18,7 +18,7 @@ void EchiquierWidget::ajouterPiece(Piece* piece)
     pieceWidget->move(piece->getX() * TAILLE_CASE, piece->getY() * TAILLE_CASE); 
     pieceWidget->show();
     pieceWidgets_.push_back(pieceWidget);
-}
+} 
 
 //Fonctions des classes du namespace UI
 ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
@@ -41,7 +41,7 @@ ProjetJeuxEchecs::~ProjetJeuxEchecs()
 
 
 EchiquierWidget::EchiquierWidget(QWidget* parent)
-    : QWidget(parent), echiquierPixMap_(":/images/echiquier.png")
+    : QWidget(parent), echiquierPixMap_(":/images/images/echiquier.png")
 {
     setFixedSize(TAILLE_COTE_ECHIQUIER, TAILLE_COTE_ECHIQUIER);
     if (echiquierPixMap_.isNull())

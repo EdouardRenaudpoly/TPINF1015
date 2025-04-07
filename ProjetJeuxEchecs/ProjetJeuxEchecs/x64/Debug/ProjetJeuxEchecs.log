@@ -1,45 +1,7 @@
 ﻿   Qt/MSBuild: 3.3.1.1
-  Reading Qt configuration (C:/Qt/6.8.3/msvc2022_64/bin/qmake)
    Qt: 6.8.3
-  uic ProjetJeuxEchecs.ui
-<<<<<<< HEAD
   ProjetJeuxEchecs.cpp
-=======
-  rcc ProjetJeuxEchecs.qrc
-  moc ProjetJeuxEchecs.h
->>>>>>> 9e473d47e9091fc0394b706ebb4456231ed97c3b
-  TestJeuxEchecs.cpp
-  bibliotheque_cours.cpp
-  verification_allocation.cpp
-  gtest-all.cc
-  ProjetJeuxEchecs.cpp
-  main.cpp
-<<<<<<< HEAD
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x29 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x72 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0xe3 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x152 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x2be that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x2c6 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x345 that is illegal in the current source character set (codepage 65001).
 C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(52,47): warning C4100: 'event': unreferenced formal parameter
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(154,101): warning C4100: 'nouveauY': unreferenced formal parameter
-C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(154,87): warning C4100: 'nouveauX': unreferenced formal parameter
-  moc_ProjetJeuxEchecs.cpp
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(153,101): warning C4100: 'nouveauY': unreferenced formal parameter
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(153,87): warning C4100: 'nouveauX': unreferenced formal parameter
   ProjetJeuxEchecs.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
-=======
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x29 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x72 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xe3 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x152 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2a4 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2ac et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32b et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(52,47): warning C4100: 'event' : paramètre formel non référencé
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(156,101): warning C4100: 'nouveauY' : paramètre formel non référencé
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(156,87): warning C4100: 'nouveauX' : paramètre formel non référencé
-  qrc_ProjetJeuxEchecs.cpp
-  moc_ProjetJeuxEchecs.cpp
-     Création de la bibliothèque C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.lib et de l'objet C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exp
-  ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
->>>>>>> 9e473d47e9091fc0394b706ebb4456231ed97c3b
