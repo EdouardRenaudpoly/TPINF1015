@@ -1,3 +1,7 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.8.3
-  ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
+  ProjetJeuxEchecs.cpp
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(52,47): warning C4100: 'event': unreferenced formal parameter
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(153,101): warning C4100: 'nouveauY': unreferenced formal parameter
+C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(153,87): warning C4100: 'nouveauX': unreferenced formal parameter
+  ProjetJeuxEchecs.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Tp6_Projet\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
