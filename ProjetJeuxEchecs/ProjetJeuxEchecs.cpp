@@ -7,6 +7,8 @@
 #include <QLabel>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QPushButton>
+
 #include <iostream>
 static constexpr int MAX_ROIS = 2;
 static constexpr int TAILLE_COTE_ECHIQUIER = 400;
@@ -30,8 +32,8 @@ ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
     QVBoxLayout* mainLayout = new QVBoxLayout(ui->centralWidget);
     ui->centralWidget->setLayout(mainLayout);
     mainLayout->addWidget(echiquierWidget);
-    Piece* roi = new Roi(0, 0, true);
-    echiquierWidget->ajouterPiece(roi);
+    //Piece* roi = new Roi(0, 0, true);
+    //echiquierWidget->ajouterPiece(roi);
 }
 
 ProjetJeuxEchecs::~ProjetJeuxEchecs()
@@ -44,8 +46,27 @@ EchiquierWidget::EchiquierWidget(QWidget* parent)
     : QWidget(parent), echiquierPixMap_(":/images/echiquier.png")
 {
     setFixedSize(TAILLE_COTE_ECHIQUIER, TAILLE_COTE_ECHIQUIER);
-    if (echiquierPixMap_.isNull())
-        qDebug() << "Erreur : l'image d'échiquier n'a pas été chargée";
+
+    QGridLayout* layout = new QGridLayout(this);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            QPushButton* button = new QPushButton(this);
+
+            button->setStyleSheet("background-color: transparent; border: none;");
+            button->setFixedSize(TAILLE_COTE_ECHIQUIER / 8, TAILLE_COTE_ECHIQUIER / 8);
+
+            layout->addWidget(button, i, j);
+
+            connect(button, &QPushButton::clicked, [=] {
+                qDebug() << "Case " << i << ", " << j << " cliquée";
+                });
+        }
+    }
+
+    setLayout(layout);
 }
 
 
