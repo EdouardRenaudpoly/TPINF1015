@@ -68,6 +68,7 @@ class EchiquierWidget : public QWidget
 	Q_OBJECT
 public:
 	explicit EchiquierWidget(QWidget* parent = nullptr);
+	void chargerPartie(int numPartie);
 	void ajouterPiece(Piece* piece);
 protected:
 	void paintEvent(QPaintEvent* event) override;
@@ -86,7 +87,7 @@ public:
 
 private:
 	Ui::ProjetJeuxEchecsClass* ui;
-	EchiquierWidget* echiquierWidget;
+	EchiquierWidget* echiquierWidget_;
 };
 
 class TropDeRoisException : public std::exception {};
