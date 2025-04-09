@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QGridLayout>
+#include <QPushButton>
 #include "ui_ProjetJeuxEchecs.h"
 #include <iostream>
 #include <map>
@@ -63,11 +64,26 @@ private:
 	Piece* pieceModele_;
 };
 
+class Echiquier : public QObject {
+	Q_OBJECT
+public:
+	Echiquier() = default;
+
+public slots:
+	void deplacerPiece(Piece* ptrPiece, int x, int y);
+	void deplacerSansVerification(Piece* ptrPiece, int x, int y);
+	void enleverPieces();
+signals:
+	void pieceDeplacee(int x, int y);
+private:
+	std::map<std::pair<int, int>, Piece*> positionPieces_;
+};
+
 class EchiquierWidget : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit EchiquierWidget(QWidget* parent = nullptr);
+	explicit EchiquierWidget(QWidget* parent = nullptr, Echiquier* ptrEchiquier);
 	void chargerPartie(int numPartie);
 	void ajouterPiece(Piece* piece);
 protected:
@@ -75,6 +91,7 @@ protected:
 private:
 	QPixmap echiquierPixMap_;
 	std::vector<PieceWidget*> pieceWidgets_;
+	Echiquier* ptrEchiquier_;
 };
 
 class ProjetJeuxEchecs : public QMainWindow
@@ -88,6 +105,10 @@ public:
 private:
 	Ui::ProjetJeuxEchecsClass* ui;
 	EchiquierWidget* echiquierWidget_;
+	QLabel* infoTourLabel_;
+	QPushButton* boutonEndgame1_;
+	QPushButton* boutonEndgame2_;
+	QPushButton* boutonEndgame3_;
 };
 
 class TropDeRoisException : public std::exception {};
@@ -114,20 +135,6 @@ class Tour : public Piece
 public:
 	Tour(int x, int y, bool estBlanc) : Piece(x,y,estBlanc){}
 	bool estMouvementValide(int x, int y) const;
-};
-
-class Echiquier : public QObject {
-	Q_OBJECT
-public:
-	Echiquier() = default;
-
-public slots:
-	void deplacerPiece(Piece* ptrPiece, int x, int y);
-	void deplacerSansVerification(Piece* ptrPiece, int x, int y);
-signals:
-	void pieceDeplacee(int x, int y);
-private:
-	std::map<std::pair<int,int>,Piece*> positionPieces_;
 };
 
 class MouvementTemporaire

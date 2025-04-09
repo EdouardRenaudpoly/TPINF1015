@@ -1,4 +1,23 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.8.3
-  qrc_ProjetJeuxEchecs.cpp
-  ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
+  moc ProjetJeuxEchecs.h
+  ProjetJeuxEchecs.cpp
+  TestJeuxEchecs.cpp
+  main.cpp
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x29 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x72 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xe3 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x152 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2a4 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2ac et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x32b et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.h(86,26): error C2548: 'EchiquierWidget::EchiquierWidget' : argument par défaut manquant pour le paramètre 2
+  (compiler le fichier source 'ProjetJeuxEchecs.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(32,5): error C3861: 'enleverPieces' : identificateur introuvable
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.h(86,26): error C2548: 'EchiquierWidget::EchiquierWidget' : argument par défaut manquant pour le paramètre 2
+  (compiler le fichier source 'main.cpp')
+  
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.h(86,26): error C2548: 'EchiquierWidget::EchiquierWidget' : argument par défaut manquant pour le paramètre 2
+  (compiler le fichier source 'TestJeuxEchecs.cpp')
+  

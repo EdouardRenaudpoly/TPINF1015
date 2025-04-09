@@ -22,81 +22,120 @@ void EchiquierWidget::ajouterPiece(Piece* piece)
     pieceWidgets_.push_back(pieceWidget);
 } 
 
+void Echiquier::enleverPieces()
+{
+    positionPieces_.clear();
+}
+
 void EchiquierWidget::chargerPartie(int numPartie)
 {
-    switch (numPartie)
+    ptrEchiquier_->enleverPieces();
+    try
     {
-        case 1:
+        switch (numPartie)
         {
-            Roi roi = Roi(0, 0, true);
-            ajouterPiece(&roi);
-            Roi roi2 = Roi(3, 4, false);
-            ajouterPiece(&roi2);
+            case 1:
+            {
+                Roi roi = Roi(0, 0, true);
+                ajouterPiece(&roi);
+                Roi roi2 = Roi(3, 4, false);
+                ajouterPiece(&roi2);
 
-            Cavalier cavalier1 = Cavalier(1, 1, true);
-            ajouterPiece(&cavalier1);
-            Cavalier cavalier2 = Cavalier(5, 5, false);
-            ajouterPiece(&cavalier2);
+                Cavalier cavalier1 = Cavalier(1, 1, true);
+                ajouterPiece(&cavalier1);
+                Cavalier cavalier2 = Cavalier(5, 5, false);
+                ajouterPiece(&cavalier2);
 
-            Tour tour1 = Tour(0, 7, true);
-            ajouterPiece(&tour1);
-            Tour tour2 = Tour(7, 0, false);
-            ajouterPiece(&tour2);
+                Tour tour1 = Tour(0, 7, true);
+                ajouterPiece(&tour1);
+                Tour tour2 = Tour(7, 0, false);
+                ajouterPiece(&tour2);
 
-            break;
-        }
-        case 2:
-        {
-            Roi roi = Roi(2, 2, true);
-            ajouterPiece(&roi);
-            Roi roi2 = Roi(6, 6, false);
-            ajouterPiece(&roi2);
+                break;
+            }
+            case 2:
+            {
+                Roi roi = Roi(2, 2, true);
+                ajouterPiece(&roi);
+                Roi roi2 = Roi(6, 6, false);
+                ajouterPiece(&roi2);
 
-            Cavalier cavalier1 = Cavalier(1, 3, true);
-            ajouterPiece(&cavalier1);
-            Cavalier cavalier2 = Cavalier(5, 4, false);
-            ajouterPiece(&cavalier2);
+                Cavalier cavalier1 = Cavalier(1, 3, true);
+                ajouterPiece(&cavalier1);
+                Cavalier cavalier2 = Cavalier(5, 4, false);
+                ajouterPiece(&cavalier2);
 
-            Tour tour1 = Tour(2, 7, true);
-            ajouterPiece(&tour1);
-            Tour tour2 = Tour(7, 2, false);
-            ajouterPiece(&tour2);
-            break;
-        }
-        case 3:
-        {
-            Roi roi = Roi(4, 4, true);
-            ajouterPiece(&roi);
-            Roi roi2 = Roi(7, 7, false);
-            ajouterPiece(&roi2);
+                Tour tour1 = Tour(2, 7, true);
+                ajouterPiece(&tour1);
+                Tour tour2 = Tour(7, 2, false);
+                ajouterPiece(&tour2);
+                break;
+            }
+            case 3:
+            {
+                Roi roi = Roi(4, 4, true);
+                ajouterPiece(&roi);
+                Roi roi2 = Roi(7, 7, false);
+                ajouterPiece(&roi2);
 
-            Cavalier cavalier1 = Cavalier(3, 5, true);
-            ajouterPiece(&cavalier1);
-            Cavalier cavalier2 = Cavalier(6, 6, false);
-            ajouterPiece(&cavalier2);
+                Cavalier cavalier1 = Cavalier(3, 5, true);
+                ajouterPiece(&cavalier1);
+                Cavalier cavalier2 = Cavalier(6, 6, false);
+                ajouterPiece(&cavalier2);
 
-            Tour tour1 = Tour(0, 3, true);
-            ajouterPiece(&tour1);
-            Tour tour2 = Tour(7, 1, false);
-            ajouterPiece(&tour2);
-            break;
+                Tour tour1 = Tour(0, 3, true);
+                ajouterPiece(&tour1);
+                Tour tour2 = Tour(7, 1, false);
+                ajouterPiece(&tour2);
+                break;
+            }
         }
     }
+    catch (TropDeRoisException)
+    {
+        qDebug() << "Trop de rois sont sur l'echiquier actuellement";
+    }
 }
-//Fonctions des classes du namespace UI
-ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
+
+ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::ProjetJeuxEchecsClass())
 {
     ui->setupUi(this);
-    echiquierWidget_ = new EchiquierWidget(this);
+    Echiquier echiquier = Echiquier();
+    echiquierWidget_ = new EchiquierWidget(this,&echiquier);
     echiquierWidget_->chargerPartie(2);
-    QVBoxLayout* mainLayout = new QVBoxLayout(ui->centralWidget);
-    ui->centralWidget->setLayout(mainLayout);
+
+    QLabel* labelTour = new QLabel("Tour des blancs", this);
+
+    QPushButton* boutonEndgame1 = new QPushButton("Endgame 1", this);
+    QPushButton* boutonEndgame2 = new QPushButton("Endgame 2", this);
+    QPushButton* boutonEndgame3 = new QPushButton("Endgame 3", this);
+
+    QHBoxLayout* boutonsLayout = new QHBoxLayout;
+    boutonsLayout->addWidget(boutonEndgame1);
+    boutonsLayout->addWidget(boutonEndgame2);
+    boutonsLayout->addWidget(boutonEndgame3);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(boutonsLayout);
+    mainLayout->addWidget(labelTour);
     mainLayout->addWidget(echiquierWidget_);
-    //Piece* roi = new Roi(0, 0, true);
-    //echiquierWidget->ajouterPiece(roi);
+    ui->centralWidget->setLayout(mainLayout);
+
+    connect(boutonEndgame1, &QPushButton::clicked, this, [=]() {
+        echiquierWidget_->chargerPartie(1);
+        });
+
+    connect(boutonEndgame2, &QPushButton::clicked, this, [=]() {
+        echiquierWidget_->chargerPartie(2);
+        });
+
+    connect(boutonEndgame3, &QPushButton::clicked, this, [=]() {
+        echiquierWidget_->chargerPartie(3);
+        });
 }
+
 
 ProjetJeuxEchecs::~ProjetJeuxEchecs()
 {
@@ -105,9 +144,10 @@ ProjetJeuxEchecs::~ProjetJeuxEchecs()
 }
 
 
-EchiquierWidget::EchiquierWidget(QWidget* parent)
+EchiquierWidget::EchiquierWidget(QWidget* parent, Echiquier* ptrEchiquier)
     : QWidget(parent), echiquierPixMap_(":/images/images/echiquier.png")
 {
+    ptrEchiquier_ = ptrEchiquier;
     setFixedSize(TAILLE_COTE_ECHIQUIER, TAILLE_COTE_ECHIQUIER);
 
     QGridLayout* layout = new QGridLayout(this);
