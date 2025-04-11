@@ -14,16 +14,28 @@ static constexpr int MAX_ROIS = 2;
 static constexpr int TAILLE_COTE_ECHIQUIER = 800;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
 
+void Echiquier::ajouterPiece(Piece* piece)
+{
+    using namespace std;
+    pair<int, int> paire = make_pair(piece->getX(), piece->getY());
+    positionPieces_[paire] = piece;
+}
 void EchiquierWidget::ajouterPiece(Piece* piece)
 {
     auto* pieceWidget = new PieceWidget(piece, this);
     pieceWidget->move(piece->getX() * TAILLE_CASE, piece->getY() * TAILLE_CASE); 
     pieceWidget->show();
     pieceWidgets_.push_back(pieceWidget);
+    ptrEchiquier_->ajouterPiece(piece);
 } 
 
 void Echiquier::enleverPieces()
 {
+    for (auto& paire : positionPieces_)
+    {
+        delete paire.second;
+    }
+
     positionPieces_.clear();
 }
 
@@ -36,64 +48,40 @@ void EchiquierWidget::chargerPartie(int numPartie)
         {
             case 1:
             {
-                Roi roi = Roi(0, 0, true);
-                ajouterPiece(&roi);
-                Roi roi2 = Roi(3, 4, false);
-                ajouterPiece(&roi2);
-
-                Cavalier cavalier1 = Cavalier(1, 1, true);
-                ajouterPiece(&cavalier1);
-                Cavalier cavalier2 = Cavalier(5, 5, false);
-                ajouterPiece(&cavalier2);
-
-                Tour tour1 = Tour(0, 7, true);
-                ajouterPiece(&tour1);
-                Tour tour2 = Tour(7, 0, false);
-                ajouterPiece(&tour2);
-
+                ajouterPiece(new Roi(0, 0, true));
+                ajouterPiece(new Roi(1, 0, true));
+                ajouterPiece(new Roi(3, 4, false));
+                ajouterPiece(new Cavalier(1, 1, true));
+                ajouterPiece(new Cavalier(5, 5, false));
+                ajouterPiece(new Tour(0, 7, true));
+                ajouterPiece(new Tour(7, 0, false));
                 break;
             }
             case 2:
             {
-                Roi roi = Roi(2, 2, true);
-                ajouterPiece(&roi);
-                Roi roi2 = Roi(6, 6, false);
-                ajouterPiece(&roi2);
-
-                Cavalier cavalier1 = Cavalier(1, 3, true);
-                ajouterPiece(&cavalier1);
-                Cavalier cavalier2 = Cavalier(5, 4, false);
-                ajouterPiece(&cavalier2);
-
-                Tour tour1 = Tour(2, 7, true);
-                ajouterPiece(&tour1);
-                Tour tour2 = Tour(7, 2, false);
-                ajouterPiece(&tour2);
+                ajouterPiece(new Roi(2,2, true));
+                ajouterPiece(new Roi(6,6, false));
+                ajouterPiece(new Cavalier(1,3, true));
+                ajouterPiece(new Cavalier(5,4, false));
+                ajouterPiece(new Tour(2,7, true));
+                ajouterPiece(new Tour(7,2, false));
                 break;
             }
             case 3:
             {
-                Roi roi = Roi(4, 4, true);
-                ajouterPiece(&roi);
-                Roi roi2 = Roi(7, 7, false);
-                ajouterPiece(&roi2);
-
-                Cavalier cavalier1 = Cavalier(3, 5, true);
-                ajouterPiece(&cavalier1);
-                Cavalier cavalier2 = Cavalier(6, 6, false);
-                ajouterPiece(&cavalier2);
-
-                Tour tour1 = Tour(0, 3, true);
-                ajouterPiece(&tour1);
-                Tour tour2 = Tour(7, 1, false);
-                ajouterPiece(&tour2);
+                ajouterPiece(new Roi(4,4, true));
+                ajouterPiece(new Roi(7,7, false));
+                ajouterPiece(new Cavalier(3,5, true));
+                ajouterPiece(new Cavalier(6,6, false));
+                ajouterPiece(new Tour(0,3, true));
+                ajouterPiece(new Tour(7,1, false));
                 break;
             }
         }
     }
     catch (TropDeRoisException)
     {
-        qDebug() << "Trop de rois sont sur l'echiquier actuellement";
+        QMessageBox::critical(nullptr, "Erreur", "Trop de rois sont actuellement sur l'echiquier");
     }
 }
 
@@ -102,38 +90,42 @@ ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget* parent)
     , ui(new Ui::ProjetJeuxEchecsClass())
 {
     ui->setupUi(this);
-    Echiquier echiquier = Echiquier();
-    echiquierWidget_ = new EchiquierWidget(this,&echiquier);
-    echiquierWidget_->chargerPartie(2);
+    echiquierWidget_ = new EchiquierWidget(this,new Echiquier());
+    //echiquierWidget_->chargerPartie(2);
 
-    QLabel* labelTour = new QLabel("Tour des blancs", this);
-
-    QPushButton* boutonEndgame1 = new QPushButton("Endgame 1", this);
-    QPushButton* boutonEndgame2 = new QPushButton("Endgame 2", this);
-    QPushButton* boutonEndgame3 = new QPushButton("Endgame 3", this);
+    infoTourLabel_ = new QLabel("Tour des blancs", this);
+    
+    boutonEndgame1_ = new QPushButton("Endgame 1", this);
+    boutonEndgame2_ = new QPushButton("Endgame 2", this);
+    boutonEndgame3_ = new QPushButton("Endgame 3", this);
 
     QHBoxLayout* boutonsLayout = new QHBoxLayout;
-    boutonsLayout->addWidget(boutonEndgame1);
-    boutonsLayout->addWidget(boutonEndgame2);
-    boutonsLayout->addWidget(boutonEndgame3);
+    boutonsLayout->addWidget(boutonEndgame1_);
+    boutonsLayout->addWidget(boutonEndgame2_);
+    boutonsLayout->addWidget(boutonEndgame3_);
 
     QVBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->addLayout(boutonsLayout);
-    mainLayout->addWidget(labelTour);
+    mainLayout->addWidget(infoTourLabel_);
     mainLayout->addWidget(echiquierWidget_);
     ui->centralWidget->setLayout(mainLayout);
 
-    connect(boutonEndgame1, &QPushButton::clicked, this, [=]() {
+    connect(boutonEndgame1_, &QPushButton::clicked, this, [=]() {
         echiquierWidget_->chargerPartie(1);
         });
 
-    connect(boutonEndgame2, &QPushButton::clicked, this, [=]() {
+    connect(boutonEndgame2_, &QPushButton::clicked, this, [=]() {
         echiquierWidget_->chargerPartie(2);
         });
 
-    connect(boutonEndgame3, &QPushButton::clicked, this, [=]() {
+    connect(boutonEndgame3_, &QPushButton::clicked, this, [=]() {
         echiquierWidget_->chargerPartie(3);
         });
+}
+
+void ProjetJeuxEchecs::changerTour()
+{
+    tourAuxBlancs_ = !tourAuxBlancs_;
 }
 
 
@@ -230,11 +222,11 @@ PieceWidget::PieceWidget(Piece* pieceModele, QWidget* parent) : QLabel(parent), 
 //Fonctions des classes du namespace Modele
 Roi::Roi(int x, int y,bool estBlanc) : Piece(x,y,estBlanc)
 {
-    if (nRois >= MAX_ROIS)
-    {
-        throw new TropDeRoisException;
-    }
     nRois++;
+    if (nRois > MAX_ROIS)
+    {
+        throw TropDeRoisException();
+    }
 }
 Roi::~Roi()
 {

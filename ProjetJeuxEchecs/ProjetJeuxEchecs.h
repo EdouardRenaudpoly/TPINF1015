@@ -68,10 +68,19 @@ class Echiquier : public QObject {
 	Q_OBJECT
 public:
 	Echiquier() = default;
+	~Echiquier()
+	{
+		for (auto& paire : positionPieces_)
+		{
+			delete paire.second;
+		}
 
+		positionPieces_.clear();
+	}
 public slots:
 	void deplacerPiece(Piece* ptrPiece, int x, int y);
 	void deplacerSansVerification(Piece* ptrPiece, int x, int y);
+	void ajouterPiece(Piece* piece);
 	void enleverPieces();
 signals:
 	void pieceDeplacee(int x, int y);
@@ -83,9 +92,13 @@ class EchiquierWidget : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit EchiquierWidget(QWidget* parent = nullptr, Echiquier* ptrEchiquier);
+	explicit EchiquierWidget(QWidget* parent = nullptr, Echiquier* ptrEchiquier=nullptr);
 	void chargerPartie(int numPartie);
 	void ajouterPiece(Piece* piece);
+	~EchiquierWidget()
+	{
+		delete ptrEchiquier_;
+	}
 protected:
 	void paintEvent(QPaintEvent* event) override;
 private:
@@ -100,6 +113,7 @@ class ProjetJeuxEchecs : public QMainWindow
 
 public:
 	explicit ProjetJeuxEchecs(QWidget* parent = nullptr);
+	void changerTour();
 	~ProjetJeuxEchecs();
 
 private:
@@ -109,6 +123,7 @@ private:
 	QPushButton* boutonEndgame1_;
 	QPushButton* boutonEndgame2_;
 	QPushButton* boutonEndgame3_;
+	bool tourAuxBlancs_ = true;
 };
 
 class TropDeRoisException : public std::exception {};
