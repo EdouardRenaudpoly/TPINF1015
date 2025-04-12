@@ -32,6 +32,8 @@ namespace Modele
 };
 QT_END_NAMESPACE
 
+class ProjetJeuxEchecs;
+
 class Piece : public QObject
 {
 	Q_OBJECT
@@ -48,7 +50,7 @@ public:
 		y_ = newY;
 	}
 
-	virtual bool estMouvementValide(int x, int y) const = 0; // Méthode virtuelle pure
+	virtual bool estDeplacementValide(int x, int y) const = 0; // Méthode virtuelle pure
 protected:
 	int x_;
 	int y_;
@@ -78,10 +80,14 @@ public:
 		positionPieces_.clear();
 	}
 public slots:
-	void deplacerPiece(Piece* ptrPiece, int x, int y);
+	bool deplacerPiece(int srcX, int srcY, int destX, int destY);
 	void deplacerSansVerification(Piece* ptrPiece, int x, int y);
 	void ajouterPiece(Piece* piece);
 	void enleverPieces();
+	Piece* getPiece(int x, int y)
+	{
+		return positionPieces_[std::make_pair(x,y)];
+	}
 signals:
 	void pieceDeplacee(int x, int y);
 private:
@@ -92,9 +98,11 @@ class EchiquierWidget : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit EchiquierWidget(QWidget* parent = nullptr, Echiquier* ptrEchiquier=nullptr);
+	explicit EchiquierWidget(QWidget* parent = nullptr, Echiquier* ptrEchiquier=nullptr, ProjetJeuxEchecs* projetJeuxEchecs=nullptr);
 	void chargerPartie(int numPartie);
 	void ajouterPiece(Piece* piece);
+	void reset();
+	void mettreAJour();
 	~EchiquierWidget()
 	{
 		delete ptrEchiquier_;
@@ -103,8 +111,12 @@ protected:
 	void paintEvent(QPaintEvent* event) override;
 private:
 	QPixmap echiquierPixMap_;
-	std::vector<PieceWidget*> pieceWidgets_;
+	QMap<QPair<int, int>, PieceWidget*> pieceWidgets_;
 	Echiquier* ptrEchiquier_;
+	QGridLayout* grille_;
+	QPoint caseSelectionnee_; 
+	ProjetJeuxEchecs* projetJeuxEchecs_;
+	bool attenteDeuxiemeClic_ = false;
 };
 
 class ProjetJeuxEchecs : public QMainWindow
@@ -113,6 +125,10 @@ class ProjetJeuxEchecs : public QMainWindow
 
 public:
 	explicit ProjetJeuxEchecs(QWidget* parent = nullptr);
+	bool getTourAuxBlancs()
+	{
+		return tourAuxBlancs_;
+	}
 	void changerTour();
 	~ProjetJeuxEchecs();
 
@@ -123,7 +139,9 @@ private:
 	QPushButton* boutonEndgame1_;
 	QPushButton* boutonEndgame2_;
 	QPushButton* boutonEndgame3_;
+	QPushButton* boutonReset_;
 	bool tourAuxBlancs_ = true;
+	int indexPartieActuelle = 0;
 };
 
 class TropDeRoisException : public std::exception {};
@@ -133,7 +151,7 @@ class Roi : public Piece
 public:
 	Roi(int x, int y, bool estBlanc);
 	~Roi();
-	bool estMouvementValide(int x, int y) const;
+	bool estDeplacementValide(int x, int y) const override;
 private:
 	static int nRois;
 };
@@ -142,14 +160,14 @@ class Cavalier : public Piece
 {
 public:
 	Cavalier(int x, int y, bool estBlanc) : Piece(x,y,estBlanc){}
-	bool estMouvementValide(int x, int y) const;
+	bool estDeplacementValide(int x, int y) const override;
 };
 
 class Tour : public Piece
 {
 public:
 	Tour(int x, int y, bool estBlanc) : Piece(x,y,estBlanc){}
-	bool estMouvementValide(int x, int y) const;
+	bool estDeplacementValide(int x, int y) const override;
 };
 
 class MouvementTemporaire

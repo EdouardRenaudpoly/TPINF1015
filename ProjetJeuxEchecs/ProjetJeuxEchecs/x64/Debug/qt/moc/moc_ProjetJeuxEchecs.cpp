@@ -181,12 +181,17 @@ static constexpr auto qt_meta_stringdata_ZN9EchiquierE = QtMocHelpers::stringDat
     "x",
     "y",
     "deplacerPiece",
+    "srcX",
+    "srcY",
+    "destX",
+    "destY",
+    "deplacerSansVerification",
     "Piece*",
     "ptrPiece",
-    "deplacerSansVerification",
     "ajouterPiece",
     "piece",
-    "enleverPieces"
+    "enleverPieces",
+    "getPiece"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -198,7 +203,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN9EchiquierE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -206,22 +211,24 @@ Q_CONSTINIT static const uint qt_meta_data_ZN9EchiquierE[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    2,   44,    2, 0x06,    1 /* Public */,
+       1,    2,   50,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       5,    3,   49,    2, 0x0a,    4 /* Public */,
-       8,    3,   56,    2, 0x0a,    8 /* Public */,
-       9,    1,   63,    2, 0x0a,   12 /* Public */,
-      11,    0,   66,    2, 0x0a,   14 /* Public */,
+       5,    4,   55,    2, 0x0a,    4 /* Public */,
+      10,    3,   64,    2, 0x0a,    9 /* Public */,
+      13,    1,   71,    2, 0x0a,   13 /* Public */,
+      15,    0,   74,    2, 0x0a,   15 /* Public */,
+      16,    2,   75,    2, 0x0a,   16 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    3,    4,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 6, QMetaType::Int, QMetaType::Int,    7,    3,    4,
-    QMetaType::Void, 0x80000000 | 6, QMetaType::Int, QMetaType::Int,    7,    3,    4,
-    QMetaType::Void, 0x80000000 | 6,   10,
+    QMetaType::Bool, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,    6,    7,    8,    9,
+    QMetaType::Void, 0x80000000 | 11, QMetaType::Int, QMetaType::Int,   12,    3,    4,
+    QMetaType::Void, 0x80000000 | 11,   14,
     QMetaType::Void,
+    0x80000000 | 11, QMetaType::Int, QMetaType::Int,    3,    4,
 
        0        // eod
 };
@@ -240,8 +247,9 @@ Q_CONSTINIT const QMetaObject Echiquier::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'deplacerPiece'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<Piece *, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'deplacerSansVerification'
@@ -253,7 +261,11 @@ Q_CONSTINIT const QMetaObject Echiquier::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<Piece *, std::false_type>,
         // method 'enleverPieces'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'getPiece'
+        QtPrivate::TypeAndForceComplete<Piece *, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>
     >,
     nullptr
 } };
@@ -264,23 +276,19 @@ void Echiquier::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->pieceDeplacee((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 1: _t->deplacerPiece((*reinterpret_cast< std::add_pointer_t<Piece*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
+        case 1: { bool _r = _t->deplacerPiece((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         case 2: _t->deplacerSansVerification((*reinterpret_cast< std::add_pointer_t<Piece*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
         case 3: _t->ajouterPiece((*reinterpret_cast< std::add_pointer_t<Piece*>>(_a[1]))); break;
         case 4: _t->enleverPieces(); break;
+        case 5: { Piece* _r = _t->getPiece((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])));
+            if (_a[0]) *reinterpret_cast< Piece**>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 1:
-            switch (*reinterpret_cast<int*>(_a[1])) {
-            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-            case 0:
-                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< Piece* >(); break;
-            }
-            break;
         case 2:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
@@ -328,14 +336,14 @@ int Echiquier::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }
