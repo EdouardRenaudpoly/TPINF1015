@@ -12,10 +12,11 @@
 // - Le Cmake utilisé provient du projet Calculatrice disponible sur la page Moodle du cours, il etait pas tester donc il est possible qu'il ne fonctionne pas.
 // - Le projet est configuré pour utiliser le compilateur MSVC 2022, vous pouvez le changer dans les properties du projet.
 
-#include "ProjetJeuxEchecs.h"
+#include "Ui.h"
 #include <QtWidgets/QApplication>
 #include <QMessageBox>
 #include <QString>
+using namespace Ui;
 
 #if __has_include("bibliotheque_cours.hpp")
 #include "bibliotheque_cours.hpp"

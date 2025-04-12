@@ -100,15 +100,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Modele.cpp" />
     <ClCompile Include="TestJeuxEchecs.cpp" />
+    <ClCompile Include="Ui.cpp" />
     <QtRcc Include="ProjetJeuxEchecs.qrc" />
     <QtUic Include="ProjetJeuxEchecs.ui" />
-    <QtMoc Include="ProjetJeuxEchecs.h" />
     <ClCompile Include="bibliotheque_cours\bibliotheque_cours.cpp" />
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
     <ClCompile Include="googletest\src\gtest-all.cc" />
-    <ClCompile Include="ProjetJeuxEchecs.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Modele.h" />
+    <QtMoc Include="Ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -32,12 +32,6 @@
     <QtUic Include="ProjetJeuxEchecs.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="ProjetJeuxEchecs.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="ProjetJeuxEchecs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -55,5 +49,19 @@
     <ClCompile Include="TestJeuxEchecs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Modele.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Modele.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Ui.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
