@@ -10,7 +10,6 @@
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"
 #endif
-#include "ProjetJeuxEchecs.h"
 #include <QMessageBox>
 #include <QString>
 #ifdef TEST

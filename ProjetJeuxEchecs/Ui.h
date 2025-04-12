@@ -48,6 +48,10 @@ namespace Ui
 		Q_OBJECT
 	public:
 		PieceWidget(Modele::Piece* pieceModele, QWidget* parent = nullptr);
+	public slots:
+		void surPieceDeplacee(Modele::Piece* piece, int x, int y);
+	signals:
+		void demanderDeplacerWidget(PieceWidget* pieceWidget, int x, int y);
 	private:
 		Modele::Piece* pieceModele_;
 	};
@@ -59,12 +63,15 @@ namespace Ui
 		explicit EchiquierWidget(QWidget* parent = nullptr, Modele::Echiquier* ptrEchiquier = nullptr, ProjetJeuxEchecs* projetJeuxEchecs = nullptr);
 		void chargerPartie(int numPartie);
 		void ajouterPiece(Modele::Piece* piece);
-		void reset();
-		void mettreAJour();
+		void deplacerPieceWidget(PieceWidget* widget, int x, int y);
+		void reinitialiserPositions();
+		//void mettreAJour();
 		~EchiquierWidget()
 		{
 			delete ptrEchiquier_;
 		}
+	private slots:
+		void surPieceCapturee(Modele::Piece* piece);
 	protected:
 		void paintEvent(QPaintEvent* event) override;
 	private:

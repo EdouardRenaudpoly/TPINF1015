@@ -59,40 +59,54 @@ namespace Ui
         }
     }
 
+    void EchiquierWidget::deplacerPieceWidget(PieceWidget* widget, int x, int y)
+    {
+        grille_->removeWidget(widget);
+        grille_->addWidget(widget, y, x); // Qt : ligne, colonne
+    }
+
+    void PieceWidget::surPieceDeplacee(Modele::Piece* piece, int x, int y)
+    {
+        if (piece == pieceModele_)
+        {
+            emit demanderDeplacerWidget(this, x, y);
+        }
+    }
+
     PieceWidget::PieceWidget(Modele::Piece* pieceModele, QWidget* parent) : QLabel(parent), pieceModele_(pieceModele)
     {
         
         setPixmap(QPixmap(getImagePathForPiece(pieceModele_)).scaled(TAILLE_CASE, TAILLE_CASE));
         setFixedSize(TAILLE_CASE, TAILLE_CASE);
-        setAttribute(Qt::WA_TransparentForMouseEvents); // optionnel si tu veux laisser passer les clics
+        setAttribute(Qt::WA_TransparentForMouseEvents);
     }
 
-    void EchiquierWidget::mettreAJour()
-    {
-        using namespace Modele;
-        for (auto widget : pieceWidgets_)
-        {
-            grille_->removeWidget(widget);
-            widget->deleteLater();
-        }
-        pieceWidgets_.clear();
+    //void EchiquierWidget::mettreAJour()
+    //{
+    //    using namespace Modele;
+    //    for (auto widget : pieceWidgets_)
+    //    {
+    //        grille_->removeWidget(widget);
+    //        widget->deleteLater();
+    //    }
+    //    pieceWidgets_.clear();
 
-        for (int x = 0; x < N_CASES_COTE; ++x)
-        {
-            for (int y = 0; y < N_CASES_COTE; ++y)
-            {
-                Piece* piece = ptrEchiquier_->getPiece(x, y);
-                if (piece)
-                {
-                    auto* widget = new PieceWidget(piece, this);
-                    grille_->addWidget(widget, y, x); // ligne/colonne
-                    pieceWidgets_[qMakePair(x, y)] = widget;
-                }
-            }
-        }
-    }
+    //    for (int x = 0; x < N_CASES_COTE; ++x)
+    //    {
+    //        for (int y = 0; y < N_CASES_COTE; ++y)
+    //        {
+    //            Piece* piece = ptrEchiquier_->getPiece(x, y);
+    //            if (piece)
+    //            {
+    //                auto* widget = new PieceWidget(piece, this);
+    //                grille_->addWidget(widget, y, x); // ligne/colonne
+    //                pieceWidgets_[qMakePair(x, y)] = widget;
+    //            }
+    //        }
+    //    }
+    //}
 
-    void EchiquierWidget::reset() {
+    void EchiquierWidget::reinitialiserPositions() {
         qDeleteAll(pieceWidgets_);
         pieceWidgets_.clear();
         ptrEchiquier_->enleverPieces();
@@ -100,7 +114,6 @@ namespace Ui
         {
             projetJeuxEchecs_->changerTour();
         }
-        mettreAJour();
     }
 
     void EchiquierWidget::ajouterPiece(Modele::Piece* piece)
@@ -109,13 +122,20 @@ namespace Ui
         auto* pieceWidget = new PieceWidget(piece, this);
         grille_->addWidget(pieceWidget, piece->getY(), piece->getX());
         pieceWidgets_[qMakePair(piece->getX(), piece->getY())] = pieceWidget;
+
+        connect(ptrEchiquier_, &Modele::Echiquier::pieceDeplacee,
+            pieceWidget, &PieceWidget::surPieceDeplacee);
+
+        connect(pieceWidget, &PieceWidget::demanderDeplacerWidget,
+            this, &EchiquierWidget::deplacerPieceWidget);
+
         ptrEchiquier_->ajouterPiece(piece);
     }
 
     void EchiquierWidget::chargerPartie(int numPartie)
     {
         using namespace Modele;
-        reset();
+        reinitialiserPositions();
         try
         {
             switch (numPartie)
@@ -160,6 +180,18 @@ namespace Ui
         }
     }
 
+    void EchiquierWidget::surPieceCapturee(Modele::Piece* piece)
+    {
+        auto pos = qMakePair(piece->getX(), piece->getY());
+        auto widget = pieceWidgets_.value(pos);
+        if (widget)
+        {
+            grille_->removeWidget(widget);
+            widget->deleteLater();
+            pieceWidgets_.remove(pos);
+        }
+    }
+
     EchiquierWidget::EchiquierWidget(QWidget* parent, Modele::Echiquier* ptrEchiquier, ProjetJeuxEchecs* projetJeuxEchecs)
         : QWidget(parent), echiquierPixMap_(":/images/images/echiquier.png"), projetJeuxEchecs_(projetJeuxEchecs)
     {
@@ -199,7 +231,19 @@ namespace Ui
                             QPoint destination = pos;
                             if (ptrEchiquier_->deplacerPiece(caseSelectionnee_.x(), caseSelectionnee_.y(), destination.x(), destination.y()))
                             {
-                                mettreAJour();
+
+                                auto widget = pieceWidgets_.value(qMakePair(caseSelectionnee_.x(), caseSelectionnee_.y()));
+
+                                if (widget)
+                                {
+                                    pieceWidgets_.remove(qMakePair(caseSelectionnee_.x(), caseSelectionnee_.y()));
+                                    pieceWidgets_[qMakePair(destination.x(), destination.y())] = widget;
+
+                                    deplacerPieceWidget(widget, destination.x(), destination.y());
+
+                                    connect(ptrEchiquier_, &Modele::Echiquier::pieceDeplacee,
+                                        widget, &PieceWidget::surPieceDeplacee);
+                                }
                                 projetJeuxEchecs_->changerTour();
                             }
                             else
@@ -211,6 +255,8 @@ namespace Ui
                     });
             }
         }
+        connect(ptrEchiquier_, &Modele::Echiquier::pieceCapturee,
+            this, &EchiquierWidget::surPieceCapturee);
 
         setLayout(grille_);
     }

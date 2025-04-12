@@ -86,6 +86,9 @@ namespace Modele
 		{
 			return positionPieces_[make_pair(x, y)];
 		}
+	signals:
+		void pieceDeplacee(Piece* piece, int nouveauX, int nouveauY);
+		void pieceCapturee(Piece* piece);
 	private:
 		map<pair<int, int>, Piece*> positionPieces_;
 	};

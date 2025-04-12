@@ -74,7 +74,9 @@ namespace Modele
             if (piece && piece->estBlanc() != blanc)
             {
                 if (piece->estDeplacementValide(roiX, roiY) && cheminEstLibre(piece, roiX, roiY))
+                {
                     return true;
+                }
             }
         }
 
@@ -150,6 +152,8 @@ namespace Modele
 
         deplacerSansVerification(piece, destX, destY);
 
+        emit pieceDeplacee(piece, destX, destY);
+
         return true;
     }
 
@@ -160,6 +164,7 @@ namespace Modele
         ptrPiece->changerPosition(x, y);
         if (positionPieces_[pair(x, y)])
         {
+            emit pieceCapturee(positionPieces_[pair(x, y)]);
             delete positionPieces_[pair(x, y)];
         }
         positionPieces_[pair(x, y)] = ptrPiece;
