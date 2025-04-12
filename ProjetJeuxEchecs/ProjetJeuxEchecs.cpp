@@ -15,9 +15,10 @@ static constexpr int TAILLE_COTE_ECHIQUIER = 800;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
 static constexpr int N_CASES_COTE = 8;
 
+using namespace std;
+
 void Echiquier::ajouterPiece(Piece* piece)
 {
-    using namespace std;
     pair<int, int> paire = make_pair(piece->getX(), piece->getY());
     positionPieces_[paire] = piece;
 }
@@ -118,6 +119,7 @@ void EchiquierWidget::chargerPartie(int numPartie)
     catch (TropDeRoisException)
     {
         QMessageBox::critical(nullptr, "Erreur", "Trop de rois sont actuellement sur l'echiquier");
+
     }
 }
 
@@ -325,10 +327,105 @@ bool Tour::estDeplacementValide(int x, int y) const
     return x_ == x || y_ == y;
 }
 
+bool Echiquier::roiEnEchec(bool blanc) 
+{
+    Piece* roi = nullptr;
+
+    for (const auto& [pos, piece] : positionPieces_)
+    {
+        if (piece && piece->estBlanc() == blanc && dynamic_cast<Roi*>(piece))
+        {
+            roi = piece;
+            break;
+        }
+    }
+
+    if (!roi)
+    {
+        return false;
+    }
+
+    int roiX = roi->getX();
+    int roiY = roi->getY();
+
+    for (const auto& [pos, piece] : positionPieces_)
+    {
+        if (piece && piece->estBlanc() != blanc)
+        {
+            if (piece->estDeplacementValide(roiX, roiY) && cheminEstLibre(piece,roiX,roiY))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool Echiquier::cheminEstLibre(Piece* piece, int destX, int destY) 
+{
+    int srcX = piece->getX();
+    int srcY = piece->getY();
+
+    if (auto* tour = dynamic_cast<Tour*>(piece)) 
+    {
+        if (srcY == destY) 
+        {
+            int minX = min(srcX, destX) + 1;
+            int maxX = max(srcX, destX);
+
+            for (int x = minX; x < maxX; ++x)
+            {
+                if (getPiece(x, srcY))
+                {
+                    return false;
+                }
+            }
+
+        }
+        else 
+        {
+            int minY = min(srcY, destY) + 1;
+            int maxY = max(srcY, destY);
+            for (int y = minY; y < maxY; ++y)
+            {
+                if (getPiece(srcX, y))
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Echiquier::estDeplacementLegal(Piece* piece, int destX, int destY)
+{
+    if (!piece->estDeplacementValide(destX, destY))
+    {
+        return false;
+    }
+
+    Piece* cible = getPiece(destX, destY);
+
+    if ((cible && cible->estBlanc() == piece->estBlanc()) 
+            || !cheminEstLibre(piece, destX, destY))
+    {
+        return false;
+    }
+
+    MouvementTemporaire mouvementTemp(this, piece, destX, destY);
+
+    return !roiEnEchec(piece->estBlanc());
+}
+
 bool Echiquier::deplacerPiece(int srcX, int srcY, int destX, int destY)
 {
     Piece* piece = getPiece(srcX, srcY);
-    if (!piece || !piece->estDeplacementValide(destX, destY)) return false;
+    if (!piece || !estDeplacementLegal(piece, destX, destY) || (srcX==destX && srcY==destY))
+    {
+        QMessageBox::critical(nullptr, "Erreur", "Ce deplacement n'est pas valide");
+        return false;
+    }
 
     deplacerSansVerification(piece, destX, destY);
 

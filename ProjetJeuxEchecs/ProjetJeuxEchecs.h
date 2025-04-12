@@ -10,6 +10,8 @@
 #include <iostream>
 #include <map>
 
+using namespace std;
+
 QT_BEGIN_NAMESPACE
 namespace Ui 
 { 
@@ -79,19 +81,22 @@ public:
 
 		positionPieces_.clear();
 	}
+	bool roiEnEchec(bool blanc);
+	bool estDeplacementLegal(Piece* piece, int destX, int destY);
+	bool cheminEstLibre(Piece* piece, int destX, int destY);
 public slots:
 	bool deplacerPiece(int srcX, int srcY, int destX, int destY);
 	void deplacerSansVerification(Piece* ptrPiece, int x, int y);
 	void ajouterPiece(Piece* piece);
 	void enleverPieces();
-	Piece* getPiece(int x, int y)
+	Piece* getPiece(int x, int y) 
 	{
-		return positionPieces_[std::make_pair(x,y)];
+		return positionPieces_[make_pair(x,y)];
 	}
 signals:
 	void pieceDeplacee(int x, int y);
 private:
-	std::map<std::pair<int, int>, Piece*> positionPieces_;
+	map<pair<int, int>, Piece*> positionPieces_;
 };
 
 class EchiquierWidget : public QWidget
