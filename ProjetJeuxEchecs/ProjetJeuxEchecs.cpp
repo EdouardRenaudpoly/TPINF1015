@@ -318,7 +318,7 @@ bool Roi::estDeplacementValide(int x, int y) const
 }
 bool Cavalier::estDeplacementValide(int x, int y) const
 {
-    return (abs(x - x_) == 1 && abs(y-y_) == 3) || (abs(x - x_) == 3 && abs(y - y_) == 1);
+    return (abs(x - x_) == 1 && abs(y-y_) == 2) || (abs(x - x_) == 2 && abs(y - y_) == 1);
 }
 bool Tour::estDeplacementValide(int x, int y) const
 {
@@ -340,6 +340,10 @@ void Echiquier::deplacerSansVerification(Piece* ptrPiece, int x, int y)
     using namespace std;
     positionPieces_.erase({ ptrPiece->getX(), ptrPiece->getY()});
     ptrPiece->changerPosition(x, y);
+    if (positionPieces_[pair(x, y)])
+    {
+        delete positionPieces_[pair(x, y)];
+    }
     positionPieces_[pair(x, y)] = ptrPiece;
 }
 MouvementTemporaire::MouvementTemporaire(Echiquier* ptrEchiquier,Piece* ptrPiece, int nouveauX, int nouveauY)

@@ -1,3 +1,5 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.8.3
+  ProjetJeuxEchecs.cpp
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\ProjetJeuxEchecs.cpp(245,47): warning C4100: 'event' : paramètre formel non référencé
   ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
