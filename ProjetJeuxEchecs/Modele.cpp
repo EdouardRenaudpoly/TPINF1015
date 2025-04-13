@@ -1,5 +1,17 @@
+﻿//﻿ Ce fichier a pour but d'implémenter un namespace et des classes contenant toute la logique derriere le jeu d'échecs, soit le mouvement des pieces, 
+// voir si le roi est en échec, voir si les coups sont légaux, etc. Le programme contient donc les pièces suivantes : le roi, la tour et le cavalier.
+// Il contient également une classe Échiquier et c'est elle qui s'occupe de déplacer les pièces et voir si les mouvements sont valides. Finalement,
+// la classe mouvement temporaire implémente un déplacement qui s'annule directement après que la classe soit détruite, ce qui est utile lors de situations
+// d'échec du roi.
+// \file   Modele.cpp
+// \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+// \date   12 avril 2025
+// Créé le 6 avril 2025
+//
+
 #include <math.h>
 #include "Modele.h"
+#include <string>
 #include <QMessageBox>
 #include <QString>
 #include <QPixmap>
@@ -23,11 +35,11 @@ namespace Modele
 
     Roi::Roi(int x, int y, bool estBlanc) : Piece(x, y, estBlanc)
     {
-        nRois++;
-        if (nRois > MAX_ROIS)
+        if (nRois >= MAX_ROIS)
         {
             throw TropDeRoisException();
         }
+        nRois++;
     }
     Roi::~Roi()
     {
@@ -121,11 +133,11 @@ namespace Modele
         return true;
     }
 
-    bool Echiquier::estDeplacementLegal(Piece* piece, int destX, int destY)
+    pair<bool,string> Echiquier::estDeplacementLegal(Piece* piece, int destX, int destY)
     {
         if (!piece->estDeplacementValide(destX, destY))
         {
-            return false;
+            return make_pair(false,"Cette piece ne peut pas se deplacer ainsi");
         }
 
         Piece* cible = getPiece(destX, destY);
@@ -133,28 +145,33 @@ namespace Modele
         if ((cible && cible->estBlanc() == piece->estBlanc())
             || !cheminEstLibre(piece, destX, destY))
         {
-            return false;
+            return make_pair(false,"cette piece ne peut pas passer au-dessus des autres");
         }
 
         MouvementTemporaire mouvementTemp(this, piece, destX, destY);
 
-        return !roiEnEchec(piece->estBlanc());
+        return make_pair(!roiEnEchec(piece->estBlanc()),"Votre roi est ou serait en situation d'echec");
     }
 
-    bool Echiquier::deplacerPiece(int srcX, int srcY, int destX, int destY)
+    pair<bool,string> Echiquier::deplacerPiece(int srcX, int srcY, int destX, int destY)
     {
         Piece* piece = getPiece(srcX, srcY);
-        if (!piece || !estDeplacementLegal(piece, destX, destY) || (srcX == destX && srcY == destY))
+        if (!piece || (srcX == destX && srcY == destY))
         {
-            QMessageBox::critical(nullptr, "Erreur", "Cette action n'est pas valide");
-            return false;
+            return make_pair(false,"Vous ne pouvez pas deplacer la piece sur elle-meme");
+        }
+
+        pair<bool, string> deplacementValideEtMessage = estDeplacementLegal(piece, destX, destY);
+        if (!deplacementValideEtMessage.first)
+        {
+            return deplacementValideEtMessage;
         }
 
         deplacerSansVerification(piece, destX, destY);
 
         emit pieceDeplacee(piece, destX, destY);
 
-        return true;
+        return make_pair(true,"");
     }
 
     void Echiquier::deplacerSansVerification(Piece* ptrPiece, int x, int y)

@@ -1,3 +1,12 @@
+﻿//Ce fichier a pour but d'implémenter un namespace et des classes qui permettent d'afficher notre jeu d'échecs de façon adéquate. Ces classes réagissent aux
+//différents signaux et implémentent les boutons dans l'interface usager pour que l'utilisateur puisse jouer au jeu correctement. Ces méthodes s'occupent
+//également d'afficher les différentes exceptions et messages d'erreur causé par les actions de l'usager ou l'initialisation des rois. Elle contient les
+//Widgets pour l'échiquier, les pieces et les différents boutons et connecte les signaux avec la partie modèle.
+//\file   Ui.cpp
+//\author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+//\date   12 avril 2025
+//Créé le 6 avril 2025
+
 #include "Ui.h"
 #include "Modele.h"
 #include <math.h>
@@ -11,6 +20,7 @@
 #include <QPushButton>
 
 #include <iostream>
+
 static constexpr int MAX_ROIS = 2;
 static constexpr int TAILLE_COTE_ECHIQUIER = 800;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
@@ -81,31 +91,6 @@ namespace Ui
         setAttribute(Qt::WA_TransparentForMouseEvents);
     }
 
-    //void EchiquierWidget::mettreAJour()
-    //{
-    //    using namespace Modele;
-    //    for (auto widget : pieceWidgets_)
-    //    {
-    //        grille_->removeWidget(widget);
-    //        widget->deleteLater();
-    //    }
-    //    pieceWidgets_.clear();
-
-    //    for (int x = 0; x < N_CASES_COTE; ++x)
-    //    {
-    //        for (int y = 0; y < N_CASES_COTE; ++y)
-    //        {
-    //            Piece* piece = ptrEchiquier_->getPiece(x, y);
-    //            if (piece)
-    //            {
-    //                auto* widget = new PieceWidget(piece, this);
-    //                grille_->addWidget(widget, y, x); // ligne/colonne
-    //                pieceWidgets_[qMakePair(x, y)] = widget;
-    //            }
-    //        }
-    //    }
-    //}
-
     void EchiquierWidget::reinitialiserPositions() {
         qDeleteAll(pieceWidgets_);
         pieceWidgets_.clear();
@@ -135,48 +120,64 @@ namespace Ui
     void EchiquierWidget::chargerPartie(int numPartie)
     {
         using namespace Modele;
-        reinitialiserPositions();
-        try
-        {
-            switch (numPartie)
-            {
-            case 1:
-            {
-                ajouterPiece(new Roi(0, 0, true));
-                ajouterPiece(new Roi(1, 0, true));
-                ajouterPiece(new Roi(3, 4, false));
-                ajouterPiece(new Cavalier(1, 1, true));
-                ajouterPiece(new Cavalier(5, 5, false));
-                ajouterPiece(new Tour(0, 7, true));
-                ajouterPiece(new Tour(7, 0, false));
-                break;
-            }
-            case 2:
-            {
-                ajouterPiece(new Roi(2, 2, true));
-                ajouterPiece(new Roi(6, 6, false));
-                ajouterPiece(new Cavalier(1, 3, true));
-                ajouterPiece(new Cavalier(5, 4, false));
-                ajouterPiece(new Tour(2, 7, true));
-                ajouterPiece(new Tour(7, 2, false));
-                break;
-            }
-            case 3:
-            {
-                ajouterPiece(new Roi(4, 4, true));
-                ajouterPiece(new Roi(7, 7, false));
-                ajouterPiece(new Cavalier(3, 5, true));
-                ajouterPiece(new Cavalier(6, 6, false));
-                ajouterPiece(new Tour(0, 3, true));
-                ajouterPiece(new Tour(7, 1, false));
-                break;
-            }
-            }
-        }
-        catch (TropDeRoisException)
-        {
-            QMessageBox::critical(nullptr, "Erreur", "Trop de rois sont actuellement sur l'echiquier");
 
+        reinitialiserPositions();
+
+        vector<tuple<string, int, int, bool>> pieces;
+
+        switch (numPartie)
+        {
+        case 1:
+            pieces = 
+            {
+                {"Roi", 0, 0, true}, {"Roi", 1, 4, false},
+                {"Cavalier", 1, 1, true}, {"Cavalier", 5, 5, false},
+                {"Tour", 0, 7, true}, {"Tour", 7, 0, false}
+            };
+            break;
+
+        case 2:
+            pieces = 
+            {
+                {"Roi", 2, 2, true}, {"Roi", 6, 6, false},
+                {"Cavalier", 1, 3, true}, {"Cavalier", 5, 4, false},
+                {"Tour", 2, 7, true}, {"Tour", 7, 2, false}
+            };
+            break;
+
+        case 3:
+            pieces = 
+            {
+                {"Roi", 4, 4, true}, {"Roi", 7, 7, false},
+                {"Cavalier", 3, 5, true}, {"Cavalier", 6, 6, false},
+                {"Tour", 0, 3, true}, {"Tour", 7, 1, false}
+            };
+            break;
+        }
+
+        for (const auto& pieceData : pieces)
+        {
+            const auto& [nomPiece, x, y, estBlanc] = pieceData;
+
+                if (nomPiece == "Roi")
+                {
+                    try
+                    {
+                        ajouterPiece(new Roi(x, y, estBlanc));
+                    }
+                    catch (TropDeRoisException)
+                    {
+                        QMessageBox::critical(nullptr, "Erreur", "Trop de rois sont actuellement sur l'echiquier");
+                    }
+                }
+                else if (nomPiece == "Cavalier")
+                {
+                    ajouterPiece(new Cavalier(x, y, estBlanc));
+                }
+                else if (nomPiece == "Tour")
+                {
+                    ajouterPiece(new Tour(x, y, estBlanc));
+                }
         }
     }
 
@@ -223,13 +224,13 @@ namespace Ui
                             {
                                 caseSelectionnee_ = pos;
                                 attenteDeuxiemeClic_ = true;
-                                qDebug() << "S�lectionn�e : " << pos;
                             }
                         }
                         else
                         {
                             QPoint destination = pos;
-                            if (ptrEchiquier_->deplacerPiece(caseSelectionnee_.x(), caseSelectionnee_.y(), destination.x(), destination.y()))
+                            pair<bool, string> messageEtDeplacement = ptrEchiquier_->deplacerPiece(caseSelectionnee_.x(), caseSelectionnee_.y(), destination.x(), destination.y());
+                            if (messageEtDeplacement.first)
                             {
 
                                 auto widget = pieceWidgets_.value(qMakePair(caseSelectionnee_.x(), caseSelectionnee_.y()));
@@ -248,8 +249,9 @@ namespace Ui
                             }
                             else
                             {
-                                qDebug() << "D�placement invalide.";
+                                QMessageBox::critical(this, "Erreur", messageEtDeplacement.second.c_str());
                             }
+
                             attenteDeuxiemeClic_ = false;
                         }
                     });
@@ -262,7 +264,7 @@ namespace Ui
     }
 
 
-    void EchiquierWidget::paintEvent(QPaintEvent* event)
+    void EchiquierWidget::paintEvent(QPaintEvent* /*event*/)
     {
         QPainter painter(this);
         if (!echiquierPixMap_.isNull()) {

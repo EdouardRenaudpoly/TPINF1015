@@ -1,3 +1,13 @@
+﻿// Ce fichier contient les en-têtes du namespace et de toutes les fonctions de la partie modèle de notre projet, ces fonctions implétentent toute la logique
+// derrière le jeu d'échecs et sont définies dans Modele.cpp. Il contient le roi, le cavalier et la tour ainsi que l'échiquier qui implémente les déplacements
+// et la classe mouvement temporaire implémentant le RAII. Il contient également l'exception TropDeRoisException qui s'active lorsque le compteur d'instance
+// de roi devient supérieur à 2.
+// \file   Modele.h
+// \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+// \date   12 avril 2025
+// Créé le 6 avril 2025
+//
+
 #pragma once
 
 #include <QtWidgets/QMainWindow>
@@ -31,7 +41,7 @@ namespace Modele
 			y_ = newY;
 		}
 
-		virtual bool estDeplacementValide(int x, int y) const = 0; // M�thode virtuelle pure
+		virtual bool estDeplacementValide(int x, int y) const = 0; // Méthode virtuelle pure
 	protected:
 		int x_;
 		int y_;
@@ -76,9 +86,9 @@ namespace Modele
 			positionPieces_.clear();
 		}
 		bool roiEnEchec(bool blanc);
-		bool estDeplacementLegal(Piece* piece, int destX, int destY);
+		pair<bool,string> estDeplacementLegal(Piece* piece, int destX, int destY);
 		bool cheminEstLibre(Piece* piece, int destX, int destY);
-		bool deplacerPiece(int srcX, int srcY, int destX, int destY);
+		pair<bool,string> deplacerPiece(int srcX, int srcY, int destX, int destY);
 		void deplacerSansVerification(Piece* ptrPiece, int x, int y);
 		void ajouterPiece(Piece* piece);
 		void enleverPieces();

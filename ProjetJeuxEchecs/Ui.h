@@ -1,3 +1,12 @@
+﻿// Ce fichier contient les en-têtes du namespace et de toutes les fonctions de la partie de l'interface usager de notre projet. La classe ProjetJeuxEchecs
+// est la fenêtre principale et elle s'occupe d'afficher les différents widgets. La classe PieceWidget s'occupe d'afficher les pièces d'échecs et de 
+// déplacer ou d'enlever les images selon les cas de figure. La classe ÉchiquierWidget agit également en contrôleur et place les différentes parties lorsque
+// les boutons sont appuyés, en plus de contenir les différents widgets à afficher et les boutons sur l'échiquier.
+// \file   Ui.h
+// \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+// \date   12 avril 2025
+// Créé le 6 avril 2025
+
 #pragma once
 
 #include <QtWidgets/QMainWindow>

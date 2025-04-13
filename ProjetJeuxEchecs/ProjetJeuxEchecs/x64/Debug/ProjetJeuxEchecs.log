@@ -1,29 +1,8 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.8.3
-  moc Modele.h
-  moc Ui.h
-  Modele.cpp
-  Ui.cpp
-  main.cpp
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Ui.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1d71 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Ui.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x1d7a et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Ui.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x229e et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Modele.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2da et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  (compiler le fichier source 'Modele.cpp')
-  
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Modele.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2da et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  (compiler le fichier source 'Ui.cpp')
-  
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Modele.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2da et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  (compiler le fichier source 'main.cpp')
-  
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Ui.cpp(265,51): warning C4100: 'event' : paramètre formel non référencé
-  moc_Modele.cpp
-  moc_Ui.cpp
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Modele.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2da et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  (compiler le fichier source 'ProjetJeuxEchecs/x64/Debug/qt/moc/moc_Modele.cpp')
-  
-C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\Modele.h(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x2da et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
-  (compiler le fichier source 'ProjetJeuxEchecs/x64/Debug/qt/moc/moc_Ui.cpp')
-  
+  TestJeuxEchecs.cpp
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x29 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x72 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0xe3 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
+C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: Le fichier contient un caractère qui débute à l'offset 0x152 et qui est non conforme dans le jeu de caractères source actuel (page de codes 65001).
   ProjetJeuxEchecs.vcxproj -> C:\Users\grave\TPsINF1015\TPs\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
