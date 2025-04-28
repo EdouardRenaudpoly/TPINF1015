@@ -4,64 +4,151 @@
 #include <iostream>
 #include <vector>
 #include <set>
-
+#include <string>
+#include <map>
+#include <numeric>
 using namespace std;
-class Solution {
-public:
-    vector<int> largestDivisibleSubset(vector<int>& nums) {
-        if (nums.empty()) return {};
-
-        sort(nums.begin(), nums.end());  // Trie les éléments
-
-        vector<int> dp(nums.size(), 1);  // dp[i] représente la taille du plus grand sous-ensemble divisible qui se termine par nums[i]
-        vector<int> previous(nums.size(), -1);  // Pour reconstruire le sous-ensemble
-
-        int maxSize = 1, maxIndex = 0;  // Taille et index du plus grand sous-ensemble
-
-        for (int i = 1; i < nums.size(); i++) {
-            for (int j = 0; j < i; j++) {
-                if (nums[i] % nums[j] == 0 && dp[i] < dp[j] + 1) {
-                    dp[i] = dp[j] + 1;
-                    previous[i] = j;
-                }
-            }
-            if (dp[i] > maxSize) {
-                maxSize = dp[i];
-                maxIndex = i;
-            }
-        }
-
-        // Reconstruction du sous-ensemble à partir de previous
-        vector<int> result;
-        while (maxIndex != -1) {
-            result.push_back(nums[maxIndex]);
-            maxIndex = previous[maxIndex];
-        }
-
-        reverse(result.begin(), result.end());
-        return result;
-    }
-
-    int main() {
-        vector<int> nums = { 1, 2, 4, 8 };
-        vector<int> result = largestDivisibleSubset(nums);
-
-        for (int num : result) {
-            cout << num << " ";
-        }
-        return 0;
-    }
-}; 
-
-int main()
+bool
+ostream& operator<< (ostream& sortie, const GestionnaireArbitre& g)
 {
-    Solution s;
-    vector<int> v = { 1,2,3 };
-    vector<int> reponse = s.largestDivisibleSubset(v);
-    for (int i : reponse)
+    for (auto& arbitre : g.arbitres_)
     {
-        cout << i << " ";
+        sortie << arbitre->getNom() << "\t" << arbitre->getRole() << endl;
     }
+    for (auto& paire : g.filtreArbitreRole_)
+    {
+        sortie << paire.first;
+        for (auto& arbitre : paire.second)
+        {
+            sortie << "\t" << arbitre->getNom();
+        }
+        sortie << endl;
+    }
+    return sortie;
+}
+
+ajouterArbitre(Arbitre* a)
+{
+    if (getArbitreParNom(a->getNom()) != nullptr)
+    {
+        arbitres_.push_back(a);
+        filtreArbitreRole_[a->getRole()].push_back(a);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+supprimerArbitre(string nom)
+{
+    Arbitre* ptrArbitre = getArbitreParNom(nom);
+    if (ptrArbitre!=nullptr)
+    {
+        auto it = arbitres_.find(ptrArbitre);
+        arbitres_.erase(it);
+        auto it = filtreArbitreRole_[a->getRole()].find(ptrArbitre);;
+        filtreArbitreRole_[a->getRole()].erase(it);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+auto getIteratorArbitreParNom(string nom)
+{
+    return find_if(arbitres_.begin(), arbitres_.end(), [=](Arbitre* arbitre) {return arbitre->getNom() == nom;});
+}
+struct comparerPersonne
+{
+    comparerPersonne() {}
+    bool operator()(Personne* p1, Personne* p2)
+    {
+        return p1->getNom() > p2->getNom();
+    }
+};
+
+class MatierePrecieuse
+{
+public:
+    MatierePrecieuse() : prixParGramme_(0.0) {}
+    ~MatierePrecieuse() = default;
+    double getPrixParGramme()
+    {
+        return prixParGramme_;
+    }
+    void setPrixParGramme(double nouveauPrix)
+    {
+        prixParGramme_=nouveauPrix;
+    }
+    virtual string getNom() = 0;
+    virtual bool estSynthetisable() = 0;
+private:
+    double prixParGramme_;
+};
+
+class Or24k : public MatierePrecieuse
+{
+public:
+    Or24k() : MatierePrecieuse() {}
+
+    string getNom() override
+    {
+        return "Or";
+    }
+    bool estSynthetisable() override
+    {
+        return false;
+    }
+};
+
+using NomMatiere = std::string;
+class Inventaire {
+public:
+    Inventaire() = default;
+    ~Inventaire() = default;
+    void ajouterMatiere(NomMatiere nom, double grammes)
+    {
+        grammesDeMatieres_[nom] = grammes;
+    }
+    double prixTotal(const std::map<NomMatiere, MatierePrecieuse*> matieres) const;
+private:
+    map<NomMatiere, double> grammesDeMatieres_;
+};
+
+double trouverPrixMatiere(const map<NomMatiere, MatierePrecieuse*>& matieres, pair<NomMatiere,double> matiereEtGrammes)
+{
+    auto it = matieres.find(matiereEtGrammes.first);
+    if (it != matieres.end())
+    {
+        return it->second->getPrixParGramme()*matiereEtGrammes.second;
+    }
+    else
+    {
+        return 0.0;
+    }
+}
+double Inventaire::prixTotal(const map<NomMatiere, MatierePrecieuse*> matieres) const
+{
+    return transform_reduce(matieres.begin(), matieres.end(),
+        0.0, plus{},
+        [&](pair<NomMatiere,MatierePrecieuse*> paire) { return trouverPrixMatiere(matieres,make_pair(paire.first, grammesDeMatieres_.at(paire.first)
+        )); });
+}
+
+int main() 
+{
+    Inventaire p;
+    Or24k m; 
+    m.setPrixParGramme(10);
+    Or24k o;
+    o.setPrixParGramme(2);
+    p.ajouterMatiere(m.getNom(), 40);
+    p.ajouterMatiere(o.getNom(), 10);
+    map<string, MatierePrecieuse*> matieres = {
+    { m.getNom(), &m }, { o.getNom(), &o } };
+    cout <<  p.prixTotal(matieres) << "\n";
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage

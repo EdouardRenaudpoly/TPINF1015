@@ -74,7 +74,6 @@ namespace Ui
 		void ajouterPiece(Modele::Piece* piece);
 		void deplacerPieceWidget(PieceWidget* widget, int x, int y);
 		void reinitialiserPositions();
-		//void mettreAJour();
 		~EchiquierWidget()
 		{
 			delete ptrEchiquier_;

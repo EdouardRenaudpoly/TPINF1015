@@ -1,16 +1,11 @@
-﻿// Fichier : main.cpp
-// Description :
-// Programme principal de l'application de jeux d'échecs
+﻿//Le fichier main.cpp initialise et lance l'application de jeu d'échecs.Il construit l'échiquier, place les pièces à leurs positions de départ, et gère 
+// l'interface graphique pour permettre aux joueurs d'interagir avec le plateau. Le main sert de point d'entrée au programme et orchestre la boucle principale du jeu en
+// plus de rouler les tests écrits à l'avance pour s'assurer du bon fonctionnement du jeu
+// \file   main.cpp
+// \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+// \date   12 avril 2025
+// Créé le 6 avril 2025
 //
-// Ce fichier est le point d'entrée de l'application Qt.
-// Il initialise la bibliothèque de cours et démarre l'application Qt.
-// Il inclut également la bibliothèque de vérification de fuites de mémoire et d'autres bibliothèques nécessaires.
-//
-// Remarque :
-// - La versoion de Qt utilisée est la version 6.8.3 vous pouvez la changer dans les properties du projet.
-// - La version de C++ utilisée est la version 20 vous pouvez la changer dans les properties du projet.
-// - Le Cmake utilisé provient du projet Calculatrice disponible sur la page Moodle du cours, il etait pas tester donc il est possible qu'il ne fonctionne pas.
-// - Le projet est configuré pour utiliser le compilateur MSVC 2022, vous pouvez le changer dans les properties du projet.
 
 #include "Ui.h"
 #include <QtWidgets/QApplication>

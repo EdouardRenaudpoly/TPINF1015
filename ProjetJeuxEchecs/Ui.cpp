@@ -263,11 +263,15 @@ namespace Ui
         setLayout(grille_);
     }
 
+    //Dans notre cas, il est justifié de ne pas utiliser le paramètre event de paintEvent, car nous redessinons systématiquement l'ensemble de l'échiquier 
+    //sans nous soucier de la zone spécifique à mettre à jour. Le paramètre event sert surtout à optimiser le dessin en ne redessinant qu'une portion 
+    //précise (event->rect()), ce qui est utile pour des interfaces complexes ou très lourdes à dessiner mais pas vraiment ici. 
 
-    void EchiquierWidget::paintEvent(QPaintEvent* /*event*/)
+    void EchiquierWidget::paintEvent([[maybe_unused]] QPaintEvent* event)
     {
         QPainter painter(this);
-        if (!echiquierPixMap_.isNull()) {
+        if (!echiquierPixMap_.isNull()) 
+        {
             painter.drawPixmap(0, 0, width(), height(), echiquierPixMap_);
         }
     }
@@ -300,22 +304,26 @@ namespace Ui
         mainLayout->addWidget(echiquierWidget_);
         ui->centralWidget->setLayout(mainLayout);
 
-        connect(boutonEndgame1_, &QPushButton::clicked, this, [=]() {
+        connect(boutonEndgame1_, &QPushButton::clicked, this, [=]() 
+            {
             indexPartieActuelle = 1;
             echiquierWidget_->chargerPartie(1);
             });
 
-        connect(boutonEndgame2_, &QPushButton::clicked, this, [=]() {
+        connect(boutonEndgame2_, &QPushButton::clicked, this, [=]() 
+            {
             indexPartieActuelle = 2;
             echiquierWidget_->chargerPartie(2);
             });
 
-        connect(boutonEndgame3_, &QPushButton::clicked, this, [=]() {
+        connect(boutonEndgame3_, &QPushButton::clicked, this, [=]() 
+            {
             indexPartieActuelle = 3;
             echiquierWidget_->chargerPartie(3);
             });
 
-        connect(boutonReset_, &QPushButton::clicked, this, [=]() {
+        connect(boutonReset_, &QPushButton::clicked, this, [=]() 
+            {
             echiquierWidget_->chargerPartie(indexPartieActuelle);
             });
     }

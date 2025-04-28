@@ -1,11 +1,11 @@
-// Fichier de test pour le projet Jeux d'échecs
-// Ce fichier contient les tests unitaires pour le projet Jeux d'échecs.
-// Pour le moment, il y a seulement des tests d'exemple.
-// Vous devez ajouter vos propres tests pour vérifier le bon fonctionnement de votre code.
-// 
-// 
+//Le fichier de tests automatise la validation du comportement du modèle du jeu d'échecs. Il contient une série de cas de test qui vérifient la logique de mouvement 
+// de chaque pièce, la détection d'états comme l'échec ou le mat, ainsi que la gestion de l'échiquier.Ces tests garantissent que les différentes composantes fonctionnent 
+// correctement et permettent d'assurer la fiabilité du projet lors de futures modifications.
+// \file   TestJeuxEchecs.cpp
+// \author Édouard Renaud (2384807) et Zackary Labelle (2386427)
+// \date   12 avril 2025
+// Créé le 6 avril 2025
 //
-// Include ici les headers de votre partie de code à tester
 
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"
