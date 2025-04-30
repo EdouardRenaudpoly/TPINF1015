@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 namespace Modele
 {
 
-    Roi::Roi(int x, int y, bool estBlanc) : Piece(x, y, estBlanc)
+    Roi::Roi(Position pos, bool estBlanc) : Piece(pos, estBlanc)
     {
         if (nRois >= MAX_ROIS)
         {
@@ -47,17 +47,17 @@ namespace Modele
     }
     int Roi::nRois = 0;
 
-    bool Roi::estDeplacementValide(int x, int y) const
+    bool Roi::estDeplacementValide(Position pos) const
     {
-        return abs(x - x_) <= 1 && abs(y - y_) <= 1;
+        return abs(pos.x - pos_.x) <= 1 && abs(pos.y - pos_.y) <= 1;
     }
-    bool Cavalier::estDeplacementValide(int x, int y) const
+    bool Cavalier::estDeplacementValide(Position pos) const
     {
-        return (abs(x - x_) == 1 && abs(y - y_) == 2) || (abs(x - x_) == 2 && abs(y - y_) == 1);
+        return (abs(pos.x - pos_.x) == 1 && abs(pos.y - pos_.y) == 2) || (abs(pos.x - pos_.x) == 2 && abs(pos.y - pos_.y) == 1);
     }
-    bool Tour::estDeplacementValide(int x, int y) const
+    bool Tour::estDeplacementValide(Position pos) const
     {
-        return x_ == x || y_ == y;
+        return pos_.x == pos.x || pos_.y == pos.y;
     }
 
     bool Echiquier::roiEnEchec(bool blanc)
@@ -78,14 +78,13 @@ namespace Modele
             return false;
         }
 
-        int roiX = roi->getX();
-        int roiY = roi->getY();
+        Position posRoi = roi->getPos();
 
         for (const auto& [pos, piece] : positionPieces_)
         {
             if (piece && piece->estBlanc() != blanc)
             {
-                if (piece->estDeplacementValide(roiX, roiY) && cheminEstLibre(piece, roiX, roiY))
+                if (piece->estDeplacementValide(posRoi) && cheminEstLibre(piece, posRoi))
                 {
                     return true;
                 }
@@ -95,21 +94,20 @@ namespace Modele
         return false;
     }
 
-    bool Echiquier::cheminEstLibre(Piece* piece, int destX, int destY)
+    bool Echiquier::cheminEstLibre(Piece* piece, Position posDestination)
     {
-        int srcX = piece->getX();
-        int srcY = piece->getY();
+        Position posSource = piece->getPos();
 
         if (auto* tour = dynamic_cast<Tour*>(piece))
         {
-            if (srcY == destY)
+            if (posSource.y == posDestination.y)
             {
-                int minX = min(srcX, destX) + 1;
-                int maxX = max(srcX, destX);
+                int minX = min(posSource.x, posDestination.x) + 1;
+                int maxX = max(posSource.x, posDestination.x);
 
                 for (int x = minX; x < maxX; ++x)
                 {
-                    if (getPiece(x, srcY))
+                    if (getPiece(Position(x, posSource.y)))
                     {
                         return false;
                     }
@@ -118,11 +116,12 @@ namespace Modele
             }
             else
             {
-                int minY = min(srcY, destY) + 1;
-                int maxY = max(srcY, destY);
+                int minY = min(posSource.y, posDestination.y) + 1;
+                int maxY = max(posSource.y, posDestination.y);
+
                 for (int y = minY; y < maxY; ++y)
                 {
-                    if (getPiece(srcX, y))
+                    if (getPiece(Position(posSource.x, y)))
                     {
                         return false;
                     }
@@ -133,76 +132,87 @@ namespace Modele
         return true;
     }
 
-    pair<bool,string> Echiquier::estDeplacementLegal(Piece* piece, int destX, int destY)
+    pair<bool,string> Echiquier::estDeplacementLegal(Piece* piece, Position posDestination)
     {
-        if (!piece->estDeplacementValide(destX, destY))
+        if (!piece->estDeplacementValide(posDestination))
         {
             return make_pair(false,"Cette piece ne peut pas se deplacer ainsi");
         }
 
-        Piece* cible = getPiece(destX, destY);
+        Piece* cible = getPiece(posDestination);
 
         if ((cible && cible->estBlanc() == piece->estBlanc())
-            || !cheminEstLibre(piece, destX, destY))
+            || !cheminEstLibre(piece, posDestination))
         {
             return make_pair(false,"cette piece ne peut pas passer au-dessus des autres");
         }
 
-        MouvementTemporaire mouvementTemp(this, piece, destX, destY);
+        MouvementTemporaire mouvementTemp(this, piece, posDestination);
 
         return make_pair(!roiEnEchec(piece->estBlanc()),"Votre roi est ou serait en situation d'echec");
     }
 
-    pair<bool,string> Echiquier::deplacerPiece(int srcX, int srcY, int destX, int destY)
+    pair<bool,string> Echiquier::deplacerPiece(Position posSource, Position posDestination)
     {
-        Piece* piece = getPiece(srcX, srcY);
-        if (!piece || (srcX == destX && srcY == destY))
+        Piece* piece = getPiece(posSource);
+        if (!piece || (posDestination == posSource))
         {
             return make_pair(false,"Vous ne pouvez pas deplacer la piece sur elle-meme");
         }
 
-        pair<bool, string> deplacementValideEtMessage = estDeplacementLegal(piece, destX, destY);
+        pair<bool, string> deplacementValideEtMessage = estDeplacementLegal(piece, posDestination);
         if (!deplacementValideEtMessage.first)
         {
             return deplacementValideEtMessage;
         }
 
-        deplacerSansVerification(piece, destX, destY);
+        deplacerSansVerification(piece, posDestination,false);
 
-        emit pieceDeplacee(piece, destX, destY);
+        emit pieceDeplacee(piece, posDestination);
 
         return make_pair(true,"");
     }
 
-    void Echiquier::deplacerSansVerification(Piece* ptrPiece, int x, int y)
+    void Echiquier::deplacerSansVerification(Piece* ptrPiece, Position pos,bool mouvementTemp)
     {
         using namespace std;
-        positionPieces_.erase({ ptrPiece->getX(), ptrPiece->getY() });
-        ptrPiece->changerPosition(x, y);
-        if (positionPieces_[pair(x, y)])
+        positionPieces_.erase(ptrPiece->getPos());
+        ptrPiece->changerPosition(pos);
+        if (positionPieces_[pos])
         {
-            emit pieceCapturee(positionPieces_[pair(x, y)]);
-            delete positionPieces_[pair(x, y)];
+            if (mouvementTemp)
+            {
+                pieceTemporairementDelete_ = positionPieces_[pos];
+            }
+            else
+            {
+                pieceTemporairementDelete_ = nullptr;
+                emit pieceCapturee(positionPieces_[pos]);
+                delete positionPieces_[pos];
+            }
         }
-        positionPieces_[pair(x, y)] = ptrPiece;
+        positionPieces_[pos] = ptrPiece;
     }
-    MouvementTemporaire::MouvementTemporaire(Echiquier* ptrEchiquier, Piece* ptrPiece, int nouveauX, int nouveauY)
+    MouvementTemporaire::MouvementTemporaire(Echiquier* ptrEchiquier, Piece* ptrPiece, Position nouvellePos)
     {
         ptrEchiquier_ = ptrEchiquier;
         ptrPiece_ = ptrPiece;
-        ancienX_ = ptrPiece_->getX();
-        ancienY_ = ptrPiece_->getY();
-        ptrEchiquier_->deplacerSansVerification(ptrPiece_, nouveauX, nouveauY);
+        anciennePos_ = ptrPiece_->getPos();
+        ptrEchiquier_->deplacerSansVerification(ptrPiece_, nouvellePos,true);
     }
     MouvementTemporaire::~MouvementTemporaire()
     {
-        ptrEchiquier_->deplacerSansVerification(ptrPiece_, ancienX_, ancienY_);
+        ptrEchiquier_->deplacerSansVerification(ptrPiece_, anciennePos_,true);
+        if (ptrEchiquier_->getPieceTemp())
+        {
+            ptrEchiquier_->annulerCapture();
+
+        }
     }
 
     void Echiquier::ajouterPiece(Piece* piece)
     {
-        pair<int, int> paire = make_pair(piece->getX(), piece->getY());
-        positionPieces_[paire] = piece;
+        positionPieces_[piece->getPos()] = piece;
     }
 
     void Echiquier::enleverPieces()

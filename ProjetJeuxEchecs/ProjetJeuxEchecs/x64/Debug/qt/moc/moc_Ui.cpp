@@ -111,8 +111,8 @@ static constexpr auto qt_meta_stringdata_ZN2Ui11PieceWidgetE = QtMocHelpers::str
     "",
     "PieceWidget*",
     "pieceWidget",
-    "x",
-    "y",
+    "Modele::Position",
+    "pos",
     "surPieceDeplacee",
     "Modele::Piece*",
     "piece"
@@ -135,16 +135,16 @@ Q_CONSTINIT static const uint qt_meta_data_ZN2Ui11PieceWidgetE[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    3,   26,    2, 0x06,    1 /* Public */,
+       1,    2,   26,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       7,    3,   33,    2, 0x0a,    5 /* Public */,
+       7,    2,   31,    2, 0x0a,    4 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3, QMetaType::Int, QMetaType::Int,    4,    5,    6,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 5,    4,    6,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 8, QMetaType::Int, QMetaType::Int,    9,    5,    6,
+    QMetaType::Void, 0x80000000 | 8, 0x80000000 | 5,    9,    6,
 
        0        // eod
 };
@@ -161,13 +161,11 @@ Q_CONSTINIT const QMetaObject Ui::PieceWidget::staticMetaObject = { {
         // method 'demanderDeplacerWidget'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<PieceWidget *, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<Modele::Position, std::false_type>,
         // method 'surPieceDeplacee'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<Modele::Piece *, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>
+        QtPrivate::TypeAndForceComplete<Modele::Position, std::false_type>
     >,
     nullptr
 } };
@@ -177,8 +175,8 @@ void Ui::PieceWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
     auto *_t = static_cast<PieceWidget *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->demanderDeplacerWidget((*reinterpret_cast< std::add_pointer_t<PieceWidget*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
-        case 1: _t->surPieceDeplacee((*reinterpret_cast< std::add_pointer_t<Modele::Piece*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
+        case 0: _t->demanderDeplacerWidget((*reinterpret_cast< std::add_pointer_t<PieceWidget*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Modele::Position>>(_a[2]))); break;
+        case 1: _t->surPieceDeplacee((*reinterpret_cast< std::add_pointer_t<Modele::Piece*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Modele::Position>>(_a[2]))); break;
         default: ;
         }
     }
@@ -192,19 +190,12 @@ void Ui::PieceWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
                 *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< PieceWidget* >(); break;
             }
             break;
-        case 1:
-            switch (*reinterpret_cast<int*>(_a[1])) {
-            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-            case 0:
-                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< Modele::Piece* >(); break;
-            }
-            break;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (PieceWidget::*)(PieceWidget * , int , int );
+            using _q_method_type = void (PieceWidget::*)(PieceWidget * , Modele::Position );
             if (_q_method_type _q_method = &PieceWidget::demanderDeplacerWidget; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -245,9 +236,9 @@ int Ui::PieceWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Ui::PieceWidget::demanderDeplacerWidget(PieceWidget * _t1, int _t2, int _t3)
+void Ui::PieceWidget::demanderDeplacerWidget(PieceWidget * _t1, Modele::Position _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 namespace {
@@ -314,18 +305,6 @@ void Ui::EchiquierWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         default: ;
         }
     }
-    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        switch (_id) {
-        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 0:
-            switch (*reinterpret_cast<int*>(_a[1])) {
-            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-            case 0:
-                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< Modele::Piece* >(); break;
-            }
-            break;
-        }
-    }
 }
 
 const QMetaObject *Ui::EchiquierWidget::metaObject() const
@@ -353,7 +332,7 @@ int Ui::EchiquierWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         if (_id < 1)
-            qt_static_metacall(this, _c, _id, _a);
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
         _id -= 1;
     }
     return _id;

@@ -41,15 +41,19 @@ namespace Ui
 		~ProjetJeuxEchecs();
 
 	private:
+		void creerWidgets();
+		void creerLayouts();
+		void creerConnections();
+
 		Ui::ProjetJeuxEchecsClass* ui;
 		EchiquierWidget* echiquierWidget_;
 		QLabel* infoTourLabel_;
-		QPushButton* boutonEndgame1_;
-		QPushButton* boutonEndgame2_;
-		QPushButton* boutonEndgame3_;
+
+		vector<QPushButton*> boutonsEndGame_;
 		QPushButton* boutonReset_;
+
 		bool tourAuxBlancs_ = true;
-		int indexPartieActuelle = 0;
+		int indexPartieActuelle_ = 0;
 	};
 
 	class PieceWidget : public QLabel
@@ -58,9 +62,9 @@ namespace Ui
 	public:
 		PieceWidget(Modele::Piece* pieceModele, QWidget* parent = nullptr);
 	public slots:
-		void surPieceDeplacee(Modele::Piece* piece, int x, int y);
+		void surPieceDeplacee(Modele::Piece* piece, Modele::Position pos);
 	signals:
-		void demanderDeplacerWidget(PieceWidget* pieceWidget, int x, int y);
+		void demanderDeplacerWidget(PieceWidget* pieceWidget, Modele::Position pos);
 	private:
 		Modele::Piece* pieceModele_;
 	};
@@ -72,7 +76,7 @@ namespace Ui
 		explicit EchiquierWidget(QWidget* parent = nullptr, Modele::Echiquier* ptrEchiquier = nullptr, ProjetJeuxEchecs* projetJeuxEchecs = nullptr);
 		void chargerPartie(int numPartie);
 		void ajouterPiece(Modele::Piece* piece);
-		void deplacerPieceWidget(PieceWidget* widget, int x, int y);
+		void deplacerPieceWidget(PieceWidget* widget, Modele::Position pos);
 		void reinitialiserPositions();
 		~EchiquierWidget()
 		{
@@ -84,10 +88,10 @@ namespace Ui
 		void paintEvent(QPaintEvent* event) override;
 	private:
 		QPixmap echiquierPixMap_;
-		QMap<QPair<int, int>, PieceWidget*> pieceWidgets_;
+		map<Modele::Position, PieceWidget*> pieceWidgets_;
 		Modele::Echiquier* ptrEchiquier_;
 		QGridLayout* grille_;
-		QPoint caseSelectionnee_;
+		Modele::Position caseSelectionnee_;
 		ProjetJeuxEchecs* projetJeuxEchecs_;
 		bool attenteDeuxiemeClic_ = false;
 	};

@@ -18,6 +18,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QString>
 
 #include <iostream>
 
@@ -25,8 +26,15 @@ static constexpr int MAX_ROIS = 2;
 static constexpr int TAILLE_COTE_ECHIQUIER = 800;
 static constexpr int TAILLE_CASE = TAILLE_COTE_ECHIQUIER / 8;
 static constexpr int N_CASES_COTE = 8;
+static constexpr int N_END_GAME = 3;
 
 using namespace std;
+
+struct EndgameConfig {
+    QString texteBouton;
+    int indexPartie;
+};
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -69,17 +77,17 @@ namespace Ui
         }
     }
 
-    void EchiquierWidget::deplacerPieceWidget(PieceWidget* widget, int x, int y)
+    void EchiquierWidget::deplacerPieceWidget(PieceWidget* widget, Modele::Position pos)
     {
         grille_->removeWidget(widget);
-        grille_->addWidget(widget, y, x); // Qt : ligne, colonne
+        grille_->addWidget(widget, pos.y, pos.x); // Qt : ligne, colonne
     }
 
-    void PieceWidget::surPieceDeplacee(Modele::Piece* piece, int x, int y)
+    void PieceWidget::surPieceDeplacee(Modele::Piece* piece, Modele::Position pos)
     {
         if (piece == pieceModele_)
         {
-            emit demanderDeplacerWidget(this, x, y);
+            emit demanderDeplacerWidget(this, pos);
         }
     }
 
@@ -92,7 +100,6 @@ namespace Ui
     }
 
     void EchiquierWidget::reinitialiserPositions() {
-        qDeleteAll(pieceWidgets_);
         pieceWidgets_.clear();
         ptrEchiquier_->enleverPieces();
         if (!projetJeuxEchecs_->getTourAuxBlancs())
@@ -106,7 +113,7 @@ namespace Ui
         using namespace Modele;
         auto* pieceWidget = new PieceWidget(piece, this);
         grille_->addWidget(pieceWidget, piece->getY(), piece->getX());
-        pieceWidgets_[qMakePair(piece->getX(), piece->getY())] = pieceWidget;
+        pieceWidgets_[piece->getPos()] = pieceWidget;
 
         connect(ptrEchiquier_, &Modele::Echiquier::pieceDeplacee,
             pieceWidget, &PieceWidget::surPieceDeplacee);
@@ -122,40 +129,28 @@ namespace Ui
         using namespace Modele;
 
         reinitialiserPositions();
-
-        vector<tuple<string, int, int, bool>> pieces;
-
-        switch (numPartie)
-        {
-        case 1:
-            pieces = 
+        vector<vector<tuple<string, int, int, bool>>> pieces = {
             {
                 {"Roi", 0, 0, true}, {"Roi", 1, 4, false},
                 {"Cavalier", 1, 1, true}, {"Cavalier", 5, 5, false},
                 {"Tour", 0, 7, true}, {"Tour", 7, 0, false}
-            };
-            break;
+            },
 
-        case 2:
-            pieces = 
             {
                 {"Roi", 2, 2, true}, {"Roi", 6, 6, false},
                 {"Cavalier", 1, 3, true}, {"Cavalier", 5, 4, false},
                 {"Tour", 2, 7, true}, {"Tour", 7, 2, false}
-            };
-            break;
+            },
 
-        case 3:
-            pieces = 
             {
                 {"Roi", 4, 4, true}, {"Roi", 7, 7, false},
                 {"Cavalier", 3, 5, true}, {"Cavalier", 6, 6, false},
                 {"Tour", 0, 3, true}, {"Tour", 7, 1, false}
-            };
-            break;
-        }
+            }
 
-        for (const auto& pieceData : pieces)
+        };
+        vector<tuple<string, int, int, bool>> piecesActuelles = pieces[numPartie - 1];
+        for (const auto& pieceData : piecesActuelles)
         {
             const auto& [nomPiece, x, y, estBlanc] = pieceData;
 
@@ -163,7 +158,7 @@ namespace Ui
                 {
                     try
                     {
-                        ajouterPiece(new Roi(x, y, estBlanc));
+                        ajouterPiece(new Roi(Position(x, y), estBlanc));
                     }
                     catch (TropDeRoisException)
                     {
@@ -172,24 +167,23 @@ namespace Ui
                 }
                 else if (nomPiece == "Cavalier")
                 {
-                    ajouterPiece(new Cavalier(x, y, estBlanc));
+                    ajouterPiece(new Cavalier(Position(x, y), estBlanc));
                 }
                 else if (nomPiece == "Tour")
                 {
-                    ajouterPiece(new Tour(x, y, estBlanc));
+                    ajouterPiece(new Tour(Position(x, y), estBlanc));
                 }
         }
     }
 
     void EchiquierWidget::surPieceCapturee(Modele::Piece* piece)
     {
-        auto pos = qMakePair(piece->getX(), piece->getY());
-        auto widget = pieceWidgets_.value(pos);
+        auto widget = pieceWidgets_[piece->getPos()];
         if (widget)
         {
             grille_->removeWidget(widget);
             widget->deleteLater();
-            pieceWidgets_.remove(pos);
+            pieceWidgets_.erase(piece->getPos());
         }
     }
 
@@ -215,11 +209,11 @@ namespace Ui
 
                 connect(button, &QPushButton::clicked, [=, this]
                     {
-                        QPoint pos(j, i);
+                        Position pos(j, i);
 
                         if (!attenteDeuxiemeClic_)
                         {
-                            Piece* pieceSelectionnee = ptrEchiquier_->getPiece(pos.x(), pos.y());
+                            Piece* pieceSelectionnee = ptrEchiquier_->getPiece(pos);
                             if (pieceSelectionnee && pieceSelectionnee->estBlanc() == projetJeuxEchecs_->getTourAuxBlancs())
                             {
                                 caseSelectionnee_ = pos;
@@ -228,19 +222,19 @@ namespace Ui
                         }
                         else
                         {
-                            QPoint destination = pos;
-                            pair<bool, string> messageEtDeplacement = ptrEchiquier_->deplacerPiece(caseSelectionnee_.x(), caseSelectionnee_.y(), destination.x(), destination.y());
+                            Position destination = pos;
+                            pair<bool, string> messageEtDeplacement = ptrEchiquier_->deplacerPiece(caseSelectionnee_, destination);
                             if (messageEtDeplacement.first)
                             {
 
-                                auto widget = pieceWidgets_.value(qMakePair(caseSelectionnee_.x(), caseSelectionnee_.y()));
+                                auto widget = pieceWidgets_[caseSelectionnee_];
 
                                 if (widget)
                                 {
-                                    pieceWidgets_.remove(qMakePair(caseSelectionnee_.x(), caseSelectionnee_.y()));
-                                    pieceWidgets_[qMakePair(destination.x(), destination.y())] = widget;
+                                    pieceWidgets_.erase(caseSelectionnee_);
+                                    pieceWidgets_[destination] = widget;
 
-                                    deplacerPieceWidget(widget, destination.x(), destination.y());
+                                    deplacerPieceWidget(widget, destination);
 
                                     connect(ptrEchiquier_, &Modele::Echiquier::pieceDeplacee,
                                         widget, &PieceWidget::surPieceDeplacee);
@@ -276,56 +270,70 @@ namespace Ui
         }
     }
 
+    void ProjetJeuxEchecs::creerWidgets()
+    {
+        using namespace Modele;
+
+        echiquierWidget_ = new EchiquierWidget(this, new Echiquier(), this);
+        infoTourLabel_ = new QLabel("Tour des blancs", this);
+        QFont labelFont = infoTourLabel_->font();
+        labelFont.setPointSize(20);
+        infoTourLabel_->setFont(labelFont);
+
+        for (int i = 0; i < N_END_GAME; i++)
+        {
+            boutonsEndGame_.push_back(new QPushButton(QString("Endgame ") + QString::number(i+1), this));
+        }
+        boutonReset_ = new QPushButton("Recommencer partie", this);
+    }
+
+    void ProjetJeuxEchecs::creerLayouts()
+    {
+        QHBoxLayout* boutonsLayout = new QHBoxLayout;
+        for (int i = 0; i < N_END_GAME; i++)
+        {
+            boutonsLayout->addWidget(boutonsEndGame_[i]);
+        }
+        boutonsLayout->addWidget(boutonReset_);
+
+        QVBoxLayout* leftLayout = new QVBoxLayout;
+        leftLayout->addLayout(boutonsLayout);
+        leftLayout->addWidget(echiquierWidget_);
+
+        QVBoxLayout* rightLayout = new QVBoxLayout;
+        rightLayout->addWidget(infoTourLabel_);
+
+        QHBoxLayout* mainLayout = new QHBoxLayout;
+        mainLayout->addLayout(leftLayout);
+        mainLayout->addLayout(rightLayout);
+
+        ui->centralWidget->setLayout(mainLayout);
+    }
+
+    void ProjetJeuxEchecs::creerConnections()
+    {
+        for (int i = 0; i < N_END_GAME; i++)
+        {
+            connect(boutonsEndGame_[i], &QPushButton::clicked, this, [=]() {
+                indexPartieActuelle_ = i+1;
+                echiquierWidget_->chargerPartie(i+1);
+                });
+        }
+
+        connect(boutonReset_, &QPushButton::clicked, this, [=]() {
+            echiquierWidget_->chargerPartie(indexPartieActuelle_);
+            });
+    }
+
     ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget* parent)
         : QMainWindow(parent)
         , ui(new Ui::ProjetJeuxEchecsClass())
     {
-        using namespace Modele;
-
         ui->setupUi(this);
-        echiquierWidget_ = new EchiquierWidget(this, new Echiquier(), this);
 
-        infoTourLabel_ = new QLabel("Tour des blancs", this);
-
-        boutonEndgame1_ = new QPushButton("Endgame 1", this);
-        boutonEndgame2_ = new QPushButton("Endgame 2", this);
-        boutonEndgame3_ = new QPushButton("Endgame 3", this);
-        boutonReset_ = new QPushButton("Recommencer partie", this);
-
-        QHBoxLayout* boutonsLayout = new QHBoxLayout;
-        boutonsLayout->addWidget(boutonEndgame1_);
-        boutonsLayout->addWidget(boutonEndgame2_);
-        boutonsLayout->addWidget(boutonEndgame3_);
-        boutonsLayout->addWidget(boutonReset_);
-
-        QVBoxLayout* mainLayout = new QVBoxLayout;
-        mainLayout->addLayout(boutonsLayout);
-        mainLayout->addWidget(infoTourLabel_);
-        mainLayout->addWidget(echiquierWidget_);
-        ui->centralWidget->setLayout(mainLayout);
-
-        connect(boutonEndgame1_, &QPushButton::clicked, this, [=]() 
-            {
-            indexPartieActuelle = 1;
-            echiquierWidget_->chargerPartie(1);
-            });
-
-        connect(boutonEndgame2_, &QPushButton::clicked, this, [=]() 
-            {
-            indexPartieActuelle = 2;
-            echiquierWidget_->chargerPartie(2);
-            });
-
-        connect(boutonEndgame3_, &QPushButton::clicked, this, [=]() 
-            {
-            indexPartieActuelle = 3;
-            echiquierWidget_->chargerPartie(3);
-            });
-
-        connect(boutonReset_, &QPushButton::clicked, this, [=]() 
-            {
-            echiquierWidget_->chargerPartie(indexPartieActuelle);
-            });
+        creerWidgets();
+        creerLayouts();
+        creerConnections();
     }
 
     void ProjetJeuxEchecs::changerTour()
