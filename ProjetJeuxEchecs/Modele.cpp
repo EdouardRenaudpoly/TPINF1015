@@ -182,11 +182,11 @@ namespace Modele
         {
             if (mouvementTemp)
             {
-                pieceTemporairementDelete_ = positionPieces_[pos];
+                pieceTemporairementSupprimee_ = positionPieces_[pos];
             }
             else
             {
-                pieceTemporairementDelete_ = nullptr;
+                pieceTemporairementSupprimee_ = nullptr;
                 emit pieceCapturee(positionPieces_[pos]);
                 delete positionPieces_[pos];
             }

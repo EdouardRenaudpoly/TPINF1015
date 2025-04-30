@@ -39,7 +39,7 @@ struct EndgameConfig {
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
-    QString getImagePathForPiece(Modele::Piece* piece)
+    QString trouverCheminImagePiece(Modele::Piece* piece)
     {
         using namespace Modele;
         if (dynamic_cast<Roi*>(piece))
@@ -94,7 +94,7 @@ namespace Ui
     PieceWidget::PieceWidget(Modele::Piece* pieceModele, QWidget* parent) : QLabel(parent), pieceModele_(pieceModele)
     {
         
-        setPixmap(QPixmap(getImagePathForPiece(pieceModele_)).scaled(TAILLE_CASE, TAILLE_CASE));
+        setPixmap(QPixmap(trouverCheminImagePiece(pieceModele_)).scaled(TAILLE_CASE, TAILLE_CASE));
         setFixedSize(TAILLE_CASE, TAILLE_CASE);
         setAttribute(Qt::WA_TransparentForMouseEvents);
     }
@@ -276,15 +276,15 @@ namespace Ui
 
         echiquierWidget_ = new EchiquierWidget(this, new Echiquier(), this);
         infoTourLabel_ = new QLabel("Tour des blancs", this);
-        QFont labelFont = infoTourLabel_->font();
-        labelFont.setPointSize(20);
-        infoTourLabel_->setFont(labelFont);
+        QFont policeLabel = infoTourLabel_->font();
+        policeLabel.setPointSize(20);
+        infoTourLabel_->setFont(policeLabel);
 
         for (int i = 0; i < N_END_GAME; i++)
         {
-            boutonsEndGame_.push_back(new QPushButton(QString("Endgame ") + QString::number(i+1), this));
+            boutonsFinPartie_.push_back(new QPushButton(QString("Endgame ") + QString::number(i+1), this));
         }
-        boutonReset_ = new QPushButton("Recommencer partie", this);
+        boutonReinitialisation_ = new QPushButton("Recommencer partie", this);
     }
 
     void ProjetJeuxEchecs::creerLayouts()
@@ -292,9 +292,9 @@ namespace Ui
         QHBoxLayout* boutonsLayout = new QHBoxLayout;
         for (int i = 0; i < N_END_GAME; i++)
         {
-            boutonsLayout->addWidget(boutonsEndGame_[i]);
+            boutonsLayout->addWidget(boutonsFinPartie_[i]);
         }
-        boutonsLayout->addWidget(boutonReset_);
+        boutonsLayout->addWidget(boutonReinitialisation_);
 
         QVBoxLayout* leftLayout = new QVBoxLayout;
         leftLayout->addLayout(boutonsLayout);
@@ -314,13 +314,13 @@ namespace Ui
     {
         for (int i = 0; i < N_END_GAME; i++)
         {
-            connect(boutonsEndGame_[i], &QPushButton::clicked, this, [=]() {
+            connect(boutonsFinPartie_[i], &QPushButton::clicked, this, [=]() {
                 indexPartieActuelle_ = i+1;
                 echiquierWidget_->chargerPartie(i+1);
                 });
         }
 
-        connect(boutonReset_, &QPushButton::clicked, this, [=]() {
+        connect(boutonReinitialisation_, &QPushButton::clicked, this, [=]() {
             echiquierWidget_->chargerPartie(indexPartieActuelle_);
             });
     }

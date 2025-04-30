@@ -33,21 +33,21 @@ namespace Modele
 
 		Position(int initial_x, int initial_y) : x(initial_x), y(initial_y) {}
 
-		bool operator==(const Position& other) const 
+		bool operator==(const Position& autre) const 
 		{
-			return x == other.x && y == other.y;
+			return x == autre.x && y == autre.y;
 		}
 
-		bool operator!=(const Position& other) const 
+		bool operator!=(const Position& autre) const 
 		{
-			return !(*this == other);
+			return !(*this == autre);
 		}
 
-		bool operator<(const Position& other) const 
+		bool operator<(const Position& autre) const 
 		{
-			if (x < other.x) return true;
-			if (other.x < x) return false;
-			return y < other.y;
+			if (x < autre.x) return true;
+			if (autre.x < x) return false;
+			return y < autre.y;
 		}
 	};
 	
@@ -126,18 +126,18 @@ namespace Modele
 		}
 		void annulerCapture()
 		{
-			positionPieces_[pieceTemporairementDelete_->getPos()] = pieceTemporairementDelete_;
+			positionPieces_[pieceTemporairementSupprimee_->getPos()] = pieceTemporairementSupprimee_;
 		}
 		Piece* getPieceTemp()
 		{
-			return pieceTemporairementDelete_;
+			return pieceTemporairementSupprimee_;
 		}
 	signals:
 		void pieceDeplacee(Piece* piece, Position nouvellePos);
 		void pieceCapturee(Piece* piece);
 	private:
 		map<Position, Piece*> positionPieces_;
-		Piece* pieceTemporairementDelete_ = nullptr;
+		Piece* pieceTemporairementSupprimee_ = nullptr;
 	};
 
 	class MouvementTemporaire

@@ -33,7 +33,7 @@ namespace Ui
 
 	public:
 		explicit ProjetJeuxEchecs(QWidget* parent = nullptr);
-		bool getTourAuxBlancs()
+		bool getTourAuxBlancs() const
 		{
 			return tourAuxBlancs_;
 		}
@@ -49,8 +49,8 @@ namespace Ui
 		EchiquierWidget* echiquierWidget_;
 		QLabel* infoTourLabel_;
 
-		vector<QPushButton*> boutonsEndGame_;
-		QPushButton* boutonReset_;
+		vector<QPushButton*> boutonsFinPartie_;
+		QPushButton* boutonReinitialisation_;
 
 		bool tourAuxBlancs_ = true;
 		int indexPartieActuelle_ = 0;
