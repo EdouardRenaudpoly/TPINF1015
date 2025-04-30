@@ -99,7 +99,13 @@ namespace Ui
         setAttribute(Qt::WA_TransparentForMouseEvents);
     }
 
-    void EchiquierWidget::reinitialiserPositions() {
+    void EchiquierWidget::reinitialiserPositions() 
+    {
+        for (auto& widget : pieceWidgets_)
+        {
+            grille_->removeWidget(widget.second);
+            widget.second->deleteLater();
+        }
         pieceWidgets_.clear();
         ptrEchiquier_->enleverPieces();
         if (!projetJeuxEchecs_->getTourAuxBlancs())
