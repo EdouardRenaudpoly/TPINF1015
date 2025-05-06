@@ -42,39 +42,24 @@ namespace Ui
     QString trouverCheminImagePiece(Modele::Piece* piece)
     {
         using namespace Modele;
-        if (dynamic_cast<Roi*>(piece))
-        {
-            if (piece->estBlanc())
-            {
-                return ":/images/images/roi_blanc.png";
+        QString couleur = piece->estBlanc() ? "blanc" : "noir";
+        QString type;
+
+        if (dynamic_cast<const Modele::Roi*>(piece))
+            type = "roi";
+        else if (dynamic_cast<const Modele::Tour*>(piece)) {
+            type = "tour";
+            if (couleur == "blanc"){ 
+                couleur = "blanche"; 
             }
-            else
-            {
-                return ":/images/images/roi_noir.png";
-            }
-        }
-        else if (dynamic_cast<Tour*>(piece))
-        {
-            if (piece->estBlanc())
-            {
-                return ":/images/images/tour_blanche.png";
-            }
-            else
-            {
-                return ":/images/images/tour_noire.png";
+            else {
+                couleur = "noire";
             }
         }
-        else
-        {
-            if (piece->estBlanc())
-            {
-                return ":/images/images/cavalier_blanc.png";
-            }
-            else
-            {
-                return ":/images/images/cavalier_noir.png";
-            }
-        }
+        else if (dynamic_cast<const Modele::Cavalier*>(piece))
+            type = "cavalier";
+
+        return ":/images/images/" + type + "_" + couleur + ".png";
     }
 
     void EchiquierWidget::deplacerPieceWidget(PieceWidget* widget, Modele::Position pos)
@@ -111,6 +96,49 @@ namespace Ui
         if (!projetJeuxEchecs_->getTourAuxBlancs())
         {
             projetJeuxEchecs_->changerTour();
+        }
+    }
+
+    void EchiquierWidget::gererClic(Modele::Position pos)
+    {
+        using namespace Modele;
+
+        if (!attenteDeuxiemeClic_)
+        {
+            Piece* pieceSelectionnee = ptrEchiquier_->getPiece(pos);
+            if (pieceSelectionnee && pieceSelectionnee->estBlanc() == projetJeuxEchecs_->getTourAuxBlancs())
+            {
+                caseSelectionnee_ = pos;
+                attenteDeuxiemeClic_ = true;
+            }
+        }
+        else
+        {
+            Position destination = pos;
+            pair<bool, string> messageEtDeplacement = ptrEchiquier_->deplacerPiece(caseSelectionnee_, destination);
+            if (messageEtDeplacement.first)
+            {
+
+                auto widget = pieceWidgets_[caseSelectionnee_];
+
+                if (widget)
+                {
+                    pieceWidgets_.erase(caseSelectionnee_);
+                    pieceWidgets_[destination] = widget;
+
+                    deplacerPieceWidget(widget, destination);
+
+                    connect(ptrEchiquier_, &Modele::Echiquier::pieceDeplacee,
+                        widget, &PieceWidget::surPieceDeplacee);
+                }
+                projetJeuxEchecs_->changerTour();
+            }
+            else
+            {
+                QMessageBox::critical(this, "Erreur", messageEtDeplacement.second.c_str());
+            }
+
+            attenteDeuxiemeClic_ = false;
         }
     }
 
@@ -213,47 +241,8 @@ namespace Ui
                 button->setFixedSize(TAILLE_COTE_ECHIQUIER / N_CASES_COTE, TAILLE_COTE_ECHIQUIER / N_CASES_COTE);
                 grille_->addWidget(button, i, j);
 
-                connect(button, &QPushButton::clicked, [=, this]
-                    {
-                        Position pos(j, i);
-
-                        if (!attenteDeuxiemeClic_)
-                        {
-                            Piece* pieceSelectionnee = ptrEchiquier_->getPiece(pos);
-                            if (pieceSelectionnee && pieceSelectionnee->estBlanc() == projetJeuxEchecs_->getTourAuxBlancs())
-                            {
-                                caseSelectionnee_ = pos;
-                                attenteDeuxiemeClic_ = true;
-                            }
-                        }
-                        else
-                        {
-                            Position destination = pos;
-                            pair<bool, string> messageEtDeplacement = ptrEchiquier_->deplacerPiece(caseSelectionnee_, destination);
-                            if (messageEtDeplacement.first)
-                            {
-
-                                auto widget = pieceWidgets_[caseSelectionnee_];
-
-                                if (widget)
-                                {
-                                    pieceWidgets_.erase(caseSelectionnee_);
-                                    pieceWidgets_[destination] = widget;
-
-                                    deplacerPieceWidget(widget, destination);
-
-                                    connect(ptrEchiquier_, &Modele::Echiquier::pieceDeplacee,
-                                        widget, &PieceWidget::surPieceDeplacee);
-                                }
-                                projetJeuxEchecs_->changerTour();
-                            }
-                            else
-                            {
-                                QMessageBox::critical(this, "Erreur", messageEtDeplacement.second.c_str());
-                            }
-
-                            attenteDeuxiemeClic_ = false;
-                        }
+                connect(button, &QPushButton::clicked, this, [=]() {
+                    gererClic(Position(j, i));
                     });
             }
         }
