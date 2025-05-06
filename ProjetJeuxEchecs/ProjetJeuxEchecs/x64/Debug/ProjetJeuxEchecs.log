@@ -1,17 +1,3 @@
 ﻿   Qt/MSBuild: 3.3.1.1
    Qt: 6.8.3
-  TestJeuxEchecs.cpp
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x45 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x52 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x6b that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x84 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0xb6 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0xbf that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0xca that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0xd8 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x103 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x130 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x186 that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x1dc that is illegal in the current source character set (codepage 65001).
-C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\TestJeuxEchecs.cpp(1,1): warning C4828: The file contains a character starting at offset 0x232 that is illegal in the current source character set (codepage 65001).
   ProjetJeuxEchecs.vcxproj -> C:\Users\zacka\Documents\Université\Session2\INF1015\Projet\ProjetJeuxEchecs\x64\Debug\ProjetJeuxEchecs.exe
