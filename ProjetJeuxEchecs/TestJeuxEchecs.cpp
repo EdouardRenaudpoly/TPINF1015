@@ -65,5 +65,70 @@ TEST(ModeleTest, Deplacement_Invalide_Obstacle_Tour)
     e.enleverPieces();
 }
 
+TEST(ModeleTest, Cavalier_DeplacementValide) {
+    using namespace Modele;
+    Echiquier e;
+    auto c = new Cavalier(Position(4, 4), true);
+    e.ajouterPiece(c);
+    EXPECT_TRUE(c->estDeplacementValide(Position(6, 5)));
+    EXPECT_FALSE(c->estDeplacementValide(Position(5, 5)));
+    e.enleverPieces();
+}
+
+TEST(ModeleTest, Tour_DeplacementVertical_Libre) {
+    using namespace Modele;
+    Echiquier e;
+    auto t = new Tour(Position(0, 0), true);
+    e.ajouterPiece(t);
+    EXPECT_TRUE(e.cheminEstLibre(t, Position(0, 5)));
+    e.enleverPieces();
+}
+
+TEST(ModeleTest, Cavalier_DeplacementInvalide) {
+    using namespace Modele;
+    Echiquier e;
+    Cavalier* cavalier = new Cavalier(Position(3, 3), true);
+    e.ajouterPiece(cavalier);
+    EXPECT_FALSE(cavalier->estDeplacementValide(Position(4, 4)));
+    e.enleverPieces();
+    
+}
+
+TEST(ModeleTest, Tour_CheminBloque) {
+    using namespace Modele;
+    Echiquier e;
+    Tour* tour = new Tour(Position(0, 0), true);
+    Cavalier* cavalier = new Cavalier(Position(0, 1), true);
+    e.ajouterPiece(tour);
+    e.ajouterPiece(cavalier);
+    EXPECT_FALSE(e.cheminEstLibre(tour, Position(0, 2)));
+    e.enleverPieces();
+}
+
+TEST(ModeleTest, CaptureLegale) {
+    using namespace Modele;
+    Echiquier e;
+    Tour* tour = new Tour(Position(0, 0), true);
+    Cavalier* ennemi = new Cavalier(Position(0, 3), false);
+    e.ajouterPiece(tour);
+    e.ajouterPiece(ennemi);
+    auto [ok, msg] = e.deplacerPiece(Position(0, 0), Position(0, 3));
+    EXPECT_TRUE(ok);
+    EXPECT_TRUE(msg.empty());
+    e.enleverPieces();
+}
+
+TEST(ModeleTest, MouvementTemporaire_RetablitPosition) {
+    using namespace Modele;
+    Echiquier e;
+    Roi* roi = new Roi(Position(4, 4), true);
+    e.ajouterPiece(roi);
+    {
+        MouvementTemporaire mvt(&e, roi, Position(5, 5));
+        EXPECT_EQ(roi->getPos(), Position(5, 5));
+    }
+    EXPECT_EQ(roi->getPos(), Position(4, 4));
+    e.enleverPieces();
+}
 
 #endif
